@@ -1,14 +1,20 @@
+#include "likelihood.h"
+
+#include <queso/GenericScalarFunction.h>
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
+#include <queso/UniformVectorRV.h>
+#include <queso/StatisticalInverseProblem.h>
+#include <queso/ScalarFunction.h>
+#include <queso/VectorSet.h>
+
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
 #include <omp.h>
 #include <mkl.h>
 
-double cov(double x, double y)
-{
-  return std::exp(-0.5 * std::abs(x - y));
-}
-
+// Forward declaration
 int main(int argc, char ** argv)
 {
   if (argc != 3) {
@@ -16,31 +22,84 @@ int main(int argc, char ** argv)
     return 1;
   }
 
-  omp_set_num_threads(atoi(argv[1]));
+  // omp_set_num_threads(atoi(argv[1]));
+  //
+  // double L = 1.0;
+  // unsigned int N = atoi(argv[2]);
+  // double dx = (double) L / (N - 1);
+  //
+  // double * A = (double *)malloc(N * N * sizeof(double));
+  // for (unsigned int i = 0; i < N; i++) {
+  //   for (unsigned int j = 0; j < N; j++) {
+  //     A[i*N+j] = cov(i*dx, j*dx);
+  //   }
+  // }
+  //
+  // double start = omp_get_wtime();
+  //
+  // // We're letting MKL choose the workspace array at runtime
+  // // Assume unsigned int N converts to lapack_int
+  // int info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, 'U', N, A, N);
+  //
+  // double time = omp_get_wtime() - start;
+  //
+  // std::cout << "LAPACKE_dpotrf executed in " << time << " secs." << std::endl;
+  // std::cout << "LAPACKE_dpotrf return value is: " << info << std::endl;
+  //
+  // free(A);
 
-  double L = 1.0;
-  unsigned int N = atoi(argv[2]);
-  double dx = (double) L / (N - 1);
+  MPI_Init(&argc, &argv);
 
-  double * A = (double *)malloc(N * N * sizeof(double));
-  for (unsigned int i = 0; i < N; i++) {
-    for (unsigned int j = 0; j < N; j++) {
-      A[i*N+j] = cov(i*dx, j*dx);
-    }
+  // Step 0 of 5: Set up environment
+  QUESO::FullEnvironment env(MPI_COMM_WORLD, argv[1], "", NULL);
+
+  // Step 1 of 5: Instantiate the parameter space
+  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
+      "param_", 1, NULL);
+
+  double min_val = 0.0;
+  double max_val = 1.0;
+
+  // Step 2 of 5: Set up the prior
+  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  paramMins.cwSet(min_val);
+  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  paramMaxs.cwSet(max_val);
+
+  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> paramDomain("param_",
+      paramSpace, paramMins, paramMaxs);
+
+  // Uniform prior here.  Could be a different prior.
+  QUESO::UniformVectorRV<QUESO::GslVector, QUESO::GslMatrix> priorRv("prior_",
+      paramDomain);
+
+  // Step 3 of 5: Set up the likelihood using the class above
+  Likelihood<QUESO::GslVector, QUESO::GslMatrix> lhood("llhd_", paramDomain);
+
+  // Step 4 of 5: Instantiate the inverse problem
+  QUESO::GenericVectorRV<QUESO::GslVector, QUESO::GslMatrix>
+    postRv("post_", paramSpace);
+
+  QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix>
+    ip("", NULL, priorRv, lhood, postRv);
+
+  // Step 5 of 5: Solve the inverse problem
+  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+
+  // Initial condition of the chain
+  paramInitials[0] = 0.0;
+  paramInitials[1] = 0.0;
+
+  QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
+
+  for (unsigned int i = 0; i < 1; i++) {
+    // Might need to tweak this
+    proposalCovMatrix(i, i) = 0.1;
   }
 
-  double start = omp_get_wtime();
+  ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
 
-  // We're letting MKL choose the workspace array at runtime
-  // Assume unsigned int N converts to lapack_int
-  int info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, 'U', N, A, N);
+  MPI_Finalize();
 
-  double time = omp_get_wtime() - start;
-
-  std::cout << "LAPACKE_dpotrf executed in " << time << " secs." << std::endl;
-
-  std::cout << "LAPACKE_dpotrf return value is: " << info << std::endl;
-
-  free(A);
-  return info;
+  return 0;
 }
