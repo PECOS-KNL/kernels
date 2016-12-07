@@ -8,6 +8,9 @@ namespace QUESO
 {
   class GslVector;
   class GslMatrix;
+
+  template <class V, class M>
+  class VectorSet;
 }
 
 template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>

@@ -2,11 +2,14 @@
 
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/VectorSet.h>
+
+#include <cmath>
 
 template <class V, class M>
 Likelihood<V, M>::Likelihood(const char * prefix,
     const QUESO::VectorSet<V, M> & domainSet)
-  : QUESO::BaseScalarFunction(prefix, domainSet)
+  : QUESO::BaseScalarFunction<V, M>(prefix, domainSet)
 {
   // Do nothing
 }
@@ -45,3 +48,5 @@ Likelihood<V, M>::cov(double x, double y)
 {
   return std::exp(-0.5 * std::abs(x - y));
 }
+
+template class Likelihood<QUESO::GslVector, QUESO::GslMatrix>;
