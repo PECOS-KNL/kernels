@@ -1,0 +1,132 @@
+\section{Introduction}
+\label{sec:intro}
+
+Heterogeneous computing with multiple levels of exposed parallelism is
+a leading candidate under consideration for the design of
+future exascale systems.
+% ~\cite{idc_report}. 
+Indeed, accelerators like
+current generation GPGPUs offer relatively high floating-point rates
+and memory bandwidth with lower relative power footprints than
+general-purpose compute platforms~\cite{gpu_hpc:2009}. However, 
+GPU-based acceleration commonly requires special
+programming constructs (e.g. NVIDIA's CUDA language) for the
+accelerated work.
+With the release of Intel's Many Integrated Core (MIC)
+architecture, an additional co-processor technology will become
+available to the scientific community.  This paper reports on
+several early porting experiences to the {\em Knights Ferry} MIC
+platform. An attractive feature of this architecture is 
+support for standard threading models like
+OpenMP~\cite{openmp_standard} which are
+already used by many scientific applications.  In addition, the MIC
+platform is based on an x86 architecture, and C/C++ and Fortran
+kernels can be easily compiled for direct native execution on MIC.
+
+The application kernels considered herein are taken from existing
+development efforts within the PECOS Center at the University of
+Texas at Austin.  The PECOS Center is a DOE-funded Center of
+Excellence working to develop the next generation of advanced
+computational methods for predictive simulation and uncertainty
+quantification of multiscale, multiphysics phenomena, focusing on the
+analysis of
+hypersonic atmospheric entry.  Consequently, porting efforts
+include relevant kernels from the direct numerical simulation (DNS) of
+turbulence, quantum mechanics, hypersonics, rarefied gas dynamics, and
+general-purpose finite-element assembly. 
+The applications include 
+both Fortran and C++ codes, and include an example with no prior
+thread-based parallelism as well as codes with existing OpenMP or TBB
+based threading.
+
+The remainder of the paper is organized as follows:
+\S\ref{sec:hardware} describes the testing infrastructure,
+%Testing infrastructure is described in \S\ref{sec:hardware},
+\S\ref{sec:cross_compile} describes
+cross compiling experiences, \S\ref{sec:apps} presents
+results of the porting efforts for each application kernel
+considered, and \S\ref{sec:summary} summarizes the overall experiences.
+
+\section{Testing Infrastructure}
+\label{sec:hardware}
+%\subsection{Test Hardware} 
+
+The test hardware used for this exercise was an eight-node
+development cluster installed at the Texas Advanced Computing Center.
+Each compute node was a host Linux (CentOS 6.1)
+server with two 3.47GHz Intel Westmere (X5690) six-core CPUs, 24GB of
+memory, and one Knights Ferry (KNF) co-processor with 30 active cores.
+KNF parts are intended to
+provide early access to the software development
+environment of forthcoming Knights Corner cards, but do not have
+the same floating-point performance.  Consequently, we report only
+relative performance and software porting experiences with
+Knights Ferry.  The KNF support on this hardware
+was provided with the {\em alpha9} release of Intel's MIC Software
+Development Platform, and all compilation was performed with an alpha
+release of Intel Composer for MIC ({\em 
+  029 Alpha Build 20120222}). 
+
+\section{Third Party Library Cross-Compiling} \label{sec:cross_compile}
+
+As with many scientific research groups, application development at
+the PECOS center employs many open-source libraries.  Prior to
+performing any tests on the Westmere or KNF MIC, it was necessary to
+first build all auxiliary libraries required by each of the
+computational kernels considered.  The following libraries were
+compiled for both the host CPU and KNF MIC architectures: {\em Boost,
+%GNU Scientific Library 
+GSL, FFTW\cite{FFTW05}, GRVY,} and
+{\em libMesh}. The libMesh library employs \nth{3} party libraries which
+were also compiled: 
+ExodusII, Laspack, libHilbert, Metis, Nemesis, NetCDF,
+Parmetis, sfcurves, Tetgen, and Triangle.
+%
+%Building these libraries for the host environment is
+%a well supported, common task, but building them for MIC
+%required cross-compilation.
+While building these libraries for the host environment is
+a common endeavor, building the libraries for MIC
+represents a new challenge as it necessitates cross-compilation
+techniques.
+Fortunately, many of these libraries utilize the
+Autotools build system, which can support cross-compilation.
+Native MIC builds were configured by
+specifying an existing non-native Linux host
+(e.g. {\em blackfin}) or by augmenting the autotools {\em config.sub}
+file with a new ``mic'' Linux target.
+To build native libraries for MIC, the ``-mmic"
+flag was added to all relevant compiler flags.
+%For other packages, simply passing ``-mmic" to the compiler
+%options was sufficient to build a native MIC package. 
+As an example, the following configure options were used to build a
+native MIC version of the FFTW 3.3 static library:
+
+\vspace*{-6pt}
+{\small
+\begin{verbatim}
+./configure CC=icc CXX=icpc FC=ifort       \
+   CFLAGS="-mmic -O3" CXXFLAGS="-mmic -O3" \
+   FCFLAGS="-mmic -O3" --host=blackfin
+\end{verbatim}
+}
+
+\noindent The libMesh library additionally required fixing configuration macros
+to support cross-compilation and auto-detection of native TBB 
+support.
+%% utilizing the Autotools build system,
+%% cross-compiling for the MIC environment was achieved by either
+%% leveraging a cross-compile host that produced no side-effects or
+%% manually adding a ``mic" host which, again, did not produce
+%% side-effects during the build process. In both cases, the ``-mmic"
+%% flag was added to the compile flags for the relevant compile
+%% option. For other packages, simply passing ``-mmic" to the compiler
+%% options was sufficient to build a native MIC package.
+
+These strategies successfully built native static libraries and
+executables for MIC. However, building shared
+libraries was more delicate and not always successful. For
+example, configuring Boost to build shared libraries 
+caused the linker to crash.  Other shared libraries, such as GSL,
+built without incident.
+

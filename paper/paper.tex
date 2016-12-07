@@ -1,0 +1,105 @@
+
+%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\RequirePackage{fix-cm}
+%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
+%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+
+\usepackage{graphicx}
+\usepackage{mdwlist}
+\usepackage{nth}
+\newcommand{\xap}{$X^2A_2'$ }
+\newcommand{\bepa}{$B^2E'$ }
+\newcommand{\bepb}{$B^2E'$ }
+
+\newcommand{\superast}{\textsuperscript{$\ast$}}
+\newcommand{\superdag}{\textsuperscript{$\dagger$}}
+
+\graphicspath{{figs/}}
+
+\hyphenation{lib-Mesh Open-MP}
+
+% In 2 column environments LaTeX often needs to be told to be less
+% tolerant of overflow and more tolerant of overwide spacing
+\sloppy
+
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+% \journalname{myjournal}
+%
+\begin{document}
+
+\title{Experiences Porting Scientific Applications to the Intel “Knights Landing” (KNL) Xeon Phi Platform}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
+
+\titlerunning{Experiences Porting Scientific Applications to the Intel “Knights Landing” (KNL) Xeon Phi Platform}
+
+% guys, please adjust order here any way you see fit....
+\author{Nicholas~Malaya\superast \and D.~McDougall \and C~Michoski \and M~Lee}
+
+\authorrunning{Nicholas~Malaya\superast \and D.~McDougall \and C~Michoski \and M~Lee} % if too long for running head
+
+\institute{
+              \superast{}Institute for Computational Engineering and Sciences
+	      (ICES), 
+	      The University of Texas at Austin \\
+              \email{\{nick,damon,michoski,mk\}@ices.utexas.edu} \\
+	      \\
+%             \emph{Present address:} of F. Author  %  if needed
+%           \and
+           %K. Schulz \at
+%	      \vspace*{5pt}
+              \superdag{}Texas Advanced Computing Center and ICES \\
+	      The University of Texas at Austin \\
+              \email{karl@tacc.utexas.edu} ({\em corresponding author})   %  \\
+}
+
+%\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
+\maketitle
+
+\vspace*{-18pt}
+\input{abstract_inc.tex}
+\input{intro.tex}
+\input{apps.tex}
+\input{dns-kernel.tex}
+\input{dns.tex}
+\input{damon.tex}
+\input{craig.tex}
+\input{summary.tex}
+
+
+\begin{acknowledgements}
+The Author's acknowledge the Texas Advanced Computing Center (TACC) at The
+University of Texas at Austin for providing HPC resources that have
+contributed to the research results reported within this paper.
+\end{acknowledgements}
+
+%\newpage
+% BibTeX users please use one of
+\bibliographystyle{spmpsci}      % mathematics and physical sciences
+\bibliography{paper}   % name your BibTeX data base
+
+\end{document}
+% end of file template.tex
+

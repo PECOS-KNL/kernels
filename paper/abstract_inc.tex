@@ -1,0 +1,25 @@
+% $Id: abstract.tex 27205 2012-01-23 02:44:21Z karl $
+
+\begin{abstract}
+
+This paper presents experiences using an early development
+environment release of the forthcoming Intel MIC platform, focusing on
+porting of existing scientific applications and
+micro-kernels.  Fortran and C++ applications are chosen
+from disciplines including quantum mechanics, hypersonics, rarefied
+gas dynamics, finite-element analysis, and FFT and linear algebra
+kernels used in the direct numerical simulation of turbulence.
+%Multiple MIC programming models are explored across these varied
+%applications including automatic offload via the Math Kernel Library
+%(MKL), native threaded execution via OpenMP, and shared-memory offload
+%mechanisms via newly available compiler directives. 
+To characterize the porting efforts required for applications at
+different stages of development, codes considered include
+both serial applications (no previous threading), codes with high BLAS
+usage, and codes with prior shared memory parallelism.
+
+
+\keywords{co-processors \and heterogeneous computing \and scientific
+  applications \and many integrated cores}
+
+\end{abstract}
