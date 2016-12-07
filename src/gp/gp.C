@@ -54,8 +54,7 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env(MPI_COMM_WORLD, argv[1], "", NULL);
 
   // Step 1 of 5: Instantiate the parameter space
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
-      "param_", 1, NULL);
+  QUESO::VectorSpace<> paramSpace(env, "param_", 1, NULL);
 
   double min_val = 0.0;
   double max_val = 1.0;
@@ -66,22 +65,18 @@ int main(int argc, char ** argv)
   QUESO::GslVector paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(max_val);
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> paramDomain("param_",
-      paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
   // Uniform prior here.  Could be a different prior.
-  QUESO::UniformVectorRV<QUESO::GslVector, QUESO::GslMatrix> priorRv("prior_",
-      paramDomain);
+  QUESO::UniformVectorRV<> priorRv("prior_", paramDomain);
 
   // Step 3 of 5: Set up the likelihood using the class above
-  Likelihood<QUESO::GslVector, QUESO::GslMatrix> lhood("llhd_", paramDomain);
+  Likelihood<> lhood("llhd_", paramDomain);
 
   // Step 4 of 5: Instantiate the inverse problem
-  QUESO::GenericVectorRV<QUESO::GslVector, QUESO::GslMatrix>
-    postRv("post_", paramSpace);
+  QUESO::GenericVectorRV<> postRv("post_", paramSpace);
 
-  QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix>
-    ip("", NULL, priorRv, lhood, postRv);
+  QUESO::StatisticalInverseProblem<> ip("", NULL, priorRv, lhood, postRv);
 
   // Step 5 of 5: Solve the inverse problem
   QUESO::GslVector paramInitials(paramSpace.zeroVector());
