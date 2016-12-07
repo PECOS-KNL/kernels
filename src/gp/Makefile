@@ -1,3 +1,8 @@
+# User must set the following environment variables:
+# QUESO_DIR
+# GSL_INC
+# BOOST_INC
+
 all: gp
 
 OBJECTS  =
