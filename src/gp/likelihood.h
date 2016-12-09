@@ -3,6 +3,8 @@
 
 #include <queso/ScalarFunction.h>
 
+#include <vector>
+
 // Forward declarations
 namespace QUESO
 {
@@ -24,6 +26,22 @@ public:
   virtual double actualValue(const V & domainVector, const V * domainDirection,
       V * gradVector, M * hessianMatrix, V * hessianEffect) const;
   double cov(double x, double y);
+
+private:
+  // Observational data
+  double m_observation;
+  double m_observationParameter;
+
+  // Simulation data
+  unsigned int m_num_simulations;
+  std::vector<double> m_simulations;
+  std::vector<double> m_simulationParameters;
+
+  // Correlation strength
+  double m_rho;
+
+  // Covariance matrix for the Gaussian Process
+  double * m_covariance;
 };
 
 #endif  // LIKELIHOOD

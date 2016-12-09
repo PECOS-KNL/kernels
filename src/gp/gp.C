@@ -18,7 +18,7 @@
 int main(int argc, char ** argv)
 {
   if (argc != 3) {
-    std::cerr << "Usage: chol <num_threads> <matrix_size>" << std::endl;
+    std::cerr << "Usage: gp <queso_input_file>" << std::endl;
     return 1;
   }
 
@@ -51,7 +51,7 @@ int main(int argc, char ** argv)
   MPI_Init(&argc, &argv);
 
   // Step 0 of 5: Set up environment
-  QUESO::FullEnvironment env(MPI_COMM_WORLD, "", "", NULL);
+  QUESO::FullEnvironment env(MPI_COMM_WORLD, argv[1], "", NULL);
 
   // Step 1 of 5: Instantiate the parameter space
   QUESO::VectorSpace<> paramSpace(env, "param_", 1, NULL);
@@ -74,25 +74,25 @@ int main(int argc, char ** argv)
   Likelihood<> lhood("llhd_", paramDomain);
 
   // Step 4 of 5: Instantiate the inverse problem
-  QUESO::GenericVectorRV<> postRv("post_", paramSpace);
+  // QUESO::GenericVectorRV<> postRv("post_", paramSpace);
 
-  QUESO::StatisticalInverseProblem<> ip("", NULL, priorRv, lhood, postRv);
+  // QUESO::StatisticalInverseProblem<> ip("", NULL, priorRv, lhood, postRv);
 
-  // Step 5 of 5: Solve the inverse problem
-  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+  // // Step 5 of 5: Solve the inverse problem
+  // QUESO::GslVector paramInitials(paramSpace.zeroVector());
 
-  // Initial condition of the chain
-  paramInitials[0] = 0.0;
-  paramInitials[1] = 0.0;
+  // // Initial condition of the chain
+  // paramInitials[0] = 0.0;
+  // paramInitials[1] = 0.0;
 
-  QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
+  // QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
 
-  for (unsigned int i = 0; i < 1; i++) {
-    // Might need to tweak this
-    proposalCovMatrix(i, i) = 0.1;
-  }
+  // for (unsigned int i = 0; i < 1; i++) {
+  //   // Might need to tweak this
+  //   proposalCovMatrix(i, i) = 0.1;
+  // }
 
-  ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
+  // ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
 
   MPI_Finalize();
 
