@@ -3,3 +3,23 @@
 \label{sec:isogeometric}
 
 Discontinuous Galerkin application on Intel MIC
+
+
+%
+% NM --- feel free to disregard anything I recommend here
+%
+yar\todo{Discuss, broadly, what class of problems this resides in and why humanity works on it}
+
+yar2\todo{some basic intro to the linear algebra you are doing}
+
+yar3\todo{any nuances of porting to MIC?}
+
+yar4\todo{discussion of scalability observed}
+
+\missingfigure{Strong scaling of the GPs on a single MIC (e.g. problem size constant
+and increasing number of threads)}
+
+Finally, some discussion is needed: is DG ameniable to MICs? Vs typical CPUs? I
+naively guess so, since you can essentially vectorize several of the
+activities.
+

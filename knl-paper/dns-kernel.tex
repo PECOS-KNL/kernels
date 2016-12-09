@@ -4,31 +4,9 @@
 
 In many fluid dynamics applications, turbulence plays a
 dominant role. Unfortunately, turbulence is notoriously complex and
-difficult to model.  One reliable
-tool for analyzing turbulence is direct
-numerical simulation (DNS)\cite{jimenez:2007}, where Navier--Stokes numerical solutions
-are fully resolved
-in both time and space. 
-%%%Although DNS is too
-%%%computationally expensive for engineering calculations, high quality
-%%%DNS is an excellent tool for investigation of turbulent flow physics.  
-
-% However, the extremely high resolution requirements of DNS
-% require excellent system performance. 
-% Communication costs arise from large volume of data all-to-all exchanges
-% between nodes needed to perform transposes. Direct matrix solves for the
-% wall-normal component of velocity rely on processor clockspeeds. Due to
-% the large problem sizes, the code is also memory intensive, and depends
-% on memory bandwidth and cache size available; finally, writing large
-% amounts of data for postprocessing makes I/O performance critical.
-
-%The simulation code seeks the solution of the
-%time-dependent three-dimensional incompressible Navier--Stokes
-%equations. Periodic boundary conditions are imposed in the streamwise
-%and span-wise direction, while in the wall normal direction, no slip
-%conditions are imposed at the walls. A partially implicit third order
-%Runge-Kutta/Crank--Nicholson scheme is used for time discretization. 
-%In
+difficult to model.  One reliable tool for analyzing turbulence is
+direct numerical simulation (DNS)\cite{jimenez:2007}, where
+Navier--Stokes numerical solutions are fully resolved in both time and space. 
 
 In the DNS application used
 by PECOS to simulate channel flow, a Fourier spectral
