@@ -16,8 +16,8 @@
 // Forward declaration
 int main(int argc, char ** argv)
 {
-  if (argc != 2) {
-    std::cerr << "Usage: gp <queso_input_file>" << std::endl;
+  if (argc != 3) {
+    std::cerr << "Usage: gp <queso_input_file> <num_simulations>" << std::endl;
     return 1;
   }
 
@@ -49,7 +49,7 @@ int main(int argc, char ** argv)
   QUESO::UniformVectorRV<> priorRv("prior_", paramDomain);
 
   // Step 3 of 5: Set up the likelihood using the class above
-  unsigned int num_simulations = 10;
+  unsigned int num_simulations = atoi(argv[2]);
   Likelihood<> lhood("llhd_", paramDomain, num_simulations);
 
   QUESO::GslVector point(paramSpace.zeroVector());
