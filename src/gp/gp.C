@@ -16,7 +16,7 @@
 // Forward declaration
 int main(int argc, char ** argv)
 {
-  if (argc != 3) {
+  if (argc != 2) {
     std::cerr << "Usage: gp <queso_input_file>" << std::endl;
     return 1;
   }
