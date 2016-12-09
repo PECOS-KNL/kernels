@@ -4,6 +4,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/VectorSet.h>
 
+#include <mkl.h>
+
 #include <cmath>
 
 template <class V, class M>
@@ -58,7 +60,6 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
     // Deal with the single experiment
     if (i == 0) {
       // Difference in scenario variables is always zero.  No need to handle it.
-
       // Deal with difference in parameters
       parameter1 = domainVector[0];
     }
@@ -83,6 +84,12 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
       m_covariance[i*total_dim+j] = std::pow(m_rho, 4.0 * param_diff * param_diff);
     }
   }
+
+  // We're letting MKL choose the workspace array at runtime
+  // Assume unsigned int N converts to lapack_int
+  int info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim);
+
+  std::cout << "LAPACKE_dpotrf return value is: " << info << std::endl;
 
   return 0;
 }
