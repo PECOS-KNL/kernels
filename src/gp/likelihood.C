@@ -107,11 +107,4 @@ Likelihood<V, M>::actualValue(const V & domainVector,
                                 hessianEffect));
 }
 
-template <class V, class M>
-double
-Likelihood<V, M>::cov(double x, double y)
-{
-  return std::exp(-0.5 * std::abs(x - y));
-}
-
 template class Likelihood<QUESO::GslVector, QUESO::GslMatrix>;

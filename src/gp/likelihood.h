@@ -25,7 +25,6 @@ public:
       V * gradVector, M * hessianMatrix, V * hessianEffect) const;
   virtual double actualValue(const V & domainVector, const V * domainDirection,
       V * gradVector, M * hessianMatrix, V * hessianEffect) const;
-  double cov(double x, double y);
 
 private:
   // Observational data
