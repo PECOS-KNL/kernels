@@ -83,6 +83,10 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
 
       double param_diff = parameter1 - parameter2;
       m_covariance[i*total_dim+j] = std::pow(m_rho, 4.0 * param_diff * param_diff);
+
+      if (i == j) {
+        m_covariance[i*total_dim+j] += 1e-6;
+      }
     }
   }
 
