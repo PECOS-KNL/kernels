@@ -19,7 +19,8 @@ template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
 {
 public:
-  Likelihood(const char * prefix, const QUESO::VectorSet<V, M> & domainSet);
+  Likelihood(const char * prefix, const QUESO::VectorSet<V, M> & domainSet,
+      unsigned int num_simulations);
   virtual ~Likelihood();
   virtual double lnValue(const V & domainVector, const V * domainDirection,
       V * gradVector, M * hessianMatrix, V * hessianEffect) const;

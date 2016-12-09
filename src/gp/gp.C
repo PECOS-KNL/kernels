@@ -49,7 +49,11 @@ int main(int argc, char ** argv)
   QUESO::UniformVectorRV<> priorRv("prior_", paramDomain);
 
   // Step 3 of 5: Set up the likelihood using the class above
-  Likelihood<> lhood("llhd_", paramDomain);
+  unsigned int num_simulations = 10;
+  Likelihood<> lhood("llhd_", paramDomain, num_simulations);
+
+  QUESO::GslVector point(paramSpace.zeroVector());
+  lhood.lnValue(point, NULL, NULL, NULL, NULL);
 
   // Step 4 of 5: Instantiate the inverse problem
   // QUESO::GenericVectorRV<> postRv("post_", paramSpace);

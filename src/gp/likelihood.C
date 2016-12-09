@@ -10,10 +10,11 @@
 
 template <class V, class M>
 Likelihood<V, M>::Likelihood(const char * prefix,
-    const QUESO::VectorSet<V, M> & domainSet)
+    const QUESO::VectorSet<V, M> & domainSet,
+    unsigned int num_simulations)
   : QUESO::BaseScalarFunction<V, M>(prefix, domainSet),
     m_observationParameter(1.0),
-    m_num_simulations(10),
+    m_num_simulations(num_simulations),
     m_simulations(m_num_simulations),
     m_simulationParameters(m_num_simulations),
     m_rho(0.5)
