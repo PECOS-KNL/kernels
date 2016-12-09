@@ -29,10 +29,10 @@ int main(int argc, char ** argv)
   MPI_Init(&argc, &argv);
 
   // Step 0 of 5: Set up environment
-  QUESO::FullEnvironment env(MPI_COMM_WORLD, argv[1], "", NULL);
+  QUESO::FullEnvironment * env = new QUESO::FullEnvironment(MPI_COMM_WORLD, argv[1], "", NULL);
 
   // Step 1 of 5: Instantiate the parameter space
-  QUESO::VectorSpace<> paramSpace(env, "param_", 1, NULL);
+  QUESO::VectorSpace<> paramSpace(*env, "param_", 1, NULL);
 
   double min_val = 0.0;
   double max_val = 1.0;

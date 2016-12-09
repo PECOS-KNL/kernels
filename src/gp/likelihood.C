@@ -45,7 +45,7 @@ Likelihood<V, M>::Likelihood(const char * prefix,
 template <class V, class M>
 Likelihood<V, M>::~Likelihood()
 {
-  free(m_covariance);
+  // free(m_covariance);
 }
 
 template <class V, class M>
@@ -155,6 +155,9 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
 
   // Second compute y^T x
   double llhd = cblas_ddot(total_dim, y, 1, x, 1);
+
+  // free(y);
+  // free(x);
 
   return -0.5 * llhd;
 }
