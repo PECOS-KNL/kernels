@@ -91,6 +91,21 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   }
 
   int info;
+  // Compute the \infty-norm of m_covariance
+  // All elements of m_covariance are nonnegative
+  double norm = 0.0;
+  for (unsigned int i = 0; i < total_dim; i++) {
+    double tmp = 0.0;
+
+    for (unsigned int j = 0; j < total_dim; j++) {
+      tmp += m_covariance[i*total_dim+j];
+    }
+
+    if (tmp > norm) {
+      norm = tmp;
+    }
+  }
+    
   // We're letting MKL choose the workspace array at runtime
   // Assume unsigned int N converts to lapack_int
   info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim);
@@ -110,21 +125,6 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
               << std::endl;
   }
 
-  // Compute the \infty-norm of m_covariance
-  // All elements of m_covariance are nonnegative
-  double norm = 0.0;
-  for (unsigned int i = 0; i < total_dim; i++) {
-    double tmp = 0.0;
-
-    for (unsigned int j = 0; j < total_dim; j++) {
-      tmp += m_covariance[i*total_dim+j];
-    }
-
-    if (tmp > norm) {
-      norm = tmp;
-    }
-  }
-    
   // Estimate the condition number of m_covariance
   double cond;
   info = LAPACKE_dpocon(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim, norm, &cond);
