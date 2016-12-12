@@ -10,7 +10,7 @@ OBJECTS += likelihood.o
 OBJECTS += gp.o
 
 CPPFLAGS=-I$(GSL_INC) -I$(BOOST_INC) -I$(QUESO_DIR)/include
-CXXFLAGS=-O0 -ggdb -std=c++11 -mkl -xCORE-AVX2 -axMIC-AVX512
+CXXFLAGS=-mt_mpi -O3 -std=c++11 -mkl -xCORE-AVX2 -axMIC-AVX512 -fopenmp
 LDFLAGS=-mkl -L$(QUESO_DIR)/lib
 
 gp: $(OBJECTS)

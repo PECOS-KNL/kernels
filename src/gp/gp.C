@@ -16,20 +16,28 @@
 // Forward declaration
 int main(int argc, char ** argv)
 {
-  if (argc != 3) {
-    std::cerr << "Usage: gp <queso_input_file> <num_simulations>" << std::endl;
+  if (argc != 4) {
+    std::cerr << "Usage: gp <num_threads> <queso_input_file> <num_simulations>" << std::endl;
     return 1;
   }
 
-  // omp_set_num_threads(atoi(argv[1]));
+  // Initialise MPI with threading support.
+  int required = MPI_THREAD_SERIALIZED;
+  int provided;
+  MPI_Init_thread(&argc, &argv, required, &provided);
+
+  // Fail if the provided support is not the required support
+  if (provided != required) {
+    queso_error_msg("This MPI implementation provides insufficient threading support");
+  }
+
+  omp_set_num_threads(atoi(argv[1]));
   // double start = omp_get_wtime();
   // double time = omp_get_wtime() - start;
   // std::cout << "LAPACKE_dpotrf executed in " << time << " secs." << std::endl;
 
-  MPI_Init(&argc, &argv);
-
   // Step 0 of 5: Set up environment
-  QUESO::FullEnvironment * env = new QUESO::FullEnvironment(MPI_COMM_WORLD, argv[1], "", NULL);
+  QUESO::FullEnvironment * env = new QUESO::FullEnvironment(MPI_COMM_WORLD, argv[2], "", NULL);
 
   // Step 1 of 5: Instantiate the parameter space
   QUESO::VectorSpace<> paramSpace(*env, "param_", 1, NULL);
@@ -49,7 +57,7 @@ int main(int argc, char ** argv)
   QUESO::UniformVectorRV<> priorRv("prior_", paramDomain);
 
   // Step 3 of 5: Set up the likelihood using the class above
-  unsigned int num_simulations = atoi(argv[2]);
+  unsigned int num_simulations = atoi(argv[3]);
   Likelihood<> lhood("llhd_", paramDomain, num_simulations);
 
   QUESO::GslVector point(paramSpace.zeroVector());
