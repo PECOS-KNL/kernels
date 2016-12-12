@@ -142,6 +142,15 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   // First solve \Sigma x = y for x
   double * y = (double *)malloc(sizeof(double) * total_dim);
   double * x = (double *)malloc(sizeof(double) * total_dim);
+
+  if (x == NULL) {
+    std::cout << "Could not allocate enough memory for rhs" << std::endl;
+  }
+
+  if (y == NULL) {
+    std::cout << "Could not allocate enough memory for data" << std::endl;
+  }
+
   y[0] = m_observation;
   x[0] = m_observation;
   for (unsigned int i = 0; i < m_num_simulations; i++) {
