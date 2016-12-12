@@ -158,7 +158,9 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
     x[i+1] = m_simulations[i];
   }
 
-  info = LAPACKE_dpotrs(LAPACK_ROW_MAJOR, 'U', total_dim, 1, m_covariance, total_dim, x, total_dim);
+  // LAPACK treats the right-hand side as a matrix.  Since we only have one right-hand side
+  // the leading dimension of this 'matrix' is 1, not total_dim.  I'm an idiot.
+  info = LAPACKE_dpotrs(LAPACK_ROW_MAJOR, 'U', total_dim, 1, m_covariance, total_dim, x, 1);
   if (info == 0) {
     std::cout << "LAPACKE_dpotrs successful" << std::endl;
   }
