@@ -32,9 +32,6 @@ int main(int argc, char ** argv)
   }
 
   omp_set_num_threads(atoi(argv[1]));
-  // double start = omp_get_wtime();
-  // double time = omp_get_wtime() - start;
-  // std::cout << "LAPACKE_dpotrf executed in " << time << " secs." << std::endl;
 
   // Step 0 of 5: Set up environment
   QUESO::FullEnvironment * env = new QUESO::FullEnvironment(MPI_COMM_WORLD, argv[2], "", NULL);
@@ -61,7 +58,11 @@ int main(int argc, char ** argv)
   Likelihood<> lhood("llhd_", paramDomain, num_simulations);
 
   QUESO::GslVector point(paramSpace.zeroVector());
+
+  double start_time = omp_get_wtime();
   lhood.lnValue(point, NULL, NULL, NULL, NULL);
+  double time = omp_get_wtime() - start_time;
+  std::cout << "Likelihood evaluation took " << time << " secs." << std::endl;
 
   // Step 4 of 5: Instantiate the inverse problem
   // QUESO::GenericVectorRV<> postRv("post_", paramSpace);
