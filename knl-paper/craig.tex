@@ -14,21 +14,31 @@ For our scaling test here we solve the first-order acoustic wave equation: \begi
 
 Broadly such a system is discretized by solving the semidiscrete system \[ \left( v, \frac{ \partial A}{\partial t} \right)_{\Omega_{i}}= V_{\Omega_{i}}+S_{\partial\Omega_{i}} \] for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume kernel that has only elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface kernel that depends on interelement communication through a classical upwinding flux cite.  
 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.9\linewidth]{./bidg_data/scaling}
+\end{center}
+\vspace*{-.5cm}
+\caption{Strong scaling of ArcSyn3sis BIDG kernel on KNL accelerator.}
+\label{fig:dns_scaling}
+\end{figure}
+
 %
 % NM --- feel free to disregard anything I recommend here
 %
  %yar\todo{Discuss, broadly, what class of problems this resides in and why humanity works on it}
 
-yar2\todo{some basic intro to the linear algebra you are doing}
+%% yar2\todo{some basic intro to the linear algebra you are doing}
 
-yar3\todo{any nuances of porting to MIC?}
+%% yar3\todo{any nuances of porting to MIC?}
 
-yar4\todo{discussion of scalability observed}
+%% yar4\todo{discussion of scalability observed}
 
-\missingfigure{Strong scaling of the GPs on a single MIC (e.g. problem size constant
-and increasing number of threads)}
+%% \missingfigure{Strong scaling of the GPs on a single MIC (e.g. problem size constant
+%% and increasing number of threads)}
 
-Finally, some discussion is needed: is DG ameniable to MICs? Vs typical CPUs? I
-naively guess so, since you can essentially vectorize several of the
-activities.
+%Finally, some discussion is needed: is DG ameniable to MICs? Vs typical CPUs? I
+%naively guess so, since you can essentially vectorize several of the
+%activities.
 
