@@ -1,7 +1,7 @@
 % Strong Scaling BIDG
 
 % Averaging:
-% m* = mean(mpi_time*(2:end))
+% m* = mean(mpi_time)
 
-% Efficiency
-% e.g. e2 = (m1/(2*m2))*100
+% Efficiency for N threads
+% e.g. e2 = (m1/(N*m2))*100

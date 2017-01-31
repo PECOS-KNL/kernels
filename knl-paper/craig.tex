@@ -6,6 +6,17 @@ For the scaling study the blended isogeometric discontinuous Galerkin (BIDG) cod
 
 In traditional isogeometric analysis tight coupling between computer aided design (CAD) mesh automation tools for complex geometric domains, such as jet engines and tokamak fusion reactors, has been developed for triangles in two dimensions cite, and semi-arbitrary elements in three dimensions cite.    This allows for meshes that exactly preserve the underlying geometry of real-world mesh designs, including arbitrarily smooth and discontinuous features cite.  In many application, geoemtric sensitivities are known to dominate errors, and as such having high-order accurate solutions on geometrically consistent meshes is essential.
 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{./bidg_data/168_circ_c}
+\end{center}
+\vspace*{-.5cm}
+\caption{Exact b\'{e}zier circular mesh used in the scaling study.}
+\label{fig:dns_scaling}
+\end{figure}
+
+
 The discontinuous Galerkin method, on the other hand, excels in aspects of its computational efficiency in the context of modern architectures, particular in convection-dominated flows that allow for localization of finite element stencils in such a way that dynamic problems lead to block diagonal matrix systems.  The locality of the memory footprint in these application models leads to the ability to compute at high local order at unusally high arithmetic intensity cite.
 
 The BIDG method merges these two methods seamlessly way cite, by utilizing an peicewise rational isogeometric basis for the geometric representation, a peicewise discontinuous po9lynomial representation for the model, and an exact (and properly conditioned) geometric transformation between the two spaces.
@@ -17,12 +28,16 @@ Broadly such a system is discretized by solving the semidiscrete system \[ \left
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.9\linewidth]{./bidg_data/scaling}
+\includegraphics[width=0.95\linewidth]{./bidg_data/scaling_p}
 \end{center}
 \vspace*{-.5cm}
-\caption{Strong scaling of ArcSyn3sis BIDG kernel on KNL accelerator.}
+\caption{Strong scaling of ArcSyn3sis BIDG kernel on KNL nodes.  Test run on isogeometric mesh with 168 elements.}
 \label{fig:dns_scaling}
 \end{figure}
+
+
+The implementartion on isogeometric meshes 
+
 
 %
 % NM --- feel free to disregard anything I recommend here
