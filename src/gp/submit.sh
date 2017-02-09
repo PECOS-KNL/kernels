@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J gp
 #SBATCH -o gp_%j.txt
-#SBATCH -n 68
+#SBATCH -n 272
 #SBATCH -N 1
 #SBATCH -p normal
 #SBATCH -t 02:00:00

@@ -117,12 +117,14 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
     std::cout << "LAPACKE_dpotrf was unsuccessful."
               << "  Parameter " << info << " had an illegal value."
               << std::endl;
+    queso_error();
   }
   else {  // if (info > 0) {
     std::cout << "LAPACKE_dpotrf was unseccessful."
               << "  The leading minor of order " << info << " is not pos. def."
               << "  The Cholesky factorisation could not be completed."
               << std::endl;
+    queso_error();
   }
 
   // Estimate the condition number of m_covariance
@@ -136,6 +138,7 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
     std::cout << "Condition number estimation failed."
               << "  Parameter " << info << " had an illegal value."
               << std::endl;
+    queso_error();
   }
 
   // Now do y^T \Sigma^{-1} y
@@ -145,10 +148,12 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
 
   if (x == NULL) {
     std::cout << "Could not allocate enough memory for rhs" << std::endl;
+    queso_error();
   }
 
   if (y == NULL) {
     std::cout << "Could not allocate enough memory for data" << std::endl;
+    queso_error();
   }
 
   y[0] = m_observation;
@@ -166,6 +171,7 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   }
   else {
     std::cout << "LAPACKE_dpotrs unsuccessful.  Parameter " << info << " had an illegal value" << std::endl;
+    queso_error();
   }
 
   // Second compute y^T x

@@ -62,7 +62,18 @@ int main(int argc, char ** argv)
   double start_time = omp_get_wtime();
   lhood.lnValue(point, NULL, NULL, NULL, NULL);
   double time = omp_get_wtime() - start_time;
-  std::cout << "Likelihood evaluation took " << time << " secs." << std::endl;
+
+  // Open a file
+  unsigned int num_openmp = atoi(argv[1]);
+  int num_mpi = env->fullComm().NumProc();
+  int rank = env->fullRank();
+
+  std::ostringstream filename;
+  filename << "submit_all_ddr/time_mpi_" << num_mpi << "_openmp_" << num_openmp << "_rank_" << rank << ".txt";
+
+  std::ofstream output_file(filename.str());
+  output_file << "Likelihood evaluation took " << time << " secs." << std::endl;
+  output_file.close();
 
   // Step 4 of 5: Instantiate the inverse problem
   // QUESO::GenericVectorRV<> postRv("post_", paramSpace);
