@@ -22,14 +22,20 @@ for i in range(len(all_ranks)):
     print num_openmp, times[i,:]
 
     # Generate MPI scaling figures
-    ax.plot(all_ranks, times[i])
+    ax.plot(all_ranks, times[i], 'b-x')
     ax.grid(True)
+    ax.set_title('OpenMP threads: ' + str(num_openmp))
+    ax.set_xlabel('MPI processes')
+    ax.set_ylabel('Time to solution (seconds)')
     fig.savefig('mpi_scaling_' + str(num_openmp) + '.pdf')
     ax.cla()
 
 # Generate OpenMP scaling figures
 for i in range(times.shape[1]):
-    ax.plot(all_ranks, times[:,i])
+    ax.plot(all_ranks, times[:,i], 'b-x')
     ax.grid(True)
+    ax.set_title('MPI processes: ' + str(all_ranks[i]))
+    ax.set_xlabel('OpenMP threads')
+    ax.set_ylabel('Time to solution (seconds)')
     fig.savefig('openmp_scaling_' + str(all_ranks[i]) + '.pdf')
     ax.cla()
