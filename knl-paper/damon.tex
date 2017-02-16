@@ -1,31 +1,69 @@
 % DNS defined in the intro!
-\subsection{Cholesky Factorization}
+\subsection{Gaussian processes}
 \label{sec:chol}
 
+It is common in many uncertainty quantification applications to replace an
+expensive model, possible a discretised partial differential equation with a
+cheap surrogate.  This is done so that during a Markov chain Monte Carlo
+procedure, likelihood evaluations are cheap.  There are a plethora of different
+surrogate choices and strategies for choosing which is appropriate for a
+particular application.  Gaussian processes are a common choice, and we explore
+their scaling on the KNL architecture here.
 
-Decomposition of PD matrix into the product of a lower triangular matrix
-and its conjugate transpose.
+\todo{hierarchical!!!}
 
+Gaussian processes are a probabilistic model for generating random fields
+characterised by a mean function and a covariance function.
+\begin{equation}
+  f(x) \sim \mathcal{N}(\mu(x), c(x, x'))
+\end{equation}
 
-%
-% NM --- feel free to disregard anything I recommend here
-%
-\todo{some basic intro to the linear algebra you are doing}
+They have the property that evaluation of the field at some finite set of
+points $(x_1, \ldots, x_n)$ yields a multivariate normal vector with a known
+mean vector and symmetric and positive-definite covariance matrix
+\begin{equation}
+  \begin{pmatrix}
+    f(x_1) \\
+    \hdots \\
+    f(x_n)
+  \end{pmatrix}
+  \sim \mathcal{N}(\mu, \Sigma).
+\end{equation}
+Thus, laying down a grid of points we wish to model the field at yields the
+usual Gaussian probability distribution function we are familiar with,
+\begin{equation}
+  p(x) \propto |\Sigma|^{-1/2} \exp(-\frac12 x^\top \Sigma^{-1} x).
+\end{equation}
+Notice that evaluation of this probability density function necessitates a
+linear solve $\Sigma u = x$.  Since $\Sigma$ is symmetric and positive-definite
+a Cholesky factorisation is required.  Iterative approaches exist too, but we
+concentrate on the direct approach here.  It is also worth noting that the
+covariance function is typically takes an exponential form
+\begin{equation}
+  c(x, x') = \sigma^2 \exp(-\frac12 \| x - x' \|^2 / l^2)
+\end{equation}
+and so the resulting covariance matrix
+\begin{equation}
+  \Sigma_{ij} = c(x_i, x_j)
+\end{equation}
+is very commonly full and dense.  The usual approach is taken for evaluation
+of the probability density function
+\begin{enumerate}
+  \item Compute $L$ such that $\Sigma = LL^\top$.
+  \item Solve $\Sigma u = x$ using 1.
+  \item Compute the inner-product $x^\top u$.
+  \item Divide by the square root of the determinant of $\Sigma$.
+  \item Return $p$
+  \item Go to 1. for the next state in the Markov chain.
+\end{enumerate}
 
-\missingfigure{Strong scaling on single MIC (e.g. problem size constant
-and increasing number of threads)}
+QUESO was used to manage the Gaussian process and Markov chain infrastructure.
+The meat of the heavy lifting is done inside the likelihood evaluation which
+necessitates the evaluation of the Gaussian probability density function.
+Extensive use of Intel's MKL was used for both the Cholesky factorisation and
+subsequent linear solve.
 
-\subsection{Gaussian Processes}
-\label{sec:chol}
-
-GPs
-
-%
-% NM --- feel free to disregard anything I recommend here
-%
-\todo{some basic intro to the linear algebra you are doing}
-
-\missingfigure{Strong scaling of the GPs on a single MIC (e.g. problem size constant
-and increasing number of threads)}
+\missingfigure{Strong scaling of the GPs on a single MIC (e.g. problem size
+constant and increasing number of threads)}
 
 Some discussion is warrented: is this ameniable to MICs? Vs typical CPUs?
