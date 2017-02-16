@@ -60,10 +60,15 @@ of the probability density function
 QUESO was used to manage the Gaussian process and Markov chain infrastructure.
 The meat of the heavy lifting is done inside the likelihood evaluation which
 necessitates the evaluation of the Gaussian probability density function.
-Extensive use of Intel's MKL was used for both the Cholesky factorisation and
-subsequent linear solve.
+Extensive use of Intel's MKL was used for both the Cholesky factorisation,
+subsequent linear solve, and determinant calculation.
 
-\missingfigure{Strong scaling of the GPs on a single MIC (e.g. problem size
-constant and increasing number of threads)}
+Figure~\ref{fig:gp} shows timings of a Gaussian process likelihood evaluation
+as a function of number of OpenMP threads.
+
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{openmp_scaling_1.pdf}
+  \label{fig:gp}
+\end{figure}
 
 Some discussion is warrented: is this ameniable to MICs? Vs typical CPUs?
