@@ -1,2 +1,5 @@
 *.o
 src/gp/gp
+knl-paper/knl-paper-paper.pdf
+knl-paper/paper.log
+knl-paper/paper.aux
