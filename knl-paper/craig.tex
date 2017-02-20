@@ -1,10 +1,10 @@
 % DNS defined in the intro!
-\subsection{Blended Isogeometric Discontinuous Galerkin Application}
+\subsection{Blended Isogeometric Discontinuous Galerkin (BIDG) Method}
 \label{sec:isogeometric}
 
-For the scaling study the blended isogeometric discontinuous Galerkin (BIDG) code, ArcSyn3sis was used.  The BIDG algorithm was developed in cite, to exploit and seamlessly merge key capabilities offered by both isogeometric analysis and discontinuous Galerkin methods. This method is an inherently high-order method, that is amenable to $hp$-adaptive schemes, and shows super-exponential convergence behaviors.
+For the scaling study the blended isogeometric discontinuous Galerkin (BIDG) code, ArcSyn3sis was used.  The BIDG algorithm was developed in \cite{Michoski2016658}. to exploit and seamlessly merge key capabilities offered by both isogeometric analysis and discontinuous Galerkin methods. This method is an inherently high-order method that is amenable to $hp$-adaptive schemes, and shows requisite super-exponential convergence behaviors.
 
-In traditional isogeometric analysis tight coupling between computer aided design (CAD) mesh automation tools for complex geometric domains, such as jet engines and tokamak fusion reactors, has been developed for triangles in two dimensions cite, and semi-arbitrary elements in three dimensions cite.    This allows for meshes that exactly preserve the underlying geometry of real-world mesh designs, including arbitrarily smooth and discontinuous features cite.  In many application, geoemtric sensitivities are known to dominate errors, and as such having high-order accurate solutions on geometrically consistent meshes is essential.
+In traditional isogeometric analysis tight coupling between computer aided design (CAD) mesh automation tools for complex geometric domains, such as jet engines and tokamak fusion reactors, has been developed for triangles in two dimensions  \cite{Engvall2016378}, and semi-arbitrary elements in three dimensions \cite{EngvallPress}.  This allows for meshes that exactly preserve the underlying geometry of real-world mesh designs, including arbitrarily smooth and discontinuous features.  In many application, geometric sensitivities are known to dominate errors, and as such having high-order accurate solutions on geometrically consistent meshes is essential.
 
 
 \begin{figure}[h]
@@ -17,13 +17,13 @@ In traditional isogeometric analysis tight coupling between computer aided desig
 \end{figure}
 
 
-The discontinuous Galerkin method, on the other hand, excels in aspects of its computational efficiency in the context of modern architectures, particular in convection-dominated flows that allow for localization of finite element stencils in such a way that dynamic problems lead to block diagonal matrix systems.  The locality of the memory footprint in these application models leads to the ability to compute at high local order at unusally high arithmetic intensity cite.
+The discontinuous Galerkin method, on the other hand, excels in aspects of its computational efficiency in the context of modern architectures, particular in convection-dominated flows that allow for localization of finite element stencils in such a way that dynamic problems lead to block diagonal matrix systems.  The locality of the memory footprint in these application models leads to the ability to compute at high local order at unusally high arithmetic intensity \cite{Klöckner2009786}.
 
-The BIDG method merges these two methods seamlessly way cite, by utilizing an peicewise rational isogeometric basis for the geometric representation, a peicewise discontinuous po9lynomial representation for the model, and an exact (and properly conditioned) geometric transformation between the two spaces.
+The BIDG method merges these two methods seamlessly by utilizing a peicewise rational isogeometric basis for the geometry, and a peicewise discontinuous polynomial representation for the model, while providing an exact (and properly conditioned) geometric transformation between the two spaces  \cite{Michoski2016658}.
 
 For our scaling test here we solve the first-order acoustic wave equation: \begin{equation} \label{awe} \frac{\partial p}{\partial t} + \nabla\cdot \boldsymbol{u} = 0, \quad  \frac{\partial\boldsymbol{u}}{\partial t} + \nabla p = 0, \end{equation} where $\boldsymbol{u}=(u_x,u_y)$ is the velocity, and $p$ the pressure.
 
-Broadly such a system is discretized by solving the semidiscrete system \[ \left( v, \frac{ \partial A}{\partial t} \right)_{\Omega_{i}}= V_{\Omega_{i}}+S_{\partial\Omega_{i}} \] for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume kernel that has only elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface kernel that depends on interelement communication through a classical upwinding flux cite.  
+Broadly such a system is discretized by solving the semidiscrete block diagonal system \[ \left( v, \frac{ \partial A}{\partial t} \right)_{\Omega_{i}}= V_{\Omega_{i}}+S_{\partial\Omega_{i}} \] for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume kernel that has only elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface kernel that depends on interelement communication through classical upwinding \cite{Michoski2014898}.  
 
 
 \begin{figure}[h]
@@ -32,11 +32,13 @@ Broadly such a system is discretized by solving the semidiscrete system \[ \left
 \end{center}
 \vspace*{-.5cm}
 \caption{Strong scaling of the ArcSyn3sis BIDG kernel on KNL nodes run on isogeometric 168 element mesh, and shown at different element order $\ell$.}
-\label{fig:dns_scaling}
+\label{fig:bidg_scaling}
 \end{figure}
 
 
-The implementartion on isogeometric meshes 
+The implementartion on isogeometric meshes utilizes the Open Concurrent Compute Abstraction (OCCA) library \cite{MedinaPress}.  The library uses an offload model for abstracting back-ends and kernel libraries from OpenMP, OpenCL, and CUDA using a macros C-based approach.  The OCCA kernel implements macro-based just-in-time code generation so that the platform target can be identified at runtime.  Threaded barriers are also set in the application kernel to allow for thread-based granularity, giving more flexibility in the optimization procedure.  The implementation of the ArcSyn3sis kernel allows for aliasing of in the flattened arrays, such that the data structures can be called more intuitively (e.g. a 4-tensor can be called as a four array, instead of indexed as a flattened continguous one array).  The volume kernel can be written in three nested loops, and outer loop over elements, and two inner loops over the degrees of freedom of the DG basis.  The surface kernel similarly loops over elements, but then due to an added interpolation step coming form the isogeometric transformation, extends one of these nested loops over the quadrature degrees of freedom for curved edges instead.
+
+The results of the basic scaling study are shown in Fig.~\ref{fig:bidg_scaling}.  These priliminary results seem to indicate improved scaling as function of polynomial order, which is consistent with the theoretic algorithmic intensity of DG algorithms.  However, this is clearly not enough evidence to be certain that such scaling is being observed.  In particular, on this mesh we see an efficiency saturation above $\ell>5$.  Moreover, since the mesh itself has only 168 elements, the number of threads eventually exceeds the number of elements, making for some intriguing questions regarding the observ3ed behavior.  In order to fully understand this behavior, a more thorough study will be required,  including a streams benchmark \cite{McCalpin1995} and roofline performance test \cite{Williams:2009:RIV:1498765.1498785}.
 
 
 %
