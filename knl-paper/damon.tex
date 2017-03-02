@@ -3,7 +3,7 @@
 \label{sec:chol}
 
 It is common in many uncertainty quantification applications to replace an
-expensive model, possible a discretised partial differential equation with a
+expensive model, possibly a discretised partial differential equation with a
 cheap surrogate.  This is done so that during a Markov chain Monte Carlo
 procedure, likelihood evaluations are cheap.  There are a plethora of different
 surrogate choices and strategies for choosing which is appropriate for a
@@ -13,7 +13,7 @@ their scaling on the KNL architecture here.
 \todo{hierarchical!!!}
 
 Gaussian processes are a probabilistic model for generating random fields
-characterised by a mean function and a covariance function.
+characterised by a mean $\mu$ function and a covariance function $c$.
 \begin{equation}
   f(x) \sim \mathcal{N}(\mu(x), c(x, x'))
 \end{equation}
@@ -29,8 +29,8 @@ mean vector and symmetric and positive-definite covariance matrix
   \end{pmatrix}
   \sim \mathcal{N}(\mu, \Sigma).
 \end{equation}
-Thus, laying down a grid of points we wish to model the field at yields the
-usual Gaussian probability distribution function we are familiar with,
+Thus, laying down a grid of points at which we wish to model the field yields
+the usual Gaussian probability distribution function we are familiar with,
 \begin{equation}
   p(x) \propto |\Sigma|^{-1/2} \exp(-\frac12 x^\top \Sigma^{-1} x).
 \end{equation}
@@ -38,7 +38,7 @@ Notice that evaluation of this probability density function necessitates a
 linear solve $\Sigma u = x$.  Since $\Sigma$ is symmetric and positive-definite
 a Cholesky factorisation is required.  Iterative approaches exist too, but we
 concentrate on the direct approach here.  It is also worth noting that the
-covariance function is typically takes an exponential form
+covariance function typically takes an exponential form
 \begin{equation}
   c(x, x') = \sigma^2 \exp(-\frac12 \| x - x' \|^2 / l^2)
 \end{equation}
@@ -58,7 +58,7 @@ of the probability density function
 \end{enumerate}
 
 QUESO was used to manage the Gaussian process and Markov chain infrastructure.
-The meat of the heavy lifting is done inside the likelihood evaluation which
+The bulk of the computational cost lies inside the likelihood function which
 necessitates the evaluation of the Gaussian probability density function.
 Extensive use of Intel's MKL was used for both the Cholesky factorisation,
 subsequent linear solve, and determinant calculation.
