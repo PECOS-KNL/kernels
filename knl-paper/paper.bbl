@@ -1,0 +1,47 @@
+\begin{thebibliography}{1}
+
+\bibitem{Engvall2016378}
+L.~Engvall and J.~A. Evans.
+\newblock Isogeometric triangular bernstein–bézier discretizations:
+  Automatic mesh generation and geometrically exact finite element analysis.
+\newblock {\em Computer Methods in Applied Mechanics and Engineering}, 304:378
+  -- 407, 2016.
+
+\bibitem{EngvallPress}
+L.~Engvall and J.~A. Evans.
+\newblock Isogeometric unstructed tetrahedral and mixed-element
+  bernstein–bézier discretizations.
+\newblock {\em In Review}, 2017.
+
+\bibitem{McCalpin1995}
+J.~D. McCalpin.
+\newblock Memory bandwidth and machine balance in current high performance
+  computers.
+\newblock {\em IEEE Computer Society Technical Committee on Computer
+  Architecture (TCCA) Newsletter}, pages 19--25, Dec. 1995.
+
+\bibitem{MedinaPress}
+D.~Medina, A.~St-Cyr, and T.~Warburton.
+\newblock {OCCA: A unified approach to multi-threading languages}.
+\newblock {\em In Review}, 2017.
+
+\bibitem{Michoski2016658}
+C.~Michoski, J.~Chan, L.~Engvall, and J.~Evans.
+\newblock Foundations of the blended isogeometric discontinuous galerkin (bidg)
+  method.
+\newblock {\em Computer Methods in Applied Mechanics and Engineering}, 305:658
+  -- 681, 2016.
+
+\bibitem{Michoski2014898}
+C.~Michoski, D.~Meyerson, T.~Isaac, and F.~Waelbroeck.
+\newblock Discontinuous {G}alerkin methods for plasma physics in the scrape-off
+  layer of tokamaks.
+\newblock {\em Journal of Computational Physics}, 274(0):898--919, 2014.
+
+\bibitem{Williams:2009:RIV:1498765.1498785}
+S.~Williams, A.~Waterman, and D.~Patterson.
+\newblock Roofline: An insightful visual performance model for multicore
+  architectures.
+\newblock {\em Commun. ACM}, 52(4):65--76, Apr. 2009.
+
+\end{thebibliography}
