@@ -1,14 +1,14 @@
 \section{Introduction}
 \label{sec:intro}
 
-Heterogeneous computing with multiple levels of exposed parallelism is 
+Heterogeneous computing with multiple levels of exposed parallelism is
 a leading candidate under consideration for the design of
 future exascale systems.\todo{update me}
-% ~\cite{idc_report}. 
+% ~\cite{idc_report}.
 Indeed, accelerators like
 current generation GPGPUs offer relatively high floating-point rates
 and memory bandwidth with lower relative power footprints than
-general-purpose compute platforms~\cite{gpu_hpc:2009}. However, 
+general-purpose compute platforms~\cite{gpu_hpc:2009}. However,
 GPU-based acceleration commonly requires special
 programming constructs (e.g. NVIDIA's CUDA language) for the
 accelerated work.
@@ -16,7 +16,7 @@ accelerated work.
 % architecture, an additional co-processor technology will become
 % available to the scientific community.  This paper reports on
 % several early porting experiences to the {\em Knights Ferry} MIC
-% platform. An attractive feature of this architecture is 
+% platform. An attractive feature of this architecture is
 % support for standard threading models like
 % OpenMP~\cite{openmp_standard} which are
 % already used by many scientific applications.  In addition, the MIC
@@ -34,8 +34,8 @@ Texas at Austin.
 % analysis of hypersonic atmospheric entry.  Consequently, porting efforts
 % include relevant kernels from the direct numerical simulation (DNS) of
 % turbulence, quantum mechanics, hypersonics, rarefied gas dynamics, and
-% general-purpose finite-element assembly. 
-The applications include 
+% general-purpose finite-element assembly.
+The applications include
 both Fortran and C++ codes, and include an example with no prior
 thread-based parallelism as well as codes with existing OpenMP or TBB
 based threading.
@@ -49,7 +49,7 @@ considered, and \S\ref{sec:summary} summarizes the overall experiences.
 
 \section{Testing Infrastructure}
 \label{sec:hardware}
-%\subsection{Test Hardware} 
+%\subsection{Test Hardware}
 
 The test hardware used for this exercise was
 on a Stampede development cluster installed at the Texas Advanced
@@ -63,7 +63,7 @@ cores.\todo{update me}
 The KNF support on this hardware
 was provided with the {\em alpha9} release of Intel's MIC Software
 Development Platform, and all compilation was performed with an alpha
-release of Intel Composer for MIC ({\em 
+release of Intel Composer for MIC ({\em
   029 Alpha Build 20120222}).\todo{update me}
 
 \section{Third Party Library Cross-Compiling} \label{sec:cross_compile}
@@ -77,7 +77,7 @@ first build all auxiliary libraries required by each of the
 computational kernels considered.\todo{update this}
 The following libraries were
 compiled for both the host CPU and KNF MIC architectures: {\em Boost,
-%GNU Scientific Library 
+%GNU Scientific Library
 GSL, FFTW\cite{FFTW05}, GRVY,} and
 {\em libMesh}.\todo{would this be better as a table?}
 
@@ -97,7 +97,7 @@ file with a new ``mic'' Linux target.
 To build native libraries for MIC, the ``-mmic"
 flag was added to all relevant compiler flags.
 %For other packages, simply passing ``-mmic" to the compiler
-%options was sufficient to build a native MIC package. 
+%options was sufficient to build a native MIC package.
 As an example, the following configure options were used to build a
 native MIC version of the FFTW 3.3 static library:
 
@@ -112,12 +112,12 @@ native MIC version of the FFTW 3.3 static library:
 
 \noindent The libMesh library additionally required fixing configuration
 macros to support cross-compilation and auto-detection of native TBB
-support. 
+support.
 
 These strategies successfully built native static libraries and
 executables for MIC. However, building shared
 libraries was more delicate and not always successful. For
-example, configuring Boost to build shared libraries 
+example, configuring Boost to build shared libraries
 caused the linker to crash.  Other shared libraries, such as GSL,
 built without incident.
 
