@@ -7,7 +7,7 @@ cheap surrogate.  This is done so that during a Markov chain Monte Carlo
 procedure, likelihood evaluations are cheap.  There are a plethora of different
 surrogate choices and strategies for choosing which is appropriate for a
 particular application.  Gaussian processes are a common choice, and we explore
-their scaling on the KNL architecture here.
+their scaling on the KNL architecture here.\todo{citations motherclucker, do you have them?}
 
 Gaussian processes are a probabilistic model for generating random fields
 characterised by a mean $\mu$ function and a covariance function $c$.
@@ -63,8 +63,14 @@ Extensive use of Intel's MKL was used for both the Cholesky factorisation,
 subsequent linear solve, and determinant calculation.
 
 Figure~\ref{fig:gp} shows timings of a Gaussian process likelihood evaluation
-as a function of number of OpenMP threads.
+as a function of number of OpenMP threads.\todo{NM- can you repeat study with MPI?}
+%NM: can you do the same study with a single OMP thread and vary MPI_tasks? numerous authors have found this to be faster, would be interesting to corroborate
 
+%
+% I would also add a discussion of the timings here. Can you say something about strong-weak scaling?
+% this looks like a strong scaling analysis, can you detail more on the speedup?
+% also, I can't read those plot axes
+%
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{openmp_scaling_1.pdf}
   \label{fig:gp}
