@@ -1,123 +1,82 @@
 \section{Introduction}
 \label{sec:intro}
 
-Heterogeneous computing with multiple levels of exposed parallelism is 
-a leading candidate under consideration for the design of
-future exascale systems.\todo{update me}
-% ~\cite{idc_report}. 
-Indeed, accelerators like
-current generation GPGPUs offer relatively high floating-point rates
-and memory bandwidth with lower relative power footprints than
-general-purpose compute platforms~\cite{gpu_hpc:2009}. However, 
-GPU-based acceleration commonly requires special
-programming constructs (e.g. NVIDIA's CUDA language) for the
-accelerated work.
-% With the release of Intel's Many Integrated Core (MIC)
-% architecture, an additional co-processor technology will become
-% available to the scientific community.  This paper reports on
-% several early porting experiences to the {\em Knights Ferry} MIC
-% platform. An attractive feature of this architecture is 
-% support for standard threading models like
-% OpenMP~\cite{openmp_standard} which are
-% already used by many scientific applications.  In addition, the MIC
-% platform is based on an x86 architecture, and C/C++ and Fortran
-% kernels can be easily compiled for direct native execution on MIC.
+Accelerators like current generation GPGPUs offer relatively high
+floating-point throughput and memory bandwidth with a lower relative power
+footprint than general-purpose compute platforms~\cite{gpu_hpc:2009}. However,
+GPU-based acceleration commonly requires special programming constructs (e.g.
+NVIDIA's CUDA language) for the accelerator to work.  Intel's Xeon Phi
+many-core architectures offer a balance with a smaller core count than GPGPUs
+but an x86 architecture and therefore don't need specialised programming
+paradigms.  Existing MPI or OpenMP~\cite{openmp_standard} threaded Fortran, C,
+or C++ codes can be compiled and run with relative ease.
 
-The application kernels considered herein are taken from existing
-development efforts within the PECOS Center at the University of
-Texas at Austin.
+The applications considered in this paper are taken from existing development
+efforts within the PECOS Center at the University of Texas at Austin.  This
+paper reports on two main areas: 1) the level of effort required in porting
+software applications from a wide array of scientific disciplines written in
+commonly used procedural languages; and 2) observed performance of these
+applications.  The applications include Fortran, C, and C++ codes, and include
+an example with no prior thread-based parallelism as well as codes with
+existing OpenMP or MPI based threading from the following scientific
+disciplines: 1) computational fluid dynamics; 2) uncertainty quantification;
+3) computational chemsitry; and 4) finite element methods.
 
-% The PECOS Center is a DOE-funded Center of
-% Excellence working to develop the next generation of advanced
-% computational methods for predictive simulation and uncertainty
-% quantification of multiscale, multiphysics phenomena, focusing on the
-% analysis of hypersonic atmospheric entry.  Consequently, porting efforts
-% include relevant kernels from the direct numerical simulation (DNS) of
-% turbulence, quantum mechanics, hypersonics, rarefied gas dynamics, and
-% general-purpose finite-element assembly. 
-The applications include 
-both Fortran and C++ codes, and include an example with no prior
-thread-based parallelism as well as codes with existing OpenMP or TBB
-based threading.
-
-The remainder of the paper is organized as follows:
-\S\ref{sec:hardware} describes the testing infrastructure,
-\S\ref{sec:cross_compile} describes
-cross compiling experiences, \S\ref{sec:apps} presents
-results of the porting efforts for each application kernel
-considered, and \S\ref{sec:summary} summarizes the overall experiences.
+The remainder of the paper is organized as follows: \S\ref{sec:hardware}
+describes the testing infrastructure, \S\ref{sec:cross_compile} describes cross
+compiling experiences, \S\ref{sec:apps} presents results of the porting efforts
+for each application considered, and \S\ref{sec:summary} summarizes the overall
+experiences.
 
 \section{Testing Infrastructure}
 \label{sec:hardware}
-%\subsection{Test Hardware} 
 
-The test hardware used for this exercise was
-on a Stampede development cluster installed at the Texas Advanced
-Computing Center.
+The test hardware used for this exercise was the recent Stampede cluster
+upgrade at the Texas Advanced Computing Center.  This upgrade cluster leaves
+the original Stampede cluster hardware untouched and adds compute performance
+capabilities with the newest iteration of Intel's MIC architecture codenamed
+``Knights Landing''.
 
-Each compute node was a host Linux (CentOS 6.1)
-server with two 3.47GHz Intel Westmere (X5690) six-core CPUs, 24GB of
-memory, and one Knights Ferry (KNF) co-processor with 30 active
-cores.\todo{update me}
+The ``Knights Landing'' Xeon Phi 7250 compute nodes in the Stampede Upgrade
+cluster boast 68 cores, each with 4 hardware threads, are bootable and each run
+a lightweight CentOS 7 Linux kernel.  They also have 16GB of high-bandwidth
+Multi-Channel Dynamic Random Access Memory (MCDRAM) and 384GB of DDR4-2400.
 
-The KNF support on this hardware
-was provided with the {\em alpha9} release of Intel's MIC Software
-Development Platform, and all compilation was performed with an alpha
-release of Intel Composer for MIC ({\em 
-  029 Alpha Build 20120222}).\todo{update me}
+The login node of the Stampede Upgrade (KNL) cluster is a 14 core (28 thread)
+Haswell generation Intel Xeon E5-2695v3 processor with a clock speed of
+2.30GHz.  This was used to cross-compile scientific applications for the KNL
+compute nodes.  Applications were built with version 17.0.0 20160721 of Intel's
+own C, C++, and Fortran compilers.
 
-\section{Third Party Library Cross-Compiling} \label{sec:cross_compile}
+\section{Third Party Library Cross-Compiling}
+\label{sec:cross_compile}
 
-As with many scientific research groups, application development at
-the PECOS center employs many open-source libraries.
+As with many scientific research groups, application development at the PECOS
+center employs many open-source libraries.  Fortunately, TACC's module system
+built on top of \texttt{lmod} provides many commonly used scientific packages
+already compiled with the necessary instructions supported by KNL.  Moreover,
+since the Stampede Upgrade cluster contains only bootable KNL nodes, the login
+Haswell node is not needed for offloading computation.  We use it only for
+compiling and building software.  Compilation is possible on KNL, but it is
+much slower.
 
-Prior to
-performing any tests on the Westmere or KNF MIC, it was necessary to
-first build all auxiliary libraries required by each of the
-computational kernels considered.\todo{update this}
-The following libraries were
-compiled for both the host CPU and KNF MIC architectures: {\em Boost,
-%GNU Scientific Library 
-GSL, FFTW\cite{FFTW05}, GRVY,} and
-{\em libMesh}.\todo{would this be better as a table?}
+The following software pacakges were compiled for the KNL MIC architecture:
+\texttt{QUESO, ArcSyn3sis, Poongback, C4, OCCA}.  Building these libraries for
+the login node environment is a well supported, common task, but building them
+for KNL required cross-compilation.  Many of these libraries utilize a build
+system which supports cross-compilation.  Builds that include KNL-specific
+instructions were configured by specifying two additional flags when compiling:
+\texttt{-xCORE-AVX2 -axMIC-AVX512}.
 
-%Building these libraries for the host environment is
-%a well supported, common task, but building them for MIC
-%required cross-compilation.
-While building these libraries for the host environment is
-a common endeavor, building the libraries for MIC
-represents a new challenge as it necessitates cross-compilation
-techniques.
-Fortunately, many of these libraries utilize the
-Autotools build system, which can support cross-compilation.
-Native MIC builds were configured by
-specifying an existing non-native Linux host
-(e.g. {\em blackfin}) or by augmenting the autotools {\em config.sub}
-file with a new ``mic'' Linux target.
-To build native libraries for MIC, the ``-mmic"
-flag was added to all relevant compiler flags.
-%For other packages, simply passing ``-mmic" to the compiler
-%options was sufficient to build a native MIC package. 
-As an example, the following configure options were used to build a
-native MIC version of the FFTW 3.3 static library:
+As an example, the following configure options were used to build 0.55.0 of the
+QUESO library for KNL:
 
-\vspace*{-6pt}
 {\small
 \begin{verbatim}
-./configure CC=icc CXX=icpc FC=ifort       \
-   CFLAGS="-mmic -O3" CXXFLAGS="-mmic -O3" \
-   FCFLAGS="-mmic -O3" --host=blackfin
+./configure CC=mpicc CXX=mpicxx  \
+   CFLAGS="-xCORE-AVX2 -axMIC-AVX512"  \
+   CXXFLAGS="-xCORE-AVX2 -axMIC-AVX512"
 \end{verbatim}
 }
 
-\noindent The libMesh library additionally required fixing configuration
-macros to support cross-compilation and auto-detection of native TBB
-support. 
-
-These strategies successfully built native static libraries and
-executables for MIC. However, building shared
-libraries was more delicate and not always successful. For
-example, configuring Boost to build shared libraries 
-caused the linker to crash.  Other shared libraries, such as GSL,
-built without incident.
-
+These strategies successfully built dynamic libraries and executables for KNL.
