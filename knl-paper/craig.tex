@@ -90,10 +90,8 @@ the quadrature degrees of freedom for curved edges.
 
 The results of the basic scaling study are shown in
 Fig.~\ref{fig:bidg_scaling}, where the strong scaling efficiency $e_{n}$ for
-$n$ MPI tasks is defined as $e_{n}=100t_{1}/(nt_{n})$, setting the time to
-completion as $t_n$.\todo{NM-can you show what percentage this is of ideal, in
-text?} These preliminary results seem to indicate improved scaling as a
-function of polynomial order $\ell$, which is consistent with the theoretical
+$n$ MPI tasks is defined as $e_{n}= [t_{1}/(nt_{n})]\times 100\%$, setting the time to
+completion as $t_n$. These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
 behavior of the algorithmic intensity of DG algorithms.  However, this is
 clearly not enough evidence to be certain that such scaling is being observed.
 In particular, on this mesh we see an efficiency saturation above $\ell>5$.
@@ -101,10 +99,11 @@ Moreover, since the mesh itself has only 168 elements, the number of threads
 eventually exceeds the number of elements, making for some intriguing questions
 regarding the observed behavior.  In order to fully understand the data and
 optimize the code appropriately, a more extensive study is required, including
-a streams\todo{I'm confused by this, see note in text}
+a streams
 %
 %NM-- why streams? Streams is just a memory bandwidth benchmark. If this is
-%     expected to be the bottleneck, I would directly address that in the text. 
+%     expected to be the bottleneck, I would directly address that in the text.
+%CM -- I don't know what the bottleneck is, I can't rule out a bottleneck until I run the tests.  All I can do is guess.
 benchmark \cite{McCalpin1995} and roofline performance test
 \cite{Williams:2009:RIV:1498765.1498785}.
 
