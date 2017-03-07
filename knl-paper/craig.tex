@@ -17,7 +17,7 @@ triangles in two dimensions \cite{Engvall2016378} and generalized elements in
 three dimensions \cite{EngvallPress}.  This allows for meshes that exactly
 preserve underlying geometry in real-world designs, including both arbitrarily
 smooth and discontinuous features.  In many applications, geometric
-sensitivities can dominate errors \textcolor{red}{[citation needed]},
+sensitivities can dominate errors  \cite{Michoski2016658,Wirasaet2015597},
 necessitating geometrically consistent meshes for accurate solutions at high
 polynomial order.
 
@@ -97,14 +97,15 @@ clearly not enough evidence to be certain that such scaling is being observed.
 In particular, on this mesh we see an efficiency saturation above $\ell>5$.
 Moreover, since the mesh itself has only 168 elements, the number of threads
 eventually exceeds the number of elements, making for some intriguing questions
-regarding the observed behavior.  In order to fully understand the data and
+regarding the observed behavior.  In order to fully understand the observed behavior and
 optimize the code appropriately, a more extensive study is required, including
-a streams
+%a streams
 %
 %NM-- why streams? Streams is just a memory bandwidth benchmark. If this is
 %     expected to be the bottleneck, I would directly address that in the text.
-%CM -- I don't know what the bottleneck is, I can't rule out a bottleneck until I run the tests.  All I can do is guess.
-benchmark \cite{McCalpin1995} and roofline performance test
+%CM -- Nick, sorry, I don't understand your point.  I don't know what the bottleneck is because I have not done comprehensive tests, so I can't rule out a bottleneck until I run the tests.  All I can do is guess.  Memory bandwidth may very well be causing a problem, and the vector kernels should be tested.  On the other hand, I think the roofline model would cover this too, so we can delete it if you prefer?
+%benchmark \cite{McCalpin1995} and
+a roofline performance test
 \cite{Williams:2009:RIV:1498765.1498785}.
 
 %
