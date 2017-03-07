@@ -53,7 +53,7 @@ own C, C++, and Fortran compilers.
 
 As with many scientific research groups, application development at the PECOS
 center employs many open-source libraries.  Fortunately, TACC's module system
-built on top of \texttt{lmod} provided many commonly used scientific packages
+built on top of \texttt{lmod} provides many commonly used scientific packages
 already compiled with the necessary instructions supported by KNL.  Moreover,
 since the Stampede Upgrade cluster contains only bootable KNL nodes, the login
 Haswell node is not needed for offloading computation.  We use it only for
@@ -61,35 +61,23 @@ compiling and building software.  Compilation is possible on KNL, but it is
 much slower.
 
 The following software pacakges were compiled for the KNL MIC architecture:
-QUESO, ArcSyn3Sis, Poongback, C4, OCCA.
+QUESO, ArcSyn3Sis, Poongback, C4, OCCA.  Building these libraries for the login
+node environment is a well supported, common task, but building them for KNL
+required cross-compilation.  Many of these libraries utilize a build system
+which supports cross-compilation.  Builds that include KNL-specific
+instructions were configured by specifying two additional flags when compiling:
+\texttt{-xCORE-AVX2 -axMIC-AVX512}.
 
-%Building these libraries for the host environment is a well supported, common
-%task, but building them for MIC required cross-compilation.
+As an example, the following configure options were used to build 0.55.0 of the
+QUESO library for KNL:
 
-% Building the libraries for MIC represents a new challenge as it necessitates
-% cross-compilation techniques.  Fortunately, many of these libraries utilize the
-% Autotools build system, which can support cross-compilation.  Native MIC builds
-% were configured by specifying an existing non-native Linux host (e.g. {\em
-% blackfin}) or by augmenting the autotools {\em config.sub} file with a new
-% ``mic'' Linux target.  To build native libraries for MIC, the ``-mmic" flag was
-% added to all relevant compiler flags.
-%
-% %For other packages, simply passing ``-mmic" to the compiler options was
-% %sufficient to build a native MIC package.
-%
-% As an example, the following configure options were used to build a native MIC
-% version of the FFTW 3.3 static library:
-%
-% \vspace*{-6pt}
-% {\small
-% \begin{verbatim}
-% ./configure CC=icc CXX=icpc FC=ifort       \
-%    CFLAGS="-mmic -O3" CXXFLAGS="-mmic -O3" \
-%    FCFLAGS="-mmic -O3" --host=blackfin
-% \end{verbatim}
-% }
-%
-% These strategies successfully built native static libraries and executables for
-% MIC. However, building shared libraries was more delicate and not always
-% successful. For example, configuring Boost to build shared libraries caused the
-% linker to crash.  Other shared libraries, such as GSL, built without incident.
+\vspace*{-6pt}
+{\small
+\begin{verbatim}
+./configure CC=mpicc CXX=mpicxx  \
+   CFLAGS="-xCORE-AVX2 -axMIC-AVX512" CXXFLAGS="-xCORE-AVX2 -axMIC-AVX512"
+\end{verbatim}
+}
+
+These strategies successfully built dynamic libraries and executables for
+MIC.
