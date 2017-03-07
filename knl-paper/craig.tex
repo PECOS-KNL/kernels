@@ -22,14 +22,14 @@ necessitating geometrically consistent meshes for accurate solutions at high
 polynomial order.
 
 % BIDG
-The BIDG algorithm was developed in \cite{Michoski2016658} merges key
-capabilities offered by both isogeometric analysis and discontinuous Galerkin
-methods.  It uses a piecewise rational isogeometric basis for the geometry, and
-a piecewise discontinuous polynomial representation for the model, while
-providing an exact (and properly conditioned) geometric transformation between
-the two spaces. The BIDG method is an inherently high-order method that is
-amenable to $hp$-adaptive schemes, and shows requisite super-exponential
-convergent behavior.
+The BIDG algorithm developed in \cite{Michoski2016658} merges key capabilities
+offered by both isogeometric analysis and discontinuous Galerkin methods.  It
+uses a piecewise rational isogeometric basis for the geometry, and a piecewise
+discontinuous polynomial representation for the model, while providing an exact
+(and properly conditioned) geometric transformation between the two spaces. The
+BIDG method is an inherently high-order method that is amenable to
+$hp$-adaptive schemes, and shows requisite super-exponential convergent
+behavior.
 
 The software package ArcSyn3sis implements the BIDG method and it is used here
 for the scaling study on the KNL architecture.
