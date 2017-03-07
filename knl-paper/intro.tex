@@ -49,22 +49,23 @@ considered, and \S\ref{sec:summary} summarizes the overall experiences.
 
 \section{Testing Infrastructure}
 \label{sec:hardware}
-%\subsection{Test Hardware}
 
-The test hardware used for this exercise was
-on a Stampede development cluster installed at the Texas Advanced
-Computing Center.
+The test hardware used for this exercise was the recent Stampede cluster
+upgrade at the Texas Advanced Computing Center.  This upgrade cluster leaves
+the original Stampede cluster hardware untouched and adds compute performance
+capabilities with the newest iteration of Intel's MIC architecture codenamed
+``Knights Landing''.
 
-Each compute node was a host Linux (CentOS 6.1)
-server with two 3.47GHz Intel Westmere (X5690) six-core CPUs, 24GB of
-memory, and one Knights Ferry (KNF) co-processor with 30 active
-cores.\todo{update me}
+The ``Knights Landing'' Xeon Phi 7250 compute nodes in the Stampede Upgrade
+cluster boast 68 cores, each with 4 hardware threads, are bootable and each run
+a lightweight CentOS 7 Linux kernel.  They also have 16GB of high-bandwidth
+Multi-Channel Dynamic Random Access Memory (MCDRAM) and 384GB of DDR4-2400.
 
-The KNF support on this hardware
-was provided with the {\em alpha9} release of Intel's MIC Software
-Development Platform, and all compilation was performed with an alpha
-release of Intel Composer for MIC ({\em
-  029 Alpha Build 20120222}).\todo{update me}
+The login node of the Stampede Upgrade (KNL) cluster is a 14 core (28 thread)
+Haswell generation Intel Xeon E5-2695v3 processor with a clock speed of
+2.30GHz.  This was used to cross-compile scientific applications for the KNL
+compute nodes.  Applications were built with version  Intel's own C, C++, and
+Fortran compilers.
 
 \section{Third Party Library Cross-Compiling} \label{sec:cross_compile}
 
@@ -120,4 +121,3 @@ libraries was more delicate and not always successful. For
 example, configuring Boost to build shared libraries
 caused the linker to crash.  Other shared libraries, such as GSL,
 built without incident.
-
