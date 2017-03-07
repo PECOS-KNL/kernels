@@ -51,55 +51,45 @@ own C, C++, and Fortran compilers.
 \section{Third Party Library Cross-Compiling}
 \label{sec:cross_compile}
 
-As with many scientific research groups, application development at
-the PECOS center employs many open-source libraries.
+As with many scientific research groups, application development at the PECOS
+center employs many open-source libraries.  Fortunately, TACC's module system
+built on top of \texttt{lmod} provided many commonly used scientific packages
+already compiled with the necessary instructions supported by KNL.  Moreover,
+since the Stampede Upgrade cluster contains only bootable KNL nodes, the login
+Haswell node is not needed for offloading computation.  We use it only for
+compiling and building software.  Compilation is possible on KNL, but it is
+much slower.
 
-Prior to
-performing any tests on the Westmere or KNF MIC, it was necessary to
-first build all auxiliary libraries required by each of the
-computational kernels considered.\todo{update this}
-The following libraries were
-compiled for both the host CPU and KNF MIC architectures: {\em Boost,
-%GNU Scientific Library
-GSL, FFTW\cite{FFTW05}, GRVY,} and
-{\em libMesh}.\todo{would this be better as a table?}
+The following software pacakges were compiled for the KNL MIC architecture:
+QUESO, ArcSyn3Sis, Poongback, C4, OCCA.
 
-%Building these libraries for the host environment is
-%a well supported, common task, but building them for MIC
-%required cross-compilation.
-While building these libraries for the host environment is
-a common endeavor, building the libraries for MIC
-represents a new challenge as it necessitates cross-compilation
-techniques.
-Fortunately, many of these libraries utilize the
-Autotools build system, which can support cross-compilation.
-Native MIC builds were configured by
-specifying an existing non-native Linux host
-(e.g. {\em blackfin}) or by augmenting the autotools {\em config.sub}
-file with a new ``mic'' Linux target.
-To build native libraries for MIC, the ``-mmic"
-flag was added to all relevant compiler flags.
-%For other packages, simply passing ``-mmic" to the compiler
-%options was sufficient to build a native MIC package.
-As an example, the following configure options were used to build a
-native MIC version of the FFTW 3.3 static library:
+%Building these libraries for the host environment is a well supported, common
+%task, but building them for MIC required cross-compilation.
 
-\vspace*{-6pt}
-{\small
-\begin{verbatim}
-./configure CC=icc CXX=icpc FC=ifort       \
-   CFLAGS="-mmic -O3" CXXFLAGS="-mmic -O3" \
-   FCFLAGS="-mmic -O3" --host=blackfin
-\end{verbatim}
-}
-
-\noindent The libMesh library additionally required fixing configuration
-macros to support cross-compilation and auto-detection of native TBB
-support.
-
-These strategies successfully built native static libraries and
-executables for MIC. However, building shared
-libraries was more delicate and not always successful. For
-example, configuring Boost to build shared libraries
-caused the linker to crash.  Other shared libraries, such as GSL,
-built without incident.
+% Building the libraries for MIC represents a new challenge as it necessitates
+% cross-compilation techniques.  Fortunately, many of these libraries utilize the
+% Autotools build system, which can support cross-compilation.  Native MIC builds
+% were configured by specifying an existing non-native Linux host (e.g. {\em
+% blackfin}) or by augmenting the autotools {\em config.sub} file with a new
+% ``mic'' Linux target.  To build native libraries for MIC, the ``-mmic" flag was
+% added to all relevant compiler flags.
+%
+% %For other packages, simply passing ``-mmic" to the compiler options was
+% %sufficient to build a native MIC package.
+%
+% As an example, the following configure options were used to build a native MIC
+% version of the FFTW 3.3 static library:
+%
+% \vspace*{-6pt}
+% {\small
+% \begin{verbatim}
+% ./configure CC=icc CXX=icpc FC=ifort       \
+%    CFLAGS="-mmic -O3" CXXFLAGS="-mmic -O3" \
+%    FCFLAGS="-mmic -O3" --host=blackfin
+% \end{verbatim}
+% }
+%
+% These strategies successfully built native static libraries and executables for
+% MIC. However, building shared libraries was more delicate and not always
+% successful. For example, configuring Boost to build shared libraries caused the
+% linker to crash.  Other shared libraries, such as GSL, built without incident.
