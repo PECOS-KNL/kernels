@@ -63,7 +63,8 @@ Extensive use of Intel's MKL was used for both the Cholesky factorisation,
 subsequent linear solve, and determinant calculation.
 
 Figure~\ref{fig:gp} shows timings of a Gaussian process likelihood evaluation
-as a function of number of OpenMP threads.
+as a function of number of OpenMP threads.\todo{NM- can you repeat study with MPI?}
+%NM: can you do the same study with a single OMP thread and vary MPI_tasks? numerous authors have found this to be faster, would be interesting to corroborate
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{openmp_scaling_1.pdf}
