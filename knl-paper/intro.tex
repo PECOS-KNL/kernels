@@ -1,51 +1,32 @@
 \section{Introduction}
 \label{sec:intro}
 
-Heterogeneous computing with multiple levels of exposed parallelism is
-a leading candidate under consideration for the design of
-future exascale systems.\todo{update me}
-% ~\cite{idc_report}.
-Indeed, accelerators like
-current generation GPGPUs offer relatively high floating-point rates
-and memory bandwidth with lower relative power footprints than
-general-purpose compute platforms~\cite{gpu_hpc:2009}. However,
-GPU-based acceleration commonly requires special
-programming constructs (e.g. NVIDIA's CUDA language) for the
-accelerated work.
-% With the release of Intel's Many Integrated Core (MIC)
-% architecture, an additional co-processor technology will become
-% available to the scientific community.  This paper reports on
-% several early porting experiences to the {\em Knights Ferry} MIC
-% platform. An attractive feature of this architecture is
-% support for standard threading models like
-% OpenMP~\cite{openmp_standard} which are
-% already used by many scientific applications.  In addition, the MIC
-% platform is based on an x86 architecture, and C/C++ and Fortran
-% kernels can be easily compiled for direct native execution on MIC.
+Accelerators like current generation GPGPUs offer relatively high
+floating-point throughput and memory bandwidth with a lower relative power
+footprint than general-purpose compute platforms~\cite{gpu_hpc:2009}. However,
+GPU-based acceleration commonly requires special programming constructs (e.g.
+NVIDIA's CUDA language) for the accelerator to work.  Intel's Xeon Phi
+many-core architectures offer a balance with a smaller core count than GPGPUs
+but an x86 architecture and therefore don't need specialised programming
+paradigms.  Existing MPI or OpenMP~\cite{openmp_standard} threaded Fortran, C,
+or C++ codes can be compiled and run with relative ease.
 
-The application kernels considered herein are taken from existing
-development efforts within the PECOS Center at the University of
-Texas at Austin.
+The applications considered in this paper are taken from existing development
+efforts within the PECOS Center at the University of Texas at Austin.  This
+paper reports on two main areas: 1) the level of effort required in porting
+software applications from a wide array of scientific disciplines written in
+commonly used procedural languages; and 2) observed performance of these
+applications.  The applications include Fortran, C, and C++ codes, and include
+an example with no prior thread-based parallelism as well as codes with
+existing OpenMP or MPI based threading from the following scientific
+disciplines: 1) computational fluid dynamics; 2) uncertainty quantification;
+3) computational chemsitry; and 4) finite element methods.
 
-% The PECOS Center is a DOE-funded Center of
-% Excellence working to develop the next generation of advanced
-% computational methods for predictive simulation and uncertainty
-% quantification of multiscale, multiphysics phenomena, focusing on the
-% analysis of hypersonic atmospheric entry.  Consequently, porting efforts
-% include relevant kernels from the direct numerical simulation (DNS) of
-% turbulence, quantum mechanics, hypersonics, rarefied gas dynamics, and
-% general-purpose finite-element assembly.
-The applications include
-both Fortran and C++ codes, and include an example with no prior
-thread-based parallelism as well as codes with existing OpenMP or TBB
-based threading.
-
-The remainder of the paper is organized as follows:
-\S\ref{sec:hardware} describes the testing infrastructure,
-\S\ref{sec:cross_compile} describes
-cross compiling experiences, \S\ref{sec:apps} presents
-results of the porting efforts for each application kernel
-considered, and \S\ref{sec:summary} summarizes the overall experiences.
+The remainder of the paper is organized as follows: \S\ref{sec:hardware}
+describes the testing infrastructure, \S\ref{sec:cross_compile} describes cross
+compiling experiences, \S\ref{sec:apps} presents results of the porting efforts
+for each application considered, and \S\ref{sec:summary} summarizes the overall
+experiences.
 
 \section{Testing Infrastructure}
 \label{sec:hardware}
