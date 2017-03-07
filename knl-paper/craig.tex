@@ -1,22 +1,38 @@
 \subsection{Blended Isogeometric Discontinuous Galerkin (BIDG) Method}
 \label{sec:isogeometric}
 
-For the scaling study the blended isogeometric discontinuous Galerkin (BIDG)
-code, ArcSyn3sis is used.  The BIDG algorithm was developed in
-\cite{Michoski2016658} to exploit and seamlessly merge key capabilities offered
-by both isogeometric analysis and discontinuous Galerkin methods. This method
-is an inherently high-order method that is amenable to $hp$-adaptive schemes,
-and shows requisite super-exponential convergent behavior.
+% DG
+The discontinuous Galerkin method is a finite element method that excels in
+aspects of its computational efficiency in the context of modern architectures,
+particular in convection-dominated flows.  These allow for localization of
+finite element stencils in such a way that dynamic problems lead to block
+diagonal matrix systems.  The locality of the memory footprint in these
+application models leads to the ability to compute solutions at high local
+order and large floating point throughput \cite{Klockner20097863}.
 
-In traditional isogeometric analysis tight coupling between computer aided
-design (CAD) mesh automation tools for complex geometric domains, such as jet
-engines and tokamak fusion reactors, has been developed for triangles in two
-dimensions \cite{Engvall2016378}, and generalized elements in three dimensions
-\cite{EngvallPress}.  This allows for meshes that exactly preserve underlying
-geometry in real-world mesh designs, including arbitrarily smooth and
-discontinuous features.  In many applications, geometric sensitivities are
-known to dominate errors, and as such having high-order accurate solutions on
-geometrically consistent meshes is essential.
+% Iso
+In traditional isogeometric analysis, computer aided design (CAD) mesh
+automation tools for complex geometric domains have been developed for
+triangles in two dimensions \cite{Engvall2016378} and generalized elements in
+three dimensions \cite{EngvallPress}.  This allows for meshes that exactly
+preserve underlying geometry in real-world designs, including both arbitrarily
+smooth and discontinuous features.  In many applications, geometric
+sensitivities can dominate errors \textcolor{red}[citation needed],
+necessitating geometrically consistent meshes for accurate solutions at high
+polynomial order.
+
+% BIDG
+The BIDG algorithm was developed in \cite{Michoski2016658} merges key
+capabilities offered by both isogeometric analysis and discontinuous Galerkin
+methods.  It uses a piecewise rational isogeometric basis for the geometry, and
+a piecewise discontinuous polynomial representation for the model, while
+providing an exact (and properly conditioned) geometric transformation between
+the two spaces. The BIDG method is an inherently high-order method that is
+amenable to $hp$-adaptive schemes, and shows requisite super-exponential
+convergent behavior.
+
+The software package ArcSyn3sis implements the BIDG method and it is used here
+for the scaling study on the KNL architecture.
 
 \begin{figure}[h]
 \begin{center}
@@ -26,20 +42,6 @@ geometrically consistent meshes is essential.
 \caption{Exact b\'{e}zier circular mesh used in the scaling study.}
 \label{fig:168_circ}
 \end{figure}
-
-The discontinuous Galerkin method, on the other hand, excels in aspects of its
-computational efficiency in the context of modern architectures, particular in
-convection-dominated flows that allow for localization of finite element
-stencils in such a way that dynamic problems lead to block diagonal matrix
-systems.  The locality of the memory footprint in these application models
-leads to the ability to compute at high local order at unusually high
-arithmetic intensity \cite{Klockner20097863}.
-
-The BIDG method merges these two methods seamlessly by utilizing a piecewise
-rational isogeometric basis for the geometry, and a piecewise discontinuous
-polynomial representation for the model, while providing an exact (and properly
-conditioned) geometric transformation between the two spaces
-\cite{Michoski2016658}.
 
 For our scaling test here we solve the first-order acoustic wave equation:
 \begin{equation}
