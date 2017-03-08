@@ -17,7 +17,7 @@ triangles in two dimensions \cite{Engvall2016378} and generalized elements in
 three dimensions \cite{EngvallPress}.  This allows for meshes that exactly
 preserve underlying geometry in real-world designs, including both arbitrarily
 smooth and discontinuous features.  In many applications, geometric
-sensitivities can dominate errors  \cite{Michoski2016658,Wirasaet2015597},
+sensitivities can dominate errors \cite{Michoski2016658,Wirasaet2015597},
 necessitating geometrically consistent meshes for accurate solutions at high
 polynomial order.
 
@@ -56,10 +56,26 @@ Such a system is discretized by solving the semidiscrete block diagonal system
   \left( v, \frac{ \partial A}{\partial t} \right)_{\Omega_{i}} =
   V_{\Omega_{i}}+S_{\partial\Omega_{i}}
 \]
-for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume kernel that has only
-elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface kernel that
+
+for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume intergral that has only
+elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface integral that
 depends on inter-element communication through classical upwinding
-\cite{Michoski2014898}.
+\cite{Michoski2014898}.  The volume integral can be written in three nested
+loops; the outer looping over elements, and two inner loops over degrees of
+freedom in the DG basis.  The surface intergral similarly loops over elements,
+but then due to an additional interpolation step from the isogeometric
+transformation, extends one of these nested loops over the quadrature degrees
+of freedom for curved edges.  The resulting linear system that is solved,
+$Fx = b$ admits an attractive block-diagonal structure,
+\begin{equation}
+  F = \begin{pmatrix}
+    F_1 & 0 & \cdots & 0 \\
+    0 & F_2 & \cdots & 0 \\
+    \vdots & & \ddots & \vdots \\
+    0 & 0 & \cdots & F_n \\
+  \end{pmatrix},
+\end{equation}
+and this highly motivates the use of a many-core architecture for execution.
 
 \begin{figure}
 \begin{center}
@@ -72,21 +88,18 @@ isogeometric 168 element mesh, and shown at different polynomial order $\ell$.}
 \end{figure}
 
 The implementation on isogeometric meshes utilizes the Open Concurrent Compute
-Abstraction (OCCA) library \cite{MedinaPress}.  The library uses an off-load
-model for abstracting back-ends and kernel libraries from OpenMP, OpenCL, and
-CUDA using a C-based macros approach.  The OCCA kernel implements macro-based
-just-in-time code generation so that the platform target can be identified at
-runtime.  Threaded barriers are also set in the application kernel to allow for
-thread-based granularity, giving more flexibility during code optimization.
-The implementation of the ArcSyn3sis kernel using OCCA allows for aliasing, of
-e.g. flattened cache-line boundary aligned arrays, such that data structures
-can be called more intuitively (e.g. a 4-tensor can be called as a four array,
-instead of indexed as a flattened contiguous one array).  The volume kernel can
-be written in three nested loops; the outer looping over elements, and two
-inner loops over degrees of freedom in the DG basis.  The surface kernel
-similarly loops over elements, but then due to an additional interpolation step
-form the isogeometric transformation, extends one of these nested loops over
-the quadrature degrees of freedom for curved edges.
+Abstraction (OCCA) library \cite{MedinaPress}.  The OCCA library abstracts
+multiple threading back-ends OpenMP, OpenCL, and CUDA using a C preprocessor
+macros.
+
+% The OCCA kernel implements macro-based just-in-time code
+% generation so that the platform target can be identified at runtime.  Threaded
+% barriers are also set in the application kernel to allow for thread-based
+% granularity, giving more flexibility during code optimization.  The
+% implementation of the ArcSyn3sis kernel using OCCA allows for aliasing, of e.g.
+% flattened cache-line boundary aligned arrays, such that data structures can be
+% called more intuitively (e.g.  a 4-tensor can be called as a four array,
+% instead of indexed as a flattened contiguous one array).
 
 The results of the basic scaling study are shown in
 Fig.~\ref{fig:bidg_scaling}, where the strong scaling efficiency $e_{n}$ for
