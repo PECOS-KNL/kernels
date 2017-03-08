@@ -1,85 +1,152 @@
-%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% This is a general template file for the LaTeX package SVJour3
-% for Springer journals.          Springer Heidelberg 2010/09/16
-%
-% Copy it to a new file with a new name and use it as the basis
-% for your article. Delete % signs as needed.
-%
-% This template includes a few options for different layouts and
-% content for various journals. Please consult a previous issue of
-% your journal as needed.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-\RequirePackage{fix-cm}
-%
-%\documentclass{svjour3}                     % onecolumn (standard format)
-%\documentclass[smallcondensed]{svjour3}     % onecolumn (ditto)
-%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
-\documentclass[twocolumn]{svjour3}          % twocolumn
-%
-\smartqed  % flush right qed marks, e.g. at end of proof
+\documentclass[sigconf]{acmart}
+
+\usepackage{booktabs} % For formal tables
 
 
-\usepackage{amsmath, amssymb, mathrsfs}
-\usepackage{graphicx}
-\usepackage{mdwlist}
-\usepackage{nth}
+% Copyright
+%\setcopyright{none}
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+
+
+
+
 \usepackage{todonotes}
-\newcommand{\xap}{$X^2A_2'$ }
-\newcommand{\bepa}{$B^2E'$ }
-\newcommand{\bepb}{$B^2E'$ }
-
-\newcommand{\superast}{\textsuperscript{$\ast$}}
-\newcommand{\superdag}{\textsuperscript{$\dagger$}}
-
-
 \graphicspath{{figs/}}
 
-%\hyphenation{lib-Mesh Open-MP}
+% DOI
+%\acmDOI{10.475/123_4}
 
-% In 2 column environments LaTeX often needs to be told to be less
-% tolerant of overflow and more tolerant of overwide spacing
-\sloppy
+% ISBN
+%\acmISBN{123-4567-24-567/08/06}
 
-% please place your own definitions here and don't use \def but
-% \newcommand{}{}
-%
-% Insert the name of "your journal" with
-% \journalname{myjournal}
-%
+%Conference
+\acmConference[PEARC'17]{Practice \& Experience in Advanced Research Computing}{July 2017}{New Orleans, Louisiana USA} 
+\acmYear{2017}
+\copyrightyear{2017}
+
+\acmPrice{15.00}
+
+
 \begin{document}
+\title{Experiences Porting Scientific Applications to the Intel ``Knights Landing'' (KNL) Xeon Phi Platform}
+\titlenote{Produces the permission block, and
+  copyright information}
+%% \subtitle{Extended Abstract}
+%% \subtitlenote{The full version of the author's guide is available as
+%%   \texttt{acmart.pdf} document}
 
-\title{Experiences Porting Scientific Applications to the Intel ``Knights
-Landing'' (KNL) Xeon Phi Platform}
-%\subtitle{Do you have a subtitle?\\ If so, write it here}
 
-\titlerunning{Experiences Porting Scientific Applications to the Intel
-``Knights Landing'' (KNL) Xeon Phi Platform}
-
-\author{Nicholas~Malaya\superast \and D~McDougall\superast\superdag \and C~Michoski
-  \and M~Lee \and C~Simmons}
-
-\authorrunning{Nicholas~Malaya\superast \and D~McDougall \and
-C~Michoski \and M~Lee \and C~Simmons} % if too long for running head
-
-\institute{
-\superast{}Institute for Computational Engineering and Sciences
-(ICES),
-The University of Texas at Austin \\
-\email{\{nick,damon,michoski,mk,csim\}@ices.utexas.edu} \\
-\\
-\superdag{}\email{damon@ices.utexas.edu} ({\em corresponding author})
+\author{Ben Trovato}
+\authornote{Dr.~Trovato insisted his name be first.}
+\orcid{1234-5678-9012}
+\affiliation{%
+  \institution{Institute for Clarity in Documentation}
+  \streetaddress{P.O. Box 1212}
+  \city{Dublin} 
+  \state{Ohio} 
+  \postcode{43017-6221}
 }
+\email{trovato@corporation.com}
 
-%\date{Received: date / Accepted: date}
-% The correct dates will be entered by the editor
+\author{G.K.M. Tobin}
+\authornote{The secretary disavows any knowledge of this author's actions.}
+\affiliation{%
+  \institution{Institute for Clarity in Documentation}
+  \streetaddress{P.O. Box 1212}
+  \city{Dublin} 
+  \state{Ohio} 
+  \postcode{43017-6221}
+}
+\email{webmaster@marysville-ohio.com}
+
+\author{Lars Th{\o}rv{\"a}ld}
+\authornote{This author is the
+  one who did all the really hard work.}
+\affiliation{%
+  \institution{The Th{\o}rv{\"a}ld Group}
+  \streetaddress{1 Th{\o}rv{\"a}ld Circle}
+  \city{Hekla} 
+  \country{Iceland}}
+\email{larst@affiliation.org}
+
+\author{Lawrence P. Leipuner}
+\affiliation{
+  \institution{Brookhaven Laboratories}
+  \streetaddress{P.O. Box 5000}}
+\email{lleipuner@researchlabs.org}
+
+\author{Sean Fogarty}
+\affiliation{%
+  \institution{NASA Ames Research Center}
+  \city{Moffett Field}
+  \state{California} 
+  \postcode{94035}}
+\email{fogartys@amesres.org}
+
+% The default list of authors is too long for headers}
+\renewcommand{\shortauthors}{B. Trovato et al.}
+
+
+
+\input{abstract_inc.tex}
+
+%% \begin{abstract}
+%% This paper provides a sample of a \LaTeX\ document which conforms,
+%% somewhat loosely, to the formatting guidelines for
+%% ACM SIG Proceedings.\footnote{This is an abstract footnote}
+%% \end{abstract}
+
+%% %
+% The code below should be generated by the tool at
+% http://dl.acm.org/ccs.cfm
+% Please copy and paste the code instead of the example below. 
+%
+%% \begin{CCSXML}
+%% <ccs2012>
+%%  <concept>
+%%   <concept_id>10010520.10010553.10010562</concept_id>
+%%   <concept_desc>Computer systems organization~Embedded systems</concept_desc>
+%%   <concept_significance>500</concept_significance>
+%%  </concept>
+%%  <concept>
+%%   <concept_id>10010520.10010575.10010755</concept_id>
+%%   <concept_desc>Computer systems organization~Redundancy</concept_desc>
+%%   <concept_significance>300</concept_significance>
+%%  </concept>
+%%  <concept>
+%%   <concept_id>10010520.10010553.10010554</concept_id>
+%%   <concept_desc>Computer systems organization~Robotics</concept_desc>
+%%   <concept_significance>100</concept_significance>
+%%  </concept>
+%%  <concept>
+%%   <concept_id>10003033.10003083.10003095</concept_id>
+%%   <concept_desc>Networks~Network reliability</concept_desc>
+%%   <concept_significance>100</concept_significance>
+%%  </concept>
+%% </ccs2012>  
+%% \end{CCSXML}
+
+%% \ccsdesc[500]{Computer systems organization~Embedded systems}
+%% \ccsdesc[300]{Computer systems organization~Redundancy}
+%% \ccsdesc{Computer systems organization~Robotics}
+%% \ccsdesc[100]{Networks~Network reliability}
+
+% We no longer use \terms command
+%\terms{Theory}
+
+%% \keywords{ACM proceedings, \LaTeX, text tagging}
+
 
 \maketitle
 
-\vspace*{-18pt}
-\input{abstract_inc.tex}
+%% \input{abstract_inc.tex}
 \input{intro.tex}
 \input{apps.tex}
 \input{dns-kernel.tex}
@@ -89,15 +156,13 @@ The University of Texas at Austin \\
 \input{summary.tex}
 
 
-\begin{acknowledgements}
+\begin{acks}
 The Author's acknowledge the Texas Advanced Computing Center (TACC) at The
 University of Texas at Austin for providing HPC resources that have
 contributed to the research results reported within this paper.
-\end{acknowledgements}
+\end{acks}
 
-%\newpage
-% BibTeX users please use one of
-\bibliographystyle{abbrv}      % mathematics and physical sciences
-\bibliography{c,mk}   % name your BibTeX data base
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{c,mk} 
 
 \end{document}

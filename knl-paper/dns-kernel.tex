@@ -33,7 +33,7 @@ for the kernel discussed below, the final pencil depicted (x,z,y) is
 the portion of the domain considered for FFT analysis on MIC.
 
 % picture of pencils
-\begin{figure}[htb]
+\begin{figure}
  \begin{center}
   \includegraphics[width=0.35\textwidth]{PencilTransposeSchematic}
   \caption{The two dimensional data decomposition. The localized FFT
@@ -127,7 +127,7 @@ setting was seen to have a significant impact on observed runtimes.
 % need to add discussion of affinity results here
 % http://software.intel.com/sites/products/documentation/studio/composer/en-us/2011/compiler_c/optaps/common/optaps_openmp_thread_affinity.htm#Explicitly_Specifying_OS_Proc_IDS__GOMP_CPU_AFFINITY 
 
-\begin{figure}[htp]
+\begin{figure}
 \begin{center}
 \includegraphics[width=0.95\linewidth]{dns_westmere_fftw_vs_mkl.pdf}
 (a)
@@ -141,7 +141,7 @@ setting was seen to have a significant impact on observed runtimes.
 \label{fig:mkl-vs-fftw}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
 \begin{center}
 \includegraphics[width=0.9\linewidth]{dns-fftw-scaling.pdf}
 \end{center}
@@ -150,7 +150,7 @@ setting was seen to have a significant impact on observed runtimes.
 \label{fig:dns_scaling}
 \end{figure}
 
-\begin{figure}[htp]
+\begin{figure}
 \begin{center}
 \includegraphics[width=1.0\linewidth]{dns_affinity_mkl.pdf}
 (a)
