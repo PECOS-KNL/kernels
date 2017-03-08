@@ -5,9 +5,9 @@ Accelerators like current generation GPGPUs offer relatively high
 floating-point throughput and memory bandwidth with a lower relative power
 footprint than general-purpose compute platforms~\cite{gpu_hpc:2009}. However,
 GPU-based acceleration commonly requires special programming constructs (e.g.
-NVIDIA's CUDA language) for the accelerator to work.  Intel's Xeon Phi
-many-core architectures offer a balance with a smaller core count than GPGPUs
-but an x86 architecture and therefore don't need specialised programming
+NVIDIA's CUDA language\cite{} or OpenCL\cite{}) for the accelerator to work.
+Intel's Xeon Phi many-core architectures offer a balance with a smaller core count than GPGPUs
+but an x86 architecture and therefore do not need specialised programming
 paradigms.  Existing MPI or OpenMP~\cite{openmp_standard} threaded Fortran, C,
 or C++ codes can be compiled and run with relative ease.
 
