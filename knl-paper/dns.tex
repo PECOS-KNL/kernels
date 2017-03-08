@@ -4,35 +4,44 @@
 
 % Why DNS code needs to be improved
 Direct numerical simulation (DNS) plays an important role in
-understanding turbulent flows because DNS provides high fidelity data
-that is difficult to obtain in the experiments. After Kim {\it et al.}
+understanding turbulent flows because DNS provides high fidelity data 
+that is difficult to obtain experimentally. After Kim {\it et al.}
 first used the DNS for wall-bounded turbulence flow in 1987
 \cite{Kim:1987ub}, DNS has been used extensively to understand the
-turbulence phenomenon and to help develop models of turbulence. In
-general, the length-scale and time-scale become smaller as $Re$
-increases where $Re$ is Reynolds number. Naturally, DNS at high $Re$
-requires a large number of grids and time-steps to obtain meaningful
-statistical data. Therefore, the use of state-of-art HPC system is
-crucial to study the turbulent flow of high Re. To date, the highest
-$Re$ of the wall-bounded turbulence DNS is 250000, for which 242 billion
-degrees of freedom are used. \cite{Lee:2015er} However, $Re$ = 250000 is
-also low compared to the high Re flow required for many practical
-engineering applications. For a DNS at higher Re, more advanced HPC
-system is required, and the DNS code should also be improved for the the
-HPC system. 
+turbulence phenomenon and to help develop models of turbulence. 
+Turbulence is characterized by a non-dimensional parameter known 
+as the Reynolds Number ($Re$).  The vast majority of fluid flows 
+in industry and nature occur at large $Re$. 
+However, as $Re$ increases, time and length scales become smaller. 
+Thus, DNS at high $Re$ naturally requires a fine meshes and time-steps 
+to obtain meaningful data from flows of interest. 
+Therefore, the use of state-of-art HPC systems is mandated
+ to study turbulent flows of interest. To date, the highest
+$Re$ of the wall-bounded turbulence DNS was at $\approx 250,000$, 
+which required 242 billion degrees of freedom to 
+resolve\cite{Lee:2015er}. However, $Re$ = 250,000 remains substantially 
+lower than the $Re$  for many practical engineering applications. 
+To enable DNS at these higher $Re$, at least exascale 
+capable HPC systems are required. These systems will require
+not only substantial hardware advanced, but also modifications 
+to the underlying DNS codes. 
 
 % Detail of simulation
 In this section, we will show you the results of testing PoongBack on
 KNL nodes in Stampede, which is a channel flow DNS code optimized for
-the modern HPC systems. PoongBack simulates the flow between two
-parallel plates with periodic boundary conditions. The simulation code
-has already shown excellent performance and has been already used in
-several researchers. \cite{Lee:2013kv} Especially, it has been used for
-generating the data for virtual flow laboratory in Johns Hopkins
-Turbulence Data Base \cite{Graham:2015ha}.It is using Fourier-Galerkin
-method in streamwise direction and high order basis spline method in
-wall-normal directions. For time integration PoongBack uses low-storage
-third order Runge-Kutta method. The simulation domain is partitioned by
+the modern HPC systems. PoongBack,
+named after the god of storms in Korea\todo{is this right?}, 
+simulates a channel flow: the flow between two infinite 
+parallel plates. The simulation code
+has already been scaled to several top-10 HPC systems, and has 
+shown excellent performance during its use by several research 
+groups\cite{Lee:2013kv}. In particular, it was used for
+generating the data for the NSF supported virtual flow laboratory in the 
+Johns Hopkins Turbulence Data Base\cite{Graham:2015ha}.
+The code uses the Fourier-Galerkin spectral method in the streamwise directions 
+and a high-order basis spline method in the wall-normal direction. 
+For time integration PoongBack uses a low-storage
+third-order Runge-Kutta method. The simulation domain is partitioned by
 two-dimensional decomposition, a.k.a. pencil-decomposition. PoongBack
 contains three major kernels; (1) solving Navier-Stokes equation in
 complex number domain (2) one-dimensional fast Fourier transforms (3)
@@ -57,7 +66,8 @@ mpi\_wtime()}'' with appropriate ``{\tt mpi\_barrier()}.''
 \begin{figure}
  \begin{center}
    \includegraphics[width=0.45\textwidth]{DNS_FFT_Wave}
-   \caption{Strong scaling result of 1D FFTs and Solving N-S equations in wavespace for single timestep.}
+   \caption{Strong scaling result depicting 1D FFTs and the solution of the 
+  N-S equations in wavespace for a single timestep.}
    \label{fig:DNS_strong_scale_fft_wave}
  \end{center}
 \end{figure}
