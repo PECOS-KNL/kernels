@@ -5,7 +5,7 @@
 The discontinuous Galerkin method is a finite element method that excels in
 aspects of its computational efficiency in the context of modern architectures,
 particular in convection-dominated flows.  These allow for localization of
-finite element stencils in such a way that dynamic problems lead to block
+finite element stencils (e.g nearest edge/face neighbors) in such a way that dynamic problems lead to block
 diagonal matrix systems.  The locality of the memory footprint in these
 application models leads to the ability to compute solutions at high local
 order and large floating point throughput \cite{Klockner20097863}.
@@ -31,8 +31,7 @@ BIDG method is an inherently high-order method that is amenable to
 $hp$-adaptive schemes, and shows requisite super-exponential convergent
 behavior.
 
-The software package ArcSyn3sis implements the BIDG method and it is used here
-for the scaling study on the KNL architecture.
+
 
 \begin{figure}
 \begin{center}
@@ -43,7 +42,8 @@ for the scaling study on the KNL architecture.
 \label{fig:168_circ}
 \end{figure}
 
-For our scaling test here we solve the first-order acoustic wave equation:
+The software package ArcSyn3sis implements the BIDG method and it is used here
+for the scaling study on the KNL architecture. For our strong scaling test we solve the first-order acoustic wave equation:
 \begin{equation}
   \label{awe}
   \frac{\partial p}{\partial t} + \nabla\cdot \boldsymbol{u} = 0, \quad

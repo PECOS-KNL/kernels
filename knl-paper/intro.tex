@@ -5,14 +5,14 @@ Accelerators like current generation GPGPUs offer relatively high
 floating-point throughput and memory bandwidth with a lower relative power
 footprint than general-purpose compute platforms~\cite{gpu_hpc:2009}. However,
 GPU-based acceleration commonly requires special programming constructs (e.g.
-NVIDIA's CUDA language) for the accelerator to work.  Intel's Xeon Phi
-many-core architectures offer a balance with a smaller core count than GPGPUs
-but an x86 architecture and therefore don't need specialised programming
+NVIDIA's CUDA language\cite{} or OpenCL\cite{}) for the accelerator to work.
+Intel's Xeon Phi many-core architectures offer a balance with a smaller core count than GPGPUs
+but an x86 architecture and therefore do not need specialised programming
 paradigms.  Existing MPI or OpenMP~\cite{openmp_standard} threaded Fortran, C,
 or C++ codes can be compiled and run with relative ease.
 
 The applications considered in this paper are taken from existing development
-efforts within the PECOS Center at the University of Texas at Austin.  This
+efforts within the PECOS Center\cite{} at the University of Texas at Austin.  This
 paper reports on two main areas: 1) the level of effort required in porting
 software applications from a wide array of scientific disciplines written in
 commonly used procedural languages; and 2) observed performance of these
@@ -79,4 +79,4 @@ QUESO library for KNL:
 \end{verbatim}
 }
 
-These strategies successfully built dynamic libraries and executables for KNL.
+These strategies successfully built dynamic libraries and executables for KNL.\todo{can we comment on if these are actually using avx512 for vectorization?}
