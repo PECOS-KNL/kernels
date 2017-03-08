@@ -12,7 +12,7 @@ paradigms.  Existing MPI or OpenMP~\cite{openmp_standard} threaded Fortran, C,
 or C++ codes can be compiled and run with relative ease.
 
 The applications considered in this paper are taken from existing development
-efforts within the PECOS Center at the University of Texas at Austin.  This
+efforts within the PECOS Center\cite{} at the University of Texas at Austin.  This
 paper reports on two main areas: 1) the level of effort required in porting
 software applications from a wide array of scientific disciplines written in
 commonly used procedural languages; and 2) observed performance of these
@@ -79,4 +79,4 @@ QUESO library for KNL:
 \end{verbatim}
 }
 
-These strategies successfully built dynamic libraries and executables for KNL.
+These strategies successfully built dynamic libraries and executables for KNL.\todo{can we comment on if these are actually using avx512 for vectorization?}
