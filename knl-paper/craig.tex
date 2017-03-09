@@ -2,35 +2,27 @@
 \label{sec:isogeometric}
 
 % DG
-The discontinuous Galerkin method is a finite element method that uses
-discontinuous piecewise polynomials as basis functions.  It excels in
-aspects of its computational efficiency in the context of modern architectures,
-particularly in convection-dominated flows.  These allow for localization of
+The discontinuous Galerkin (DG) method is a finite element method (FEM) that is appealing in
+aspects of its computational efficiency on modern architectures,
+particularly in the context of explicit wave propagation.  In this context, DG allows for localization of
 finite element stencils (e.g nearest edge/face neighbors) in such a way that dynamic problems lead to block
-diagonal matrix systems.  The locality of the memory footprint in these
-application models leads to the ability to compute solutions at high local
-order and large floating point throughput \cite{Klockner20097863}.
+diagonal matrix systems, providing the capability to compute solutions at high order accuracy on sparse meshes with large memory throughput \cite{Klockner20097863}.
 
 % Iso
-In traditional isogeometric analysis, computer aided design (CAD) mesh
-automation tools for complex geometric domains have been developed for
-triangles in two dimensions \cite{Engvall2016378} and generalized elements in
-three dimensions \cite{EngvallPress}.  This allows for meshes that exactly
-preserve underlying geometry in real-world designs, including both arbitrarily
-smooth and discontinuous features.  In many applications, geometric
-sensitivities can dominate errors \cite{Michoski2016658,Wirasaet2015597},
+In isogeometric analysis, geometric shape functions and finite element test functions are chosen as isogeometric basis functions (e.g. NURBS or splines) \cite{Riesenfeld20151054}.  This choice is made to address the so-called design-to-analysis bottleneck, where the engineering design community utilizes computer aided design (CAD) technologies to parameterize complicated geometries, but in such a way that resulting seams and gaps in the meshes make them impossible to perform finite element analysis (FEA) on.  IGA solves this problem by building into CAD programs isogeometric basis functions that lead to CAD meshes that are analysis suitable.  Moreover, it is known that traditional efforts to deal with complicated geometric domains, such as heavily refining linear meshes are using isoparametric elements, can lead to ``geometric variational crimes.''    In fact, in many applications, geometric sensitivities dominate error behavior \cite{Michoski2016658,Wirasaet2015597,Fahs:2011:IAH:2003056.2003066,Toulorge_a2d},
 necessitating geometrically consistent meshes for accurate solutions at high
 polynomial order.
 
-% BIDG
+
 The BIDG algorithm developed in \cite{Michoski2016658} merges key capabilities
-offered by both isogeometric analysis and discontinuous Galerkin methods.  It
-uses a piecewise rational isogeometric basis for the geometry, and a piecewise
-discontinuous polynomial representation for the model, while providing an exact
-(and properly conditioned) geometric transformation between the two spaces. The
-BIDG method is an inherently high-order method that is amenable to
-$hp$-adaptive schemes, and shows requisite super-exponential convergent
-behavior.
+offered by both IGA and DG methods.  In BIDG different basis functions are used to parameterize the geometry than to solve for the DG method.  For the geometry piecewise rational Bernstein-B\'{e}zier basis functions are used, and for the DG basis piecewise discontinuous polynomials are used.  What this provides is the ability to exactly parameterize complex geometries, while still being able to utilize the small localized stencils from DG methods.   A set of geometric transformations between the DG and IGA bases is then easily established, up to a constraint on the conditioning of the IGA elements of the mesh. 
+Recently automation tools for complex geometric domains have also been developed for BIDG on triangles in two dimensions \cite{Engvall2016378} and generalized elements in three dimensions \cite{EngvallPress}.  This allows for meshes that exactly
+preserve underlying geometry in real-world designs, including both arbitrarily
+smooth and discontinuous features. The resulting BIDG method is an inherently high-order method that is amenable to $hp$-adaptive schemes, and shows requisite and theoretically rigorous super-exponential convergent behavior.
+
+
+One of nuances of solving curvilinear systems is the relatively heavy storage requirements.  In linear systems the element coordinate transforms are affine, thus the geometric factors are constant over elements, and can be factored out of stiffness and mass matrix calculations.  In the case of curvilinear elements however this is not the case, where the geometric transforms have elementwise dependencies.  This is particularly problematic in isoparametric methods, where the degree of the geometric basis tends to increase with the solution basis \cite{doi:10.1137/120899662}.  However, in the BIDG method, because the geometric parameterization is isogeometric, the method is generally speaking a subparametric method, since the exact geometry can be preserved at a lower rational degree than the solution basis  \cite{Michoski2016658}.  What this leads to is a larger storage requirement for the mesh itself at low polynomial degree $\ell$ and a smaller one at higher polynomial degree.  A number of solutions to this heavy storage problem have been presented in the literature for isoparametric methods \cite{doi:10.1137/120899662}, though these have not yet been tested in BIDG.
+
 
 \begin{figure}
 \begin{center}
@@ -48,33 +40,32 @@ for the scaling study on the KNL architecture. For our strong scaling test we so
   \frac{\partial p}{\partial t} + \nabla\cdot \boldsymbol{u} = 0, \quad
   \frac{\partial\boldsymbol{u}}{\partial t} + \nabla p = 0,
 \end{equation}
-where $\boldsymbol{u}=(u_x,u_y)$ is the velocity, and $p$ the pressure.
-
-Such a system is discretized by solving the semidiscrete block diagonal system
+where $\boldsymbol{u}=(u_x,u_y)$ is the velocity, and $p$ the pressure. The following semidiscrete block diagonal system results:
 \[
   \left( v, \frac{ \partial A}{\partial t} \right)_{\Omega_{i}} =
   V_{\Omega_{i}}+S_{\partial\Omega_{i}}
 \]
-
-for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume intergral that has only
-elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface integral that
+for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume kernel that has only
+elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface kernel that
 depends on inter-element communication through classical upwinding
-\cite{Michoski2014898}.  The volume integral can be written in three nested
-loops; the outer looping over elements, and two inner loops over degrees of
-freedom in the DG basis.  The surface intergral similarly loops over elements,
-but then due to an additional interpolation step from the isogeometric
-transformation, extends one of these nested loops over the quadrature degrees
-of freedom for curved edges.  The resulting linear system that is solved,
-$Fx = b$ admits an attractive block-diagonal structure,
-\begin{equation}
-  F = \begin{pmatrix}
-    F_1 & 0 & \cdots & 0 \\
-    0 & F_2 & \cdots & 0 \\
-    \vdots & & \ddots & \vdots \\
-    0 & 0 & \cdots & F_n \\
-  \end{pmatrix},
-\end{equation}
-and this highly motivates the use of a many-core architecture for execution.
+\cite{Michoski2014898}.  The resulting system can be understood as a globally sparse block-matrix, where the blocks are dense, thus motivating the use of a many-core architecture for execution.  The implementation utilizes the Open Concurrent Compute Abstraction (OCCA) library \cite{MedinaPress}.  The OCCA library abstracts multiple threading back-ends (OpenMP, OpenCL, and CUDA) using C preprocessor macros.
+
+%% The solution kernel subsequently The volume integral can be written in three nested
+%% loops; the outer looping over elements, and two inner loops over degrees of
+%% freedom in the DG basis.  The surface intergral similarly loops over elements,
+%% but then due to an additional interpolation step from the isogeometric
+%% transformation, extends one of these nested loops over the quadrature degrees
+%% of freedom for curved edges.  The resulting linear system that is solved,
+%% $Fx = b$ admits an attractive block-diagonal structure,
+%% \begin{equation}
+%%   F = \begin{pmatrix}
+%%     F_1 & 0 & \cdots & 0 \\
+%%     0 & F_2 & \cdots & 0 \\
+%%     \vdots & & \ddots & \vdots \\
+%%     0 & 0 & \cdots & F_n \\
+%%   \end{pmatrix},
+%% \end{equation}
+
 
 \begin{figure}
 \begin{center}
@@ -86,10 +77,6 @@ isogeometric 168 element mesh, and shown at different polynomial order $\ell$.}
 \label{fig:bidg_scaling}
 \end{figure}
 
-The implementation on isogeometric meshes utilizes the Open Concurrent Compute
-Abstraction (OCCA) library \cite{MedinaPress}.  The OCCA library abstracts
-multiple threading back-ends (OpenMP, OpenCL, and CUDA) using C preprocessor
-macros.
 
 % The OCCA kernel implements macro-based just-in-time code
 % generation so that the platform target can be identified at runtime.  Threaded
