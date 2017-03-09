@@ -75,27 +75,6 @@ int main(int argc, char ** argv)
   output_file << "Likelihood evaluation took " << time << " secs." << std::endl;
   output_file.close();
 
-  // Step 4 of 5: Instantiate the inverse problem
-  // QUESO::GenericVectorRV<> postRv("post_", paramSpace);
-
-  // QUESO::StatisticalInverseProblem<> ip("", NULL, priorRv, lhood, postRv);
-
-  // // Step 5 of 5: Solve the inverse problem
-  // QUESO::GslVector paramInitials(paramSpace.zeroVector());
-
-  // // Initial condition of the chain
-  // paramInitials[0] = 0.0;
-  // paramInitials[1] = 0.0;
-
-  // QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
-
-  // for (unsigned int i = 0; i < 1; i++) {
-  //   // Might need to tweak this
-  //   proposalCovMatrix(i, i) = 0.1;
-  // }
-
-  // ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
-
   MPI_Finalize();
 
   return 0;
