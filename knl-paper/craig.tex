@@ -97,14 +97,14 @@ In particular, on this mesh we see an efficiency saturation above $\ell>5$.
 Moreover, since the mesh itself has only 168 elements, the number of threads
 eventually exceeds the number of elements, making for some intriguing questions
 regarding the observed behavior.  In order to fully understand the observed behavior and
-optimize the code appropriately, a more extensive study is required, including
+optimize the code appropriately, a more extensive study is required, including performing
 %a streams
 %
 %NM-- why streams? Streams is just a memory bandwidth benchmark. If this is
 %     expected to be the bottleneck, I would directly address that in the text.
 %CM -- Nick, sorry, I don't understand your point.  I don't know what the bottleneck is because I have not done comprehensive tests, so I can't rule out a bottleneck until I run the tests.  All I can do is guess.  Memory bandwidth may very well be causing a problem, and the vector kernels should be tested.  On the other hand, I think the roofline model would cover this too, so we can delete it if you prefer?
 %benchmark \cite{McCalpin1995} and
-a roofline performance test
+the roofline diagnostic
 \cite{Williams:2009:RIV:1498765.1498785}.
 
 %
