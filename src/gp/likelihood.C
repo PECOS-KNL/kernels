@@ -4,6 +4,7 @@
 #include <queso/GslMatrix.h>
 #include <queso/VectorSet.h>
 
+#include <omp.h>
 #include <mkl.h>
 
 #include <cmath>
@@ -53,6 +54,8 @@ double
 Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
     V * gradVector, M * hessianMatrix, V * hessianEffect) const
 {
+  double t1 = omp_get_wtime();
+
   unsigned int total_dim = m_num_simulations + 1;  // Plus 1 for one experiment
 
   // First, fill up the covariance matrix
@@ -105,7 +108,10 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
       norm = tmp;
     }
   }
-    
+
+  double t2 = omp_get_wtime();
+  double setup_time = t2 - t1;
+
   // We're letting MKL choose the workspace array at runtime
   // Assume unsigned int N converts to lapack_int
   info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim);
@@ -127,6 +133,9 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
     queso_error();
   }
 
+  double t3 = omp_get_wtime();
+  double factorization_time = t3 - t2;
+
   // Estimate the condition number of m_covariance
   double cond;
   info = LAPACKE_dpocon(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim, norm, &cond);
@@ -140,6 +149,9 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
               << std::endl;
     queso_error();
   }
+
+  double t4 = omp_get_wtime();
+  double condition_num_time = t4 - t3;
 
   // Now do y^T \Sigma^{-1} y
   // First solve \Sigma x = y for x
@@ -174,8 +186,20 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
     queso_error();
   }
 
+  double t5 = omp_get_wtime();
+  double linear_solve_time = t5 - t4;
+
   // Second compute y^T x
   double llhd = cblas_ddot(total_dim, y, 1, x, 1);
+
+  double t6 = omp_get_wtime();
+  double dot_product_time = t6 - t5;
+
+  std::cout << "Setup time: " << setup_time << std::endl;
+  std::cout << "Factorization time: " << factorization_time << std::endl;
+  std::cout << "Condition number: " << condition_num_time << std::endl;
+  std::cout << "Linear solve time: " << linear_solve_time << std::endl;
+  std::cout << "Dot product: " << dot_product_time << std::endl;
 
   // free(y);
   // free(x);
