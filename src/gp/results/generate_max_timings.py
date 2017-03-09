@@ -3,8 +3,19 @@ import matplotlib
 matplotlib.use('pdf')
 from matplotlib import pyplot as plt
 
-fig = plt.figure()
+from matplotlib import rcParams
+rcParams['font.family'] = 'serif'
+rcParams['font.serif'] = 'Computer Modern Roman'
+rcParams['text.usetex'] = True
+
+from matplotlib.ticker import LogLocator, NullLocator
+from matplotlib.ticker import LogFormatter
+
+fig = plt.figure(figsize=(5.5,4))
 ax = fig.add_subplot(1, 1, 1)
+
+locator = LogLocator(2)
+formatter = LogFormatter(2)
 
 all_ranks = [1, 2, 4, 8, 16, 32, 64, 128, 256]
 
@@ -21,21 +32,16 @@ for i in range(len(all_ranks)):
 
     print num_openmp, times[i,:]
 
-    # Generate MPI scaling figures
-    ax.plot(all_ranks, times[i], 'b-x')
-    ax.grid(True)
-    ax.set_title('OpenMP threads: ' + str(num_openmp))
-    ax.set_xlabel('MPI processes')
-    ax.set_ylabel('Time to solution (seconds)')
-    fig.savefig('mpi_scaling_' + str(num_openmp) + '.pdf')
-    ax.cla()
-
 # Generate OpenMP scaling figures
 for i in range(times.shape[1]):
-    ax.plot(all_ranks, times[:,i], 'b-x')
-    ax.grid(True)
-    ax.set_title('MPI processes: ' + str(all_ranks[i]))
-    ax.set_xlabel('OpenMP threads')
-    ax.set_ylabel('Time to solution (seconds)')
-    fig.savefig('openmp_scaling_' + str(all_ranks[i]) + '.pdf')
-    ax.cla()
+    if i == 0 or i == 1:
+        ax.loglog(all_ranks, times[:,i], 'b-x')
+        ax.set_xlim(1, 256)
+        ax.set_xlabel('OpenMP threads')
+        ax.set_ylabel('Time to solution (seconds)')
+        ax.xaxis.set_major_locator(locator)
+        ax.xaxis.set_minor_locator(NullLocator())
+        ax.xaxis.set_major_formatter(formatter)
+        fig.tight_layout()
+        fig.savefig('openmp_scaling_' + str(all_ranks[i]) + '.pdf')
+        ax.cla()
