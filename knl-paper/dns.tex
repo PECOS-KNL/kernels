@@ -30,7 +30,7 @@ to the underlying DNS codes.
 In this section, we will show you the results of testing PoongBack on
 KNL nodes in Stampede, which is a channel flow DNS code optimized for
 the modern HPC systems. PoongBack,
-named after the Korean god of storms\todo{is this right?}, 
+named after the ancient Korean god of winds, 
 simulates a channel flow: the flow between two infinite 
 parallel plates. The simulation code
 has already been scaled to several top-10 HPC systems, and has 
@@ -38,10 +38,10 @@ shown excellent performance during its use by several research
 groups\cite{Lee:2013kv}. In particular, it was used for
 generating the data for the NSF supported virtual flow laboratory in the 
 Johns Hopkins Turbulence Data Base\cite{Graham:2015ha}.
-The code uses the Fourier-Galerkin spectral method in the streamwise directions 
+The code uses the Fourier-Galerkin spectral method in the streamwise and spanwise directions 
 and a high-order basis spline method in the wall-normal direction. 
 For time integration PoongBack uses a low-storage
-third-order Runge-Kutta method\cite{}. 
+third-order Runge-Kutta method\cite{Spalart:1991wu}. 
 The simulation domain is partitioned by
 a two-dimensional decomposition, a.k.a. pencil-decomposition. PoongBack
 contains three major kernels; (1) solving the Navier-Stokes equations in
@@ -180,9 +180,8 @@ the data reordering for KNL nodes.
 \end{figure}
 
 
-As the data transpose kernel assumes locality of data, OpenMP is used
-for data re-ordering, but not MPI. The hybrid parallelism with MPI + OpenMP
-is tested and results are shown in Figure~\ref{fig:DNS_MPI_OpenMP}\todo{this doesnt make sense, isnt the data local?}. 
+For data re-ordering, OpenMP can be used in each MPI task. The hybrid parallelism with MPI + OpenMP
+is tested and results are shown in Figure~\ref{fig:DNS_MPI_OpenMP}. 
 Each line in Figure~\ref{fig:DNS_MPI_OpenMP} details cases where the product of
 the number of MPI tasks and the number of OpenMP threads is
 constant. Using more MPI tasks and less OpenMP threads generally shows
