@@ -1,8 +1,8 @@
 \subsection{Gaussian processes}
 \label{sec:chol}
 
-It is common in many uncertainty quantification applications to replace an
-expensive model, possibly a discretised partial differential equation with a
+Many uncertainty quantification applications replace an
+expensive model, such as a discretised partial differential equation, with a
 cheap surrogate.  This is done so that during a Markov chain Monte Carlo
 procedure, likelihood evaluations are cheap.  There are a plethora of different
 surrogate choices and strategies for choosing which is appropriate for a
@@ -10,9 +10,9 @@ particular application.  Gaussian processes are a common choice, and we explore
 their scaling on the KNL architecture here.\todo{citations motherclucker, do you have them?}
 
 Gaussian processes are a probabilistic model for generating random fields
-characterised by a mean $\mu$ function and a covariance function $c$.
+characterised by a mean $\mu$ function and a covariance function $c$,
 \begin{equation}
-  f(x) \sim \mathcal{N}(\mu(x), c(x, x'))
+  f(x) \sim \mathcal{N}(\mu(x), c(x, x')).
 \end{equation}
 
 They have the property that evaluation of the field at some finite set of
@@ -34,7 +34,7 @@ the usual Gaussian probability distribution function we are familiar with,
 Notice that evaluation of this probability density function necessitates a
 linear solve $\Sigma u = x$.  Since $\Sigma$ is symmetric and positive-definite
 a Cholesky factorisation is required.  Iterative approaches exist too, but we
-concentrate on the direct approach here.  It is also worth noting that the
+concentrate on the direct approach for this work.  It is also worth noting that the
 covariance function typically takes an exponential form
 \begin{equation}
   c(x, x') = \sigma^2 \exp(-\frac12 \| x - x' \|^2 / l^2)
@@ -43,17 +43,18 @@ and so the resulting covariance matrix
 \begin{equation}
   \Sigma_{ij} = c(x_i, x_j)
 \end{equation}
-is very commonly full and dense.  The covariance function can also contain
-unknown parameters that need to be inferred in, for example, a hierarchical
-Bayesian setting.  The usual approach is taken for evaluation of the
-probability density function
+is full and dense.  The covariance function can also contain
+unknown parameters\todo{shouldnt these be hyper params} 
+that need to be inferred, for example, a hierarchical
+Bayesian setting.  The usual approach to evaluate the
+probability density function is: 
 \begin{enumerate}
   \item Compute $L$ such that $\Sigma = LL^\top$.
-  \item Solve $\Sigma u = x$ using 1.
+  \item Solve $\Sigma u = x$ using (1).
   \item Compute the inner-product $x^\top u$.
   \item Divide by the square root of the determinant of $\Sigma$.
   \item Return $p$
-  \item Go to 1. for the next state in the Markov chain.
+  \item Go to (1) for the next state in the Markov chain.
 \end{enumerate}
 
 QUESO was used to manage the Gaussian process and Markov chain infrastructure.
@@ -63,15 +64,19 @@ Extensive use of Intel's MKL was used for both the Cholesky factorisation,
 subsequent linear solve, and determinant calculation.
 
 Figure~\ref{fig:gp} shows timings of a Gaussian process likelihood evaluation
-as a function of number of OpenMP threads.\todo{NM- can you repeat study with MPI? DM- As far as I'm aware, MKL doesn't take an MPI communicator.  MKL is how we do the Cholesky for the GP.}
-%NM: can you do the same study with a single OMP thread and vary MPI_tasks? numerous authors have found this to be faster, would be interesting to corroborate
+as a function of number of OpenMP threads. 
+%\todo{NM- can you repeat study with MPI? DM- As far as I'm aware, MKL doesn't take an MPI communicator.  MKL is how we do the Cholesky for the GP.}
+%NM: can you do the same study with a single OMP thread and vary MPI_tasks? numerous authors have found this to be faster, would be interesting to corroborate 
 %DM: As far as I'm aware, MKL doesn't take an MPI communicator.  MKL is how we do the Cholesky for the GP.
+% NM-- got it, misunderstood. 
 
 %
 % I would also add a discussion of the timings here. Can you say something about strong-weak scaling?
 % this looks like a strong scaling analysis, can you detail more on the speedup?
 %
 % DM - Plot axes upated.  I'll add timing discussion.  What is a 'strong-weak scaling'?
+%
+% NM -- heh.. i mean either strong or weak scaling. sorry
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{openmp_scaling_1.pdf}
   \label{fig:gp}
