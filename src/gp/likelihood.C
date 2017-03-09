@@ -105,7 +105,7 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
       norm = tmp;
     }
   }
-    
+
   // We're letting MKL choose the workspace array at runtime
   // Assume unsigned int N converts to lapack_int
   info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim);
