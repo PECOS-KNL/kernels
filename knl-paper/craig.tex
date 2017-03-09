@@ -2,7 +2,8 @@
 \label{sec:isogeometric}
 
 % DG
-The discontinuous Galerkin method is a finite element method that excels in
+The discontinuous Galerkin method is a finite element method that uses
+discontinuous piecewise polynomials as basis functions.  It excels in
 aspects of its computational efficiency in the context of modern architectures,
 particularly in convection-dominated flows.  These allow for localization of
 finite element stencils (e.g nearest edge/face neighbors) in such a way that dynamic problems lead to block
@@ -30,8 +31,6 @@ discontinuous polynomial representation for the model, while providing an exact
 BIDG method is an inherently high-order method that is amenable to
 $hp$-adaptive schemes, and shows requisite super-exponential convergent
 behavior.
-
-
 
 \begin{figure}
 \begin{center}
