@@ -11,7 +11,7 @@ rcParams['text.usetex'] = True
 from matplotlib.ticker import LogLocator, NullLocator
 from matplotlib.ticker import LogFormatter
 
-data = np.loadtxt('omp_times.txt')
+data = np.loadtxt('omp_times.txt', skiprows=1)
 
 fig = plt.figure(figsize=(5.5,4))
 ax = fig.add_subplot(1, 1, 1)
@@ -19,14 +19,16 @@ ax = fig.add_subplot(1, 1, 1)
 locator = LogLocator(2)
 formatter = LogFormatter(2)
 
+threads = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+
 ideal = np.zeros(data.shape[0])
 ideal[0] = data[0,1]
 
 for i in range(1, ideal.shape[0]):
     ideal[i] = ideal[i-1] / 2.0
 
-ax.loglog(data[:,0], data[:,1], 'b-x')
-ax.loglog(data[:,0], ideal, 'k--')
+ax.loglog(threads, data[:,1], 'b-x')
+ax.loglog(threads, ideal, 'k--')
 ax.set_xlim(1, 256)
 ax.set_xlabel('OpenMP threads')
 ax.set_ylabel('Time to solution (seconds)')

@@ -120,16 +120,16 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   info = LAPACKE_dpotrf(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim);
 
   if (info == 0) {
-    std::cout << "LAPACKE_dpotrf was successful" << std::endl;
+    std::cerr << "LAPACKE_dpotrf was successful" << std::endl;
   }
   else if (info < 0) {
-    std::cout << "LAPACKE_dpotrf was unsuccessful."
+    std::cerr << "LAPACKE_dpotrf was unsuccessful."
               << "  Parameter " << info << " had an illegal value."
               << std::endl;
     queso_error();
   }
   else {  // if (info > 0) {
-    std::cout << "LAPACKE_dpotrf was unseccessful."
+    std::cerr << "LAPACKE_dpotrf was unseccessful."
               << "  The leading minor of order " << info << " is not pos. def."
               << "  The Cholesky factorisation could not be completed."
               << std::endl;
@@ -144,10 +144,10 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   info = LAPACKE_dpocon(LAPACK_ROW_MAJOR, 'U', total_dim, m_covariance, total_dim, norm, &cond);
 
   if (info == 0) {
-    std::cout << "Approximate reciprocal condition number of m_covariance is: " << cond << std::endl;
+    std::cerr << "Approximate reciprocal condition number of m_covariance is: " << cond << std::endl;
   }
   else {
-    std::cout << "Condition number estimation failed."
+    std::cerr << "Condition number estimation failed."
               << "  Parameter " << info << " had an illegal value."
               << std::endl;
     queso_error();
@@ -162,12 +162,12 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   double * x = (double *)malloc(sizeof(double) * total_dim);
 
   if (x == NULL) {
-    std::cout << "Could not allocate enough memory for rhs" << std::endl;
+    std::cerr << "Could not allocate enough memory for rhs" << std::endl;
     queso_error();
   }
 
   if (y == NULL) {
-    std::cout << "Could not allocate enough memory for data" << std::endl;
+    std::cerr << "Could not allocate enough memory for data" << std::endl;
     queso_error();
   }
 
@@ -182,10 +182,10 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   // the leading dimension of this 'matrix' is 1, not total_dim.  I'm an idiot.
   info = LAPACKE_dpotrs(LAPACK_ROW_MAJOR, 'U', total_dim, 1, m_covariance, total_dim, x, 1);
   if (info == 0) {
-    std::cout << "LAPACKE_dpotrs successful" << std::endl;
+    std::cerr << "LAPACKE_dpotrs successful" << std::endl;
   }
   else {
-    std::cout << "LAPACKE_dpotrs unsuccessful.  Parameter " << info << " had an illegal value" << std::endl;
+    std::cerr << "LAPACKE_dpotrs unsuccessful.  Parameter " << info << " had an illegal value" << std::endl;
     queso_error();
   }
 
@@ -198,11 +198,14 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   double t6 = omp_get_wtime();
   double dot_product_time = t6 - t5;
 
-  std::cout << "Setup time: " << setup_time << std::endl;
-  std::cout << "Factorization time: " << factorization_time << std::endl;
-  std::cout << "Condition number: " << condition_num_time << std::endl;
-  std::cout << "Linear solve time: " << linear_solve_time << std::endl;
-  std::cout << "Dot product: " << dot_product_time << std::endl;
+  std::cout << "Setup \t Fact \t Cond \t Solve \t Dot" << std::endl;
+
+  std::cout << setup_time << "\t"
+            << factorization_time << "\t"
+            << condition_num_time << "\t"
+            << linear_solve_time << "\t"
+            << dot_product_time << "\t"
+            << std::endl;
 
   // free(y);
   // free(x);

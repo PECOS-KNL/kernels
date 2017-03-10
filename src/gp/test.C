@@ -65,8 +65,6 @@ int main(int argc, char ** argv)
   double start_time = omp_get_wtime();
   double val = lhood.lnValue(point, NULL, NULL, NULL, NULL);
 
-  printf("Log likelihood: %10.20lf\n", val);
-
   if (std::abs(val - SOL) > TOL) {
     std::cerr << "\033[1;31mFAILED\033[0m\n";
     queso_error();
