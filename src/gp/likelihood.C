@@ -72,7 +72,7 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
       parameter1 = m_simulationParameters[i-1];
     }
 
-    for (unsigned int j = 0; j < total_dim; j++) {
+    for (unsigned int j = i; j < total_dim; j++) {
       double parameter2;
 
       // Deal with the single experiment (observation)
@@ -100,8 +100,11 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   for (unsigned int i = 0; i < total_dim; i++) {
     double tmp = 0.0;
 
-    for (unsigned int j = 0; j < total_dim; j++) {
-      tmp += m_covariance[i*total_dim+j];
+    // Handle element on the diagonal
+    tmp += m_covariance[i*total_dim+i];
+
+    for (unsigned int j = i+1; j < total_dim; j++) {
+      tmp += 2.0 * m_covariance[i*total_dim+j];
     }
 
     if (tmp > norm) {
