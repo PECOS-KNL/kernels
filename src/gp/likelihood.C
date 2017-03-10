@@ -59,20 +59,21 @@ Likelihood<V, M>::lnValue(const V & domainVector, const V * domainDirection,
   unsigned int total_dim = m_num_simulations + 1;  // Plus 1 for one experiment
 
   // First, fill up the covariance matrix
+#pragma omp parallel for collapse(2)
   for (unsigned int i = 0; i < total_dim; i++) {
-    double parameter1;
-    // Deal with the single experiment
-    if (i == 0) {
-      // Difference in scenario variables is always zero.  No need to handle it.
-      // Deal with difference in parameters
-      parameter1 = domainVector[0];
-    }
-    else {
-      // Subtract 1 because we have 1 experiment (observation)
-      parameter1 = m_simulationParameters[i-1];
-    }
+    for (unsigned int j = 0; j < total_dim; j++) {
+      double parameter1;
+      // Deal with the single experiment
+      if (i == 0) {
+        // Difference in scenario variables is always zero.  No need to handle it.
+        // Deal with difference in parameters
+        parameter1 = domainVector[0];
+      }
+      else {
+        // Subtract 1 because we have 1 experiment (observation)
+        parameter1 = m_simulationParameters[i-1];
+      }
 
-    for (unsigned int j = i; j < total_dim; j++) {
       double parameter2;
 
       // Deal with the single experiment (observation)
