@@ -5,22 +5,24 @@ The subsections which follow highlight two things: 1) the level of effort
 required in porting software applications from a wide array of scientific
 disciplines written in commonly used procedural languages; and 2) observed
 performance of these applications.  Applications are drawn from four distinct
-scientific disciplines.
+scientific disciplines:
 
-\paragraph{Poongback}  Poongback is a Fortran application targeted towards
-solving the incompressible Navier-Stokes equations in a periodic wall-bounded
-channel.
+\paragraph{Incompressible fluid dynamics}  Poongback is a Fortran application
+targeted towards solving the incompressible Navier-Stokes equations in a
+periodic wall-bounded channel.
 
-\paragraph{C4}  C4 is a collection of Fortran applications that leverages a
-suite of algorithms for solving coupled-cluster problems in quantum chemistry.
+\paragraph{Uncertainty quantification}  QUESO is a C++ library for the
+Quantifying Uncertainty in Estimation, Simulation, and Optimization.  It
+provides a suite of algorithms for sampling unknown probability distributions
+and provides a parallel (MPI) environment to allow the user to leverage this in
+large-scale engineering applications.
 
-\paragraph{QUESO}  QUESO is a C++ library for the Quantifying Uncertainty in
-Estimation, Simulation, and Optimization.  It provides a suite of algorithms
-for sampling unknown probability distributions and provides a parallel (MPI)
-environment to allow the user to leverage this in large-scale engineering
-applications.
+\paragraph{Computational chemistry}  CFOUR is a collection of Fortran
+applications that leverages a suite of algorithms for solving coupled-cluster
+problems in quantum chemistry.
 
-\paragraph{ArcSyn3sis}  ArcSyn3sis is a C++ library that implements a
-blended isogeometric discontinuous Galerkin (BIDG) method that seamlessly blends the discontinuous Galerkin method with isogeometric analysis.
+\paragraph{Finite element methods}  ArcSyn3sis is a C++ library that implements
+a blended isogeometric discontinuous Galerkin (BIDG) method that seamlessly
+blends the discontinuous Galerkin method with isogeometric analysis.
 
 We explore each of these applications in turn.
