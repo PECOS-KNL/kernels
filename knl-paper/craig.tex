@@ -31,7 +31,7 @@ smooth and discontinuous features. The resulting BIDG method is an inherently hi
 %% \label{fig:168_circ}
 %% \end{figure}
 
-The software package ArcSyn3sis implements the BIDG method and it is used here
+The C/C++ software package ArcSyn3sis implements the BIDG method and it is used here
 for the scaling study on the KNL architecture. For our strong scaling test we solve the first-order acoustic wave equation:
 \begin{equation}
   \label{awe}
@@ -46,7 +46,7 @@ where $\boldsymbol{u}=(u_x,u_y)$ is the velocity, and $p$ the pressure. The foll
 for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume kernel that has only
 elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface kernel that
 depends on inter-element communication through classical upwinding
-\cite{Michoski2014898}.  The resulting system can be understood as a globally sparse block-matrix with locally dense blocks, thus motivating the use of a many-core architecture for execution.  The implementation utilizes the Open Concurrent Compute Abstraction (OCCA) library \cite{MedinaPress}.  The OCCA library abstracts multiple threading back-ends (OpenMP, OpenCL, and CUDA) using C preprocessor macros.
+\cite{Michoski2014898}.  The resulting system can be understood as a globally sparse block-matrix with locally dense blocks, thus motivating the use of a many-core architecture for execution.  The implementation utilizes the Open Concurrent Compute Abstraction (OCCA) library \cite{MedinaPress}. The OCCA library abstracts multiple threading back-ends (OpenMP, OpenCL, and CUDA) using C preprocessor macros
 
 %% The solution kernel subsequently The volume integral can be written in three nested
 %% loops; the outer looping over elements, and two inner loops over degrees of
@@ -85,17 +85,16 @@ isogeometric 168 element mesh, and shown at different polynomial order $\ell$.}
 % called more intuitively (e.g.  a 4-tensor can be called as a four array,
 % instead of indexed as a flattened contiguous one array).
 
-The results of the basic scaling study are shown in
+The results of the basic scaling study using PpenMP threads on a single node are shown in
 Fig.~\ref{fig:bidg_scaling}, where the strong scaling efficiency $e_{n}$ for
-$n$ MPI tasks is defined as $e_{n}= [t_{1}/(nt_{n})]\times 100\%$, and $t_n$ is the time to
-completion. These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
+$n$ OpenMP threads is defined as $e_{n}= [t_{1}/(nt_{n})]\times 100\%$, and $t_n$ is the time to
+completion. The implementation was relatively straightforward using the OCCA library, with relatively little effort put into code optimization.  These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
 behavior of the algorithmic intensity of DG algorithms.  However, this is
 clearly not enough evidence to be certain that such scaling is being observed.
 In particular, on this mesh we see an efficiency saturation above $\ell>5$.
 Moreover, since the mesh itself has only 168 elements, the number of threads
 eventually exceeds the number of elements, making for some intriguing questions
-regarding the observed behavior.  In order to fully understand the observed behavior and
-effectively optimize the code, a more extensive study is required, including performing
+regarding the observed behavior.  In order to fully understand the observed behavior and effectively optimize the code, a more extensive study is required, including performing
 %a streams
 %
 %NM-- why streams? Streams is just a memory bandwidth benchmark. If this is
