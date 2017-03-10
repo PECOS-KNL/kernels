@@ -14,7 +14,7 @@
 #include <omp.h>
 
 #define SOL -496100.47317803854821249843
-#define TOL 1e-14
+#define TOL 1e-5
 
 // Forward declaration
 int main(int argc, char ** argv)
