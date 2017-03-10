@@ -65,10 +65,6 @@ subsequent linear solve, and determinant calculation.
 
 Figure~\ref{fig:gp} shows timings of a Gaussian process likelihood evaluation
 as a function of number of OpenMP threads. 
-%\todo{NM- can you repeat study with MPI? DM- As far as I'm aware, MKL doesn't take an MPI communicator.  MKL is how we do the Cholesky for the GP.}
-%NM: can you do the same study with a single OMP thread and vary MPI_tasks? numerous authors have found this to be faster, would be interesting to corroborate 
-%DM: As far as I'm aware, MKL doesn't take an MPI communicator.  MKL is how we do the Cholesky for the GP.
-% NM-- got it, misunderstood. 
 
 %
 % I would also add a discussion of the timings here. Can you say something about strong-weak scaling?
@@ -77,6 +73,9 @@ as a function of number of OpenMP threads.
 % DM - Plot axes upated.  I'll add timing discussion.  What is a 'strong-weak scaling'?
 %
 % NM -- heh.. i mean either strong or weak scaling. sorry
+%
+% DM -- happy to do weak, concerned about the page limit given csim still needs
+% to add his stuff, though.  let me know what you think is best.
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{gp_scaling.pdf}
   \label{fig:gp}
