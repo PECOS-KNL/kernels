@@ -22,14 +22,14 @@ smooth and discontinuous features. The resulting BIDG method is an inherently hi
 One of nuances of solving curvilinear systems in finite elements is the relatively heavy storage requirements.  In linear systems the element coordinate transforms are affine, thus the geometric factors are constant over elements, and can be factored out of stiffness and mass matrix calculations.  In the case of curvilinear elements however this is not the case, where the geometric transforms have elementwise dependencies.  This is particularly notable in isoparametric methods, where the degree of the geometric basis tends to increase with the solution basis \cite{doi:10.1137/120899662}.  However, in the BIDG method, because the geometric parameterization is isogeometric, the method is generally speaking a subparametric method, since the exact geometry can be preserved at a lower rational degree than the solution basis  \cite{Michoski2016658}.  What this leads to is a larger storage requirement for the mesh itself at low polynomial degree $\ell$ and a decreasing one at higher polynomial degree.  A number of solutions to this heavy storage problem have been presented in the literature for isoparametric methods \cite{doi:10.1137/120899662}, though these have not yet been tested in BIDG.
 
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{./bidg_data/168_circ}
-\end{center}
-\vspace*{-.5cm}
-\caption{Exact b\'{e}zier circular mesh used in the scaling study.}
-\label{fig:168_circ}
-\end{figure}
+%% \begin{figure}
+%% \begin{center}
+%% \includegraphics[width=0.8\linewidth]{./bidg_data/168_circ}
+%% \end{center}
+%% \vspace*{-.5cm}
+%% \caption{Exact b\'{e}zier circular mesh used in the scaling study.}
+%% \label{fig:168_circ}
+%% \end{figure}
 
 The software package ArcSyn3sis implements the BIDG method and it is used here
 for the scaling study on the KNL architecture. For our strong scaling test we solve the first-order acoustic wave equation:
