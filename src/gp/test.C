@@ -13,6 +13,9 @@
 #include <iostream>
 #include <omp.h>
 
+#define SOL -496100.47317803854821249843
+#define TOL 1e-14
+
 // Forward declaration
 int main(int argc, char ** argv)
 {
@@ -60,20 +63,17 @@ int main(int argc, char ** argv)
   QUESO::GslVector point(paramSpace.zeroVector());
 
   double start_time = omp_get_wtime();
-  lhood.lnValue(point, NULL, NULL, NULL, NULL);
-  double time = omp_get_wtime() - start_time;
+  double val = lhood.lnValue(point, NULL, NULL, NULL, NULL);
 
-  // Open a file
-  unsigned int num_openmp = atoi(argv[1]);
-  int num_mpi = env->fullComm().NumProc();
-  int rank = env->fullRank();
+  printf("Log likelihood: %10.20lf\n", val);
 
-  std::ostringstream filename;
-  filename << "submit_all_ddr/time_mpi_" << num_mpi << "_openmp_" << num_openmp << "_rank_" << rank << ".txt";
-
-  std::ofstream output_file(filename.str());
-  output_file << "Likelihood evaluation took " << time << " secs." << std::endl;
-  output_file.close();
+  if (std::abs(val - SOL) > TOL) {
+    std::cerr << "\033[1;31mFAILED\033[0m\n";
+    queso_error();
+  }
+  else {
+    std::cerr << "\033[1;32mPASSED\033[0m\n";
+  }
 
   MPI_Finalize();
 
