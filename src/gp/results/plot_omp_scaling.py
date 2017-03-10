@@ -27,14 +27,16 @@ ideal[0] = data[0,0] + data[0,1]
 for i in range(1, ideal.shape[0]):
     ideal[i] = ideal[i-1] / 2.0
 
-ax.loglog(threads, data[:,0] + data[:,1], 'b-x')
-ax.loglog(threads, ideal, 'k--')
-ax.set_xlim(1, 256)
+ax.loglog(threads, data[:,0] + data[:,1], 'b-o', label='GP assembly and factorization')
+ax.loglog(threads, ideal, 'k--', label='Linear Scalability')
+ax.set_xlim(0.51, 511)
 ax.set_xlabel('OpenMP threads')
-ax.set_ylabel('Time to solution (seconds)')
+ax.set_ylabel('Elapsed time (sec)')
 ax.xaxis.set_major_locator(locator)
 ax.xaxis.set_minor_locator(NullLocator())
 ax.xaxis.set_major_formatter(formatter)
+ax.grid(False)
+ax.legend(frameon=False, numpoints=1)
 fig.tight_layout()
 fig.savefig('openmp_scaling_1.pdf')
 ax.cla()
