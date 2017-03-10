@@ -61,15 +61,15 @@ compiling and building software.  Compilation is possible on KNL, but it is
 much slower.
 
 The following software pacakges were compiled for the KNL MIC architecture:
-\texttt{QUESO, ArcSyn3sis, Poongback, C4, OCCA}.  Building these libraries for
-the login node environment is a well supported, common task, but building them
-for KNL required cross-compilation.  Many of these libraries utilize a build
-system which supports cross-compilation.  Builds that include KNL-specific
-instructions were configured by specifying two additional flags when compiling:
-\texttt{-xCORE-AVX2 -axMIC-AVX512}.
+\texttt{QUESO, ArcSyn3sis, Poongback, CFOUR, OCCA}.  Building these libraries
+for the login node environment is a well supported, common task, but building
+them for KNL required cross-compilation.  Many of these libraries utilize a
+build system which supports cross-compilation.  Builds that include
+KNL-specific instructions were configured by specifying two additional flags
+when compiling: \texttt{-xCORE-AVX2 -axMIC-AVX512}.
 
-As an example, the following configure options were used to build 0.55.0 of the
-QUESO library for KNL:
+As an example, the following configure options were used to build version
+0.55.0 of the QUESO library for KNL:
 
 {\small
 \begin{verbatim}
