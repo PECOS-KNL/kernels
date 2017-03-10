@@ -2,16 +2,14 @@
 \label{sec:isogeometric}
 
 % DG
-The discontinuous Galerkin (DG) method is a finite element method (FEM) that is appealing in
-aspects of its computational efficiency on modern architectures,
+The blended isogeometric discontinuous Galerkin (BIDG) method is a hybrid finite element method that seamlessley blends together isogeometric analysis (IGA) with discontinuous Galerk (DG) methods in order to explot the strengths of each, while mitigating their respective drawbacks. Classical DG methods are finite element methods (FEMs) that are appealing in
+aspects of their computational efficiency on modern architectures,
 particularly in the context of explicit wave propagation.  In this context, DG allows for localization of
 finite element stencils (e.g nearest edge/face neighbors) in such a way that dynamic problems lead to block
 diagonal matrix systems, providing the capability to compute solutions at high order accuracy on sparse meshes with large memory throughput \cite{Klockner20097863}.
 
 % Iso
-In isogeometric analysis, geometric shape functions and finite element test functions are chosen as isogeometric basis functions (e.g. NURBS or splines) \cite{Riesenfeld20151054}.  This choice is made to address the so-called design-to-analysis bottleneck, where the engineering design community utilizes computer aided design (CAD) technologies to parameterize complicated geometries, but in such a way that resulting seams and gaps in the meshes make them impossible to perform finite element analysis (FEA) on.  IGA solves this problem by building into CAD programs isogeometric basis functions that lead to CAD meshes that are analysis suitable.  Moreover, it is known that traditional efforts to deal with complicated geometric domains, such as heavily refining linear meshes are using isoparametric elements, can lead to ``geometric variational crimes.''    In fact, in many applications, geometric sensitivities dominate error behavior \cite{Michoski2016658,Wirasaet2015597,Fahs:2011:IAH:2003056.2003066,Toulorge_a2d},
-necessitating geometrically consistent meshes for accurate solutions at high
-polynomial order.
+In contrast, IGA typically informs a class of continuous Galerkin (CG) type methods where the geometric shape functions and finite element test functions are chosen as isogeometric basis functions (e.g. NURBS or splines) \cite{Riesenfeld20151054}.  These choices are made to address the critical ``design-to-analysis'' bottleneck, where the engineering design community utilizes computer aided design (CAD) technologies to parameterize complicated geometries, but in such a way that resulting seams and gaps in the meshes make them impossible to perform finite element analysis (FEA) on.  Recent progress in the IGA community has provided a comprehensive solution to this problem by building into CAD programs isogeometric basis functions that lead to CAD meshes that are able to generate analysis suitable designs (i.e. can be used for FEA).  Moreover, it is known that traditional efforts to deal with complicated geometric domains, such as heavily refining linear meshes or using isoparametric elements, can lead to ``geometric variational crimes'' \cite{Michoski2016658}.    These numerical errors in fact can ultimately dominate the error behavior in many applications, where it has been shown that geometric sensitivities generate largely inadmissible (or unreliable) solutions \cite{Wirasaet2015597,Fahs:2011:IAH:2003056.2003066,Toulorge_a2d}; thus necessitating the need for geometrically consistent meshes for accurate solutions at high polynomial order.
 
 
 The BIDG algorithm developed in \cite{Michoski2016658} merges key capabilities
@@ -21,19 +19,19 @@ preserve underlying geometry in real-world designs, including both arbitrarily
 smooth and discontinuous features. The resulting BIDG method is an inherently high-order method that is amenable to $hp$-adaptive schemes, and shows requisite and theoretically rigorous super-exponential convergent behavior.
 
 
-One of nuances of solving curvilinear systems is the relatively heavy storage requirements.  In linear systems the element coordinate transforms are affine, thus the geometric factors are constant over elements, and can be factored out of stiffness and mass matrix calculations.  In the case of curvilinear elements however this is not the case, where the geometric transforms have elementwise dependencies.  This is particularly problematic in isoparametric methods, where the degree of the geometric basis tends to increase with the solution basis \cite{doi:10.1137/120899662}.  However, in the BIDG method, because the geometric parameterization is isogeometric, the method is generally speaking a subparametric method, since the exact geometry can be preserved at a lower rational degree than the solution basis  \cite{Michoski2016658}.  What this leads to is a larger storage requirement for the mesh itself at low polynomial degree $\ell$ and a smaller one at higher polynomial degree.  A number of solutions to this heavy storage problem have been presented in the literature for isoparametric methods \cite{doi:10.1137/120899662}, though these have not yet been tested in BIDG.
+%One of nuances of solving curvilinear systems in finite elements is the relatively heavy storage requirements.  In linear systems the element coordinate transforms are affine, thus the geometric factors are constant over elements, and can be factored out of stiffness and mass matrix calculations.  In the case of curvilinear elements however this is not the case, where the geometric transforms have elementwise dependencies.  This is particularly notable in isoparametric methods, where the degree of the geometric basis tends to increase with the solution basis \cite{doi:10.1137/120899662}.  However, in the BIDG method, because the geometric parameterization is isogeometric, the method is generally speaking a subparametric method, since the exact geometry can be preserved at a lower rational degree than the solution basis  \cite{Michoski2016658}.  What this leads to is a larger storage requirement for the mesh itself at low polynomial degree $\ell$ and a decreasing one at higher polynomial degree.  A number of solutions to this heavy storage problem have been presented in the literature for isoparametric methods \cite{doi:10.1137/120899662}, though these have not yet been tested in BIDG.
 
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{./bidg_data/168_circ}
-\end{center}
-\vspace*{-.5cm}
-\caption{Exact b\'{e}zier circular mesh used in the scaling study.}
-\label{fig:168_circ}
-\end{figure}
+%% \begin{figure}
+%% \begin{center}
+%% \includegraphics[width=0.8\linewidth]{./bidg_data/168_circ}
+%% \end{center}
+%% \vspace*{-.5cm}
+%% \caption{Exact b\'{e}zier circular mesh used in the scaling study.}
+%% \label{fig:168_circ}
+%% \end{figure}
 
-The software package ArcSyn3sis implements the BIDG method and it is used here
+The C/C++ software package ArcSyn3sis implements the BIDG method and it is used here
 for the scaling study on the KNL architecture. For our strong scaling test we solve the first-order acoustic wave equation:
 \begin{equation}
   \label{awe}
@@ -48,7 +46,7 @@ where $\boldsymbol{u}=(u_x,u_y)$ is the velocity, and $p$ the pressure. The foll
 for $A = (p,\boldsymbol{u})$, $V_{\Omega_{i}}$ a volume kernel that has only
 elementwise dependencies, and $S_{\partial\Omega_{i}}$ a surface kernel that
 depends on inter-element communication through classical upwinding
-\cite{Michoski2014898}.  The resulting system can be understood as a globally sparse block-matrix, where the blocks are dense, thus motivating the use of a many-core architecture for execution.  The implementation utilizes the Open Concurrent Compute Abstraction (OCCA) library \cite{MedinaPress}.  The OCCA library abstracts multiple threading back-ends (OpenMP, OpenCL, and CUDA) using C preprocessor macros.
+\cite{Michoski2014898}.  The resulting system can be understood as a globally sparse block-matrix with locally dense blocks, thus motivating the use of a many-core architecture for execution.  The implementation utilizes the Open Concurrent Compute Abstraction (OCCA) library \cite{MedinaPress}. The OCCA library abstracts multiple threading back-ends (OpenMP, OpenCL, and CUDA) using C preprocessor macros
 
 %% The solution kernel subsequently The volume integral can be written in three nested
 %% loops; the outer looping over elements, and two inner loops over degrees of
@@ -69,7 +67,7 @@ depends on inter-element communication through classical upwinding
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.99\linewidth]{./bidg_data/2nd_try/scaling}
+\includegraphics[width=0.99\linewidth]{./bidg_data/2nd_try/scaling_p}
 \end{center}
 \vspace*{-.5cm}
 \caption{Strong scaling of the ArcSyn3sis BIDG kernel on KNL nodes run on
@@ -77,7 +75,7 @@ isogeometric 168 element mesh, and shown at different polynomial order $\ell$.}
 \label{fig:bidg_scaling}
 \end{figure}
 
-
+ 
 % The OCCA kernel implements macro-based just-in-time code
 % generation so that the platform target can be identified at runtime.  Threaded
 % barriers are also set in the application kernel to allow for thread-based
@@ -87,17 +85,16 @@ isogeometric 168 element mesh, and shown at different polynomial order $\ell$.}
 % called more intuitively (e.g.  a 4-tensor can be called as a four array,
 % instead of indexed as a flattened contiguous one array).
 
-The results of the basic scaling study are shown in
+The results of the basic scaling study using PpenMP threads on a single node are shown in
 Fig.~\ref{fig:bidg_scaling}, where the strong scaling efficiency $e_{n}$ for
-$n$ MPI tasks is defined as $e_{n}= [t_{1}/(nt_{n})]\times 100\%$, and $t_n$ is the time to
-completion. These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
+$n$ OpenMP threads is defined as $e_{n}= [t_{1}/(nt_{n})]\times 100\%$, and $t_n$ is the time to
+completion. The implementation was relatively straightforward using the OCCA library, with relatively little effort put into code optimization.  These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
 behavior of the algorithmic intensity of DG algorithms.  However, this is
 clearly not enough evidence to be certain that such scaling is being observed.
 In particular, on this mesh we see an efficiency saturation above $\ell>5$.
 Moreover, since the mesh itself has only 168 elements, the number of threads
 eventually exceeds the number of elements, making for some intriguing questions
-regarding the observed behavior.  In order to fully understand the observed behavior and
-optimize the code appropriately, a more extensive study is required, including performing
+regarding the observed behavior.  In order to fully understand the observed behavior and effectively optimize the code, a more extensive study is required, including performing
 %a streams
 %
 %NM-- why streams? Streams is just a memory bandwidth benchmark. If this is
