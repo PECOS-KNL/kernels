@@ -64,19 +64,28 @@ Extensive use of Intel's MKL was used for both the Cholesky factorisation,
 subsequent linear solve, and determinant calculation.
 
 Figure~\ref{fig:gp} shows timings of a Gaussian process likelihood evaluation
-as a function of number of OpenMP threads. 
+as a function of number of OpenMP threads.  The timings only include the
+assembly and the factorisation, since these two procedures are the most
+expensive at each iteration of a Markov chain Monte Carlo procedure.  The
+assembly was parallelized with the usual OpenMP preprocessor directives, and
+the factorization was executed by Intel's MKL.  Two cases were run, one
+entirely in MCDRAM and the other entirely in DDR4.  Timings for both of these
+show that for problems that are not memory-bandwith limited, MCDRAM does not
+offer a significant payoff.
 
 %
-% I would also add a discussion of the timings here. Can you say something about strong-weak scaling?
-% this looks like a strong scaling analysis, can you detail more on the speedup?
-%
-% DM - Plot axes upated.  I'll add timing discussion.  What is a 'strong-weak scaling'?
-%
-% NM -- heh.. i mean either strong or weak scaling. sorry
+% Can you say something about strong-weak scaling?  this looks like a strong
+% scaling analysis, can you detail more on the speedup?
 %
 % DM -- happy to do weak, concerned about the page limit given csim still needs
 % to add his stuff, though.  let me know what you think is best.
 \begin{figure}
-  \includegraphics[width=0.45\textwidth]{gp_scaling_collapse.pdf}
-  \label{fig:gp}
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{gp_membind_scaling_collapse.pdf}
+    \caption{Strong scaling of time taken to execute both a Gaussian process
+    assembly and factorization.  The red line shows the case where the problem
+    was allocated entirely in MCDRAM.  The blue line shows the case where the
+    problem was allocated entirely in DDR4.}
+    \label{fig:gp}
+  \end{center}
 \end{figure}
