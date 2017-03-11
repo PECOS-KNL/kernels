@@ -58,7 +58,7 @@ For this study the grid size used was $1024\times128\times512$, which is
 comparable to the $Re_\tau = 180$ simulation from
 Kim\cite{Kim:1987ub}. For every benchmark cases, MCDRAM is
 used as a cache memory between processors and DRAM. The simulation code
-was compiled with the flag ``{\tt -xMIC-AVX512}.'' \todo{should this be -ax not -x?} Also, the FFTW-3.3.5
+was compiled with the flag ``{\tt -xMIC-AVX512}.'' \todo{should this be -ax not -x? MK: -x is okay if you are going to run it on compute node only.} Also, the FFTW-3.3.5
 library is installed with the options ``{\tt --enable-avx512}'' and
 ``{\tt --enable-mpi}.''~\cite{Frigo:2005tu}. We used double-precision
 operations for all the kernels and elapsed times were measured by ``{\tt
@@ -145,7 +145,7 @@ sub-communicator. Since MPI-enabled FFTW only supports a one dimensionally
 partitioned domain, a.k.a plane decomposition, we separately use
 FFTW for 1D FFTs and MPI communications with ``{\tt
 fftw\_mpi\_execute\_r2r()}'', an idea originally attributable to Dr. Rhys
-Ulerich. \todo{Maybe put Rhys in the acknowledgements?} The part of code used
+Ulerich. \todo{Maybe put Rhys in the acknowledgements? / MK: I think footnote is better. But I don't know if it is allowed.} The part of code used
 for data reordering performs a tensor
 transpose: {\tt B(i,j,k,l) $\leftarrow$ A(l,i,k,j)} or {\tt
 B(i,j,k) $\leftarrow$ A(j,k,i)}. Unfortunately, cache-line
@@ -192,7 +192,8 @@ Figure~\ref{fig:DNS_strong_scale_transpose}.
 \begin{figure}
  \begin{center}
    \includegraphics[width=0.45\textwidth]{DNS_full_timestep}
-   \caption{Strong scaling results for the total elapsed time for single timestep. The parantheses denote: (MPI tasks $\times$ OpenMP threads). Hybrid parallelism was found to show the best performance, with nearly perfect scalability until approximately 128 concurrencies.}
+   \caption{Strong scaling results for the total elapsed time for single timestep. The parantheses denote: (MPI tasks $\times$ OpenMP threads).}
+%   \caption{Strong scaling results for the total elapsed time for single timestep. The parantheses denote: (MPI tasks $\times$ OpenMP threads). Hybrid parallelism was found to show the best performance, with nearly perfect scalability until approximately 128 concurrencies.}
    \label{fig:DNS_strong_scale_total_elapsed_time}
  \end{center}
 \end{figure}
