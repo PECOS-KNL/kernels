@@ -21,18 +21,35 @@ of future work, the results presented here will detail overall runtime performan
 from migrating to this new architecture. 
 
 For this work, the performance of a single calculation, the EOM-CCSDT energy of the first
-excited singlet state of $C_2H_2$, will be studied in detail. This excited state is the focus
+excited singlet state of $C_2H_2$, was studied in detail. This excited state is the focus
 of a current study being conducted by authors of this paper in which over 1 million single point
 energies will be calculated. As such, ensuring the best performance for this run type will conserve
 important national compute resources available at TACC. All EOM-CCSDT calculations were performed 
 using the NCC module \cite{ncc:15} of the CFOUR program system 
-and the ANO1 basis set \cite{ano1:87} with core electrons uncorrelated.
+and the ANO1 basis set \cite{ano1:87} with core electrons uncorrelated. A nonequilibrium geometry
+of this excited singlet state was used that has C1 symmetry. The lowest symmetry point group available to 
+$C_2H_2$ was used because this computational requires the most memory and compute time. This establishes
+an upper bound per computation.
 
 Porting CFOUR to the KNL architecture was very straightforward. No modification of the code or the build
 system was required. All that needed to be done was to add the previously discussed compile and link flags
 to the corresponding Fortran, C, and C++ environmental variables.
 
-\subsubsection{previous best practice and haswell performance}
+The NCC module in CFOUR is a recent contribution to the code and, as such, has been designed to take
+advantage of many-core architectures. It uses OpenMP for thread-based parallelism and in this work, the
+built-in parallelism of Intel's MKL is also exploited. As has been discussed in detail previously \cite{ncc:15},
+it has been determined that on traditional dual Intel CPU compute node systems, best performance is obtained 
+by using $OMP\_NUM\_THREADS=16$. This relies on the default behavior that MKL will use $OMP\_NUM\_THREADS$ 
+if outside an OpenMP block but run single-threaded within an OpenMP block. In the NCC module, there are MKL-library 
+calls within an OpenMP block, however, best performance is achieved by using only serial MKL calls within OpenMP
+blocks. This ensures that thread oversubscription never occurs.
+
+For benchmark comparison purposes, the traditional CPU used for reference was an Intel Xeon  E5-2670 v3 CPU
+running at 2.30GHz. This CPU was first available on market in late 2014 and is representative of typical HPC 
+compute nodes in current generation supercomputers. Best performance on this system was achieved with 
+$OMP\_NUM\_THREADS=16$ and the total compute time for the $C_2H_2$ excited state energy discussed previously
+was 607 s. If more than 16 threads were used, the total walltime for the calculation increases.
+
 \subsubsection{memory mode and membind}
 \subsubsection{cluster mode}
 \subsubsection{threads and mkl and environmental variables oh my}
