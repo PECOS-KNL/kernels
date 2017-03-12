@@ -1,10 +1,36 @@
-\subsection{EOMEE-CCSDT single-node performance}
+\subsection{EOM-CCSDT single-node performance}
 \label{sec:cfour}
 
-This is my section. There are many like it but this one is mine.
+For the calculations used in this work,
+the CFOUR \cite{cfour:08} program was used. CFOUR
+(Coupled-Cluster techniques for Computational Chemistry) is an
+application for performing high-level quantum chemical calculations
+that is under active development by research groups at UT Austin and
+Universit\"{a}t Mainz, Germany). CFOUR's major strength is its arsenal
+of high-level ab initio methods for the calculation of atomic and
+molecular properties.  Virtually all approaches based on M\o
+ller-Plesset (MP) perturbation theory and the coupled-cluster
+approximation (CC) are available.
 
-intro to CFOUR and calculation done and the CC module used for this work
-porting cfour to the mic
+For the other applications considered here, the scalibility of various code bases 
+used in the PECOS center on KNL compute nodes has been presented. To compliment
+this effort, this section will focus on a comparison of optimal single-node performance
+between traditional (Haswell) Intel CPUs and the new KNL compute nodes of Stampede 2.
+While the scalability of CFOUR on current and emerging architectures will be the focus 
+of future work, the results presented here will detail overall runtime performance gains
+from migrating to this new architecture. 
+
+For this work, the performance of a single calculation, the EOM-CCSDT energy of the first
+excited singlet state of $C_2H_2$, will be studied in detail. This excited state is the focus
+of a current study being conducted by authors of this paper in which over 1 million single point
+energies will be calculated. As such, ensuring the best performance for this run type will conserve
+important national compute resources available at TACC. All EOM-CCSDT calculations were performed 
+using the NCC module \cite{ncc:15} of the CFOUR program system 
+and the ANO1 basis set \cite{ano1:87} with core electrons uncorrelated.
+
+Porting CFOUR to the KNL architecture was very straightforward. No modification of the code or the build
+system was required. All that needed to be done was to add the previously discussed compile and link flags
+to the corresponding Fortran, C, and C++ environmental variables.
 
 \subsubsection{previous best practice and haswell performance}
 \subsubsection{memory mode and membind}
