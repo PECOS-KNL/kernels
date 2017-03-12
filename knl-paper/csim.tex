@@ -51,7 +51,7 @@ achieved by using only serial MKL calls within OpenMP blocks. This ensures that 
 For benchmark comparison purposes, the traditional CPUs used for reference were Two Intel Xeon E5-2670 v3 CPUs
 running at 2.30GHz. These CPUs were first available on market in late 2014 and is representative of typical HPC 
 compute nodes in current generation supercomputers. Best performance on this system was achieved with 
-OMP\_NUM\_THREADS of 16 and the total compute time for the $C_2H_2$ excited state energy discussed previously
+16 OpenMP threads and the total compute time for the $C_2H_2$ excited state energy discussed previously
 was 607s.
 %\todo{is this hyperthreading? please note hardware cores}. 
 % nope 16 hardware threads updated the above text to note it was a dual CPU system
