@@ -9,7 +9,7 @@ NVIDIA's CUDA language\cite{} or OpenCL\cite{}) for the accelerator to work.
 Intel's Xeon Phi many-core architectures offer a balance with a smaller core count than GPGPUs
 but an x86 architecture and therefore do not need specialised programming
 paradigms.  Existing MPI or OpenMP~\cite{openmp_standard} threaded Fortran, C,
-or C++ codes can be compiled and run with relative ease.
+or C++ codes can be compiled and run with relative ease using the Intel compilers.
 
 The applications considered in this paper are taken from existing development
 efforts within the PECOS Center\cite{} at the University of Texas at Austin.  This
@@ -61,7 +61,7 @@ compiling and building software.  Compilation is possible on KNL, but it is
 much slower.
 
 The following software pacakges were compiled for the KNL MIC architecture:
-\texttt{QUESO, ArcSyn3sis, Poongback, CFOUR, OCCA}.  Building these libraries
+\texttt{Poongback, QUESO, OCCA, ArcSyn3sis, CFOUR}.  Building these libraries
 for the login node environment is a well supported, common task, but building
 them for KNL required cross-compilation.  Many of these libraries utilize a
 build system which supports cross-compilation.  Builds that include

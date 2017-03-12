@@ -36,23 +36,25 @@ were added to corresponding Fortran, C, and C++ environmental variables.
 
 The NCC module in CFOUR is a recent contribution to the code and, as such, has been designed to take
 advantage of many-core architectures. It uses OpenMP for thread-based parallelism and in this work, the
-built-in parallelism of Intel's MKL is also exploited. As has been discussed in detail previously \cite{ncc:15},
-it has been determined that on traditional dual Intel CPU compute node systems, best performance is obtained 
+built-in parallelism of Intel's MKL is also exploited. As discussed previously~\cite{ncc:15},
+traditional dual Intel CPU compute node systems found that best performance is obtained 
 by using $OMP\_NUM\_THREADS=16$. This relies on the default behavior that MKL will use $OMP\_NUM\_THREADS$ 
-if outside an OpenMP block but run single-threaded within an OpenMP block. In the NCC module, there are MKL-library 
-calls within an OpenMP block, however, best performance is achieved by using only serial MKL calls within OpenMP
+if outside an OpenMP block but run single-threaded within an OpenMP block. 
+In the NCC module, there are MKL-library 
+calls within an OpenMP block, and so best performance is achieved by using only serial MKL calls within OpenMP
 blocks. This ensures that thread oversubscription never occurs.
 
-For benchmark comparison purposes, the traditional CPU used for reference was an Intel Xeon  E5-2670 v3 CPU
+For benchmark comparison purposes, the traditional CPU used for reference was an Intel Xeon E5-2670 v3 CPU
 running at 2.30GHz. This CPU was first available on market in late 2014 and is representative of typical HPC 
 compute nodes in current generation supercomputers. Best performance on this system was achieved with 
 $OMP\_NUM\_THREADS=16$ and the total compute time for the $C_2H_2$ excited state energy discussed previously
-was 607s. If more than 16 threads were used, the total walltime for the calculation increases. Additionally,
+was 607s\todo{is this hyperthreading? please note hardware cores}. 
+If more than 16 threads were used, the total walltime for the calculation increases. Additionally,
 a single-core job took 3514s.
 
 While the KNL architecture offers three different memory modes, only two of those are supported on Stampede 2,
 cache mode and flat mode. Cache mode preallocates all of the ``fast'' MCDRAM as direct-mapped L3 cache and
-as such only the 96 GB DDR4 RAM is presented to the operating system. Flat mode presents both the MCDRAM and the 
+as such only 96 GB of DDR4 RAM is presented to the operating system. Flat mode presents both the MCDRAM and the 
 DDR RAM to the operating system and the user can use the ``numactl'' utility to decide at run time if memory 
 allocations should be directed to the 16 GB of MCDRAM or the 96 GB of DDR RAM. For these comparisons, Intel's 
 recommended default cluster mode of ``Quadrant'' is used. 
