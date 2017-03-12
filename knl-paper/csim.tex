@@ -42,7 +42,7 @@ were added to corresponding Fortran, C, and C++ environmental variables.
 The NCC module in CFOUR is a recent contribution to the code and, as such, has been designed to take
 advantage of many-core architectures. It uses OpenMP for thread-based parallelism and in this work, the
 built-in parallelism of Intel's MKL is also exploited. As discussed previously~\cite{ncc:15},
-traditional dual Intel CPU compute node systems found that best performance is obtained 
+on traditional dual Intel CPU compute node systems, best performance is obtained 
 by using OMP\_NUM\_THREADS of 16. This relies on the default behavior that MKL will use OMP\_NUM\_THREADS 
 if outside an OpenMP block but run single-threaded within an OpenMP block. 
 In the NCC module, there are MKL-library calls both within and outside OpenMP blocks, and best performance is 
