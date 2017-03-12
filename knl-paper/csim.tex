@@ -12,27 +12,27 @@ molecular properties.  Virtually all approaches based on M\o
 ller-Plesset (MP) perturbation theory and the coupled-cluster
 approximation (CC) are available.
 
-For the other applications considered here, the scalibility of various code bases 
-used in the PECOS center on KNL compute nodes has been presented. To compliment
-this effort, this section will focus on a comparison of optimal single-node performance
+This section will focus on a comparison of optimal single-node performance
 between traditional (Haswell) Intel CPUs and the new KNL compute nodes of Stampede 2.
 While the scalability of CFOUR on current and emerging architectures will be the focus 
 of future work, the results presented here will detail overall runtime performance gains
 from migrating to this new architecture. 
 
 For this work, the performance of a single calculation, the EOM-CCSDT energy of the first
-excited singlet state of $C_2H_2$, was studied in detail. This excited state is the focus
-of a current study being conducted by authors of this paper in which over 1 million single point
-energies on a potential energy surface will be calculated. As such, ensuring the best performance for this run 
-type will conserve important national compute resources available at TACC. All EOM-CCSDT calculations were performed 
-using the NCC module \cite{ncc:15} of the CFOUR program system and the ANO1 basis set \cite{ano1:87} with core 
-electrons uncorrelated. A nonequilibrium geometry of this excited singlet state was used that has C1 symmetry. 
-The lowest symmetry point group available to $C_2H_2$ was used because this computational requires the most memory 
-and compute time. This establishes an upper bound per computation.
+excited singlet state of $C_2H_2$, was studied in detail\cite{}\todo{can you point to an appropriate paper detailing this state?}. 
+This excited state requires over one million single point
+energies on a potential energy surface to be calculated. 
+%As such, ensuring the best performance for this run 
+%type conserves important national compute resources available at TACC. 
+All EOM-CCSDT calculations were performed 
+using the NCC module\cite{ncc:15} of the CFOUR program system and the ANO1 basis set\cite{ano1:87} with core 
+electrons uncorrelated. The nonequilibrium geometry used for this excited singlet state has C1 symmetry. 
+The lowest symmetry point group available to $C_2H_2$ was used because it requires the most memory 
+and compute time\todo{pretty picture?}. This establishes an upper bound per computation.
 
-Porting CFOUR to the KNL architecture was very straightforward. No modification of the code or the build
-system was required. All that needed to be done was to add the previously discussed compile and link flags
-to the corresponding Fortran, C, and C++ environmental variables.
+Porting CFOUR to the KNL architecture was straightforward. No modification of the code or the build
+system was required. The compile and link flags previously discussed in Section~\ref{sec:cross_compile}
+were added to corresponding Fortran, C, and C++ environmental variables.
 
 The NCC module in CFOUR is a recent contribution to the code and, as such, has been designed to take
 advantage of many-core architectures. It uses OpenMP for thread-based parallelism and in this work, the
