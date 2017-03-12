@@ -19,16 +19,21 @@ of future work, the results presented here will detail overall runtime performan
 from migrating to this new architecture. 
 
 For this work, the performance of a single calculation, the EOM-CCSDT energy of the first
-excited singlet state of $C_2H_2$, was studied in detail\cite{}\todo{can you point to an appropriate paper detailing this state?}. 
-This excited state requires over one million single point
-energies on a potential energy surface to be calculated. 
-%As such, ensuring the best performance for this run 
-%type conserves important national compute resources available at TACC. 
-All EOM-CCSDT calculations were performed 
+excited singlet state of $C_2H_2$, was studied.
+%\cite{}\todo{can you point to an appropriate paper detailing this state?}. 
+%this refers to this work
+This excited state is the focus of currently ongoing work being conducted by authors of this paper 
+in which over 1 million single point energies on a potential energy surface will be calculated.
+%This excited state requires over one million single point
+%energies on a potential energy surface to be calculated. 
+%clarification: this paper is one single point calculation. other work being done requires 1 million
+%of these calculations. This is the motivation for ensuring the best performance of this calculation type
+As such, ensuring the best performance for this run type conserves important national compute resources 
+available at TACC.  All EOM-CCSDT calculations were performed 
 using the NCC module\cite{ncc:15} of the CFOUR program system and the ANO1 basis set\cite{ano1:87} with core 
 electrons uncorrelated. The nonequilibrium geometry used for this excited singlet state has C1 symmetry. 
-The lowest symmetry point group available to $C_2H_2$ was used because it requires the most memory 
-and compute time\todo{pretty picture?}. This establishes an upper bound per computation.
+This lowest symmetry point group available to $C_2H_2$ was used because it requires the most memory 
+and compute time. This establishes an upper bound per computation.
 
 Porting CFOUR to the KNL architecture was straightforward. No modification of the code or the build
 system was required. The compile and link flags previously discussed in Section~\ref{sec:cross_compile}
@@ -38,34 +43,60 @@ The NCC module in CFOUR is a recent contribution to the code and, as such, has b
 advantage of many-core architectures. It uses OpenMP for thread-based parallelism and in this work, the
 built-in parallelism of Intel's MKL is also exploited. As discussed previously~\cite{ncc:15},
 traditional dual Intel CPU compute node systems found that best performance is obtained 
-by using $OMP\_NUM\_THREADS=16$. This relies on the default behavior that MKL will use $OMP\_NUM\_THREADS$ 
+by using OMP\_NUM\_THREADS of 16. This relies on the default behavior that MKL will use OMP\_NUM\_THREADS 
 if outside an OpenMP block but run single-threaded within an OpenMP block. 
-In the NCC module, there are MKL-library 
-calls within an OpenMP block, and so best performance is achieved by using only serial MKL calls within OpenMP
-blocks. This ensures that thread oversubscription never occurs.
+In the NCC module, there are MKL-library calls both within and outside OpenMP blocks, and best performance is 
+achieved by using only serial MKL calls within OpenMP blocks. This ensures that thread oversubscription never occurs.
 
-For benchmark comparison purposes, the traditional CPU used for reference was an Intel Xeon E5-2670 v3 CPU
-running at 2.30GHz. This CPU was first available on market in late 2014 and is representative of typical HPC 
+For benchmark comparison purposes, the traditional CPUs used for reference were Two Intel Xeon E5-2670 v3 CPUs
+running at 2.30GHz. These CPUs were first available on market in late 2014 and is representative of typical HPC 
 compute nodes in current generation supercomputers. Best performance on this system was achieved with 
-$OMP\_NUM\_THREADS=16$ and the total compute time for the $C_2H_2$ excited state energy discussed previously
-was 607s\todo{is this hyperthreading? please note hardware cores}. 
-If more than 16 threads were used, the total walltime for the calculation increases. Additionally,
-a single-core job took 3514s.
+OMP\_NUM\_THREADS of 16 and the total compute time for the $C_2H_2$ excited state energy discussed previously
+was 607s.
+%\todo{is this hyperthreading? please note hardware cores}. 
+% nope 16 hardware threads updated the above text to note it was a dual CPU system
+If more than 16 threads were used, the total walltime for the calculation increases. 
 
 While the KNL architecture offers three different memory modes, only two of those are supported on Stampede 2,
 cache mode and flat mode. Cache mode preallocates all of the ``fast'' MCDRAM as direct-mapped L3 cache and
 as such only 96 GB of DDR4 RAM is presented to the operating system. Flat mode presents both the MCDRAM and the 
 DDR RAM to the operating system and the user can use the ``numactl'' utility to decide at run time if memory 
-allocations should be directed to the 16 GB of MCDRAM or the 96 GB of DDR RAM. For these comparisons, Intel's 
-recommended default cluster mode of ``Quadrant'' is used. 
+allocations should be directed to the 16 GB of MCDRAM or the 96 GB of DDR RAM. For these comparisons, 16 OpenMP
+threads and Intel's recommended default cluster mode of ``Quadrant'' are used.
 
 This mode attempts to localize communication without requiring explicit memory management by the user. 
 It does this by grouping tiles into four logical/virtual (not physical) quadrants, then requiring each tile 
 to manage MCDRAM addresses only in its own quadrant (and DDR addresses in its own half of the chip). 
 This reduces the average number of ``hops'' that tile-to-memory requests require compared to all-to-all mode, 
-which can reduce latency and congestion on the mesh.  This results in three different runtime configurations: 
-flat mode with DDR RAM in Qudrant mode (5284s), flat mode with MCDRAM in Quadrant mode(xxxx s), and 
-Cache-Quadrant mode (5467s).
-\subsubsection{cluster mode}
-\subsubsection{threads and mkl and environmental variables oh my}
-\subsubsection{cfour conclusion}
+which can reduce latency and congestion on the mesh. This results in three different runtime configurations:
+flat mode with DDR RAM in Quadrant mode (828s), flat mode with MCDRAM in Quadrant mode(789s), and
+Cache-Quadrant mode (793s). 
+
+The total memory required for this EOM-CCSDT calculation is 10 GB. As such, the entire calculation can
+be fit into the fast MCDRAM. While this does result in a small performance increase (789s vs 828s), it is important
+to note that the Cache-Quadrant mode (793s) performed almost identically. This is important for several reasons. First,
+the majority of Stampede 2 compute nodes are set up in Cache-Quadrant mode. There are only a handful of Flat nodes
+available. Second, many CFOUR calculations will not fit solely in MCDRAM. The Cache-Quadrant mode offers the 
+performance benefits of the fast MCDRAM that also applies when a processes uses more than 16 GB. Finally, this
+performance benefit is transparent to the enduser. No runtime configuration is required. Because of this, the 
+remainder of this section will focus on maximizing performance for Cache-Quadrant systems.
+
+On traditional CPUs, best performance is achieved when using 16 OpenMP threads and not allowing threaded MKL calls
+from within an OpenMP block. This is not the case on KNL-based systems. For the EOM-CCSDT energy calculation, 
+run time improvements were seen up to 128 OpenMP threads for the NCC module. Additional improvements were seen
+when allowing threaded MKL calls from within an OpenMP parallel region. This was done by setting both environmental
+variables OMP\_NESTED and MKL\_DYNAMIC to true. The first variable is what enables threaded MKL calls from OpenMP
+parallel blocks while the second variable reduces oversubscription from MKL threading within our NCC OpenMP blocks.
+This is accomplished by analyzing system workload and dynamically changing the number of MKL threads. This 
+combination of environmental variables along with our NCC module results in 128 threads used for NCC OpenMP parallel
+regions, 128 MKL threads outside OpenMP blocks and a dynamic number of MKL threads when called within OpenMP blocks.
+With these changes, total run time for our EOM-CCSDT calculation was 395s.
+
+Overall, obtaining decent performance with CFOUR on KNL systems was easily achieved. By moving from Haswell to 
+KNL, run time performance for the EOM-CCSDT energy of the first excited singlet state of $C_2H_2$ was improved
+by 35\%. It is interesting to note, that the parallel scalibility of KNL was better than that of a Haswell-based
+system: haswell compute nodes were only able to see performance improvements up to 16 threads, while on KNL,
+improvments were seen up to 128 threads. This could be attributed to either the higher memory bandwidth available
+on these systems or to improvements introduced with the AVX512 instruction set. Future work will focus on a new
+implmentation of the parallelization of NCC to take further advantage of these new systems.
+
