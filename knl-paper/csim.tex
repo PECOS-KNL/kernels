@@ -64,7 +64,7 @@ DDR RAM to the operating system and the user can use the ``numactl'' utility to 
 allocations should be directed to the 16 GB of MCDRAM or the 96 GB of DDR RAM. For these comparisons, 16 OpenMP
 threads and Intel's recommended default cluster mode of ``Quadrant'' are used.
 
-This mode attempts to localize communication without requiring explicit memory management by the user. 
+Quadrant mode attempts to localize communication without requiring explicit memory management by the user. 
 It does this by grouping tiles into four logical/virtual (not physical) quadrants, then requiring each tile 
 to manage MCDRAM addresses only in its own quadrant (and DDR addresses in its own half of the chip). 
 This reduces the average number of ``hops'' that tile-to-memory requests require compared to all-to-all mode, 
@@ -77,9 +77,10 @@ be fit into the fast MCDRAM. While this does result in a small performance incre
 to note that the Cache-Quadrant mode (793s) performed almost identically. This is important for several reasons. First,
 the majority of Stampede 2 compute nodes are set up in Cache-Quadrant mode. There are only a handful of Flat nodes
 available. Second, many CFOUR calculations will not fit solely in MCDRAM. The Cache-Quadrant mode offers the 
-performance benefits of the fast MCDRAM that also applies when a processes uses more than 16 GB. Finally, this
-performance benefit is transparent to the enduser. No runtime configuration is required. Because of this, the 
-remainder of this section will focus on maximizing performance for Cache-Quadrant systems.
+performance benefits of the fast MCDRAM that also applies when a processes uses more than 16 GB. This is something
+that the Flat nodes can not do. Finally, this performance benefit is transparent to the enduser. No runtime 
+configuration is required. Because of this, the remainder of this section will focus on maximizing performance 
+for Cache-Quadrant systems.
 
 On traditional CPUs, best performance is achieved when using 16 OpenMP threads and not allowing threaded MKL calls
 from within an OpenMP block. This is not the case on KNL-based systems. For the EOM-CCSDT energy calculation, 
