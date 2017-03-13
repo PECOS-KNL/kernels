@@ -85,25 +85,27 @@ isogeometric 168 element mesh, and shown at different polynomial order $\ell$.}
 % called more intuitively (e.g.  a 4-tensor can be called as a four array,
 % instead of indexed as a flattened contiguous one array).
 
-The results of the basic scaling study using PpenMP threads on a single node are shown in
+The results of the basic scaling study using OpenMP threads on a single node are shown in
 Fig.~\ref{fig:bidg_scaling}, where the strong scaling efficiency $e_{n}$ for
 $n$ OpenMP threads is defined as $e_{n}= [t_{1}/(nt_{n})]\times 100\%$, and $t_n$ is the time to
-completion. The implementation was relatively straightforward using the OCCA library, with relatively little effort put into code optimization.  These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
+completion. The implementation was relatively straightforward using the OCCA library, with relatively little effort put into code optimization.  The intel icpc compiler was used on Stampede 2 with C and C++ compiler flags {\verb -xCORE-AVX2 -axMIC-AVX512}.  The code was run using explicit fourth-order Runge-Kutta over a short time window ($< 300 timesteps$), and the average over timesteps is reported.  
+
+
+These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
 behavior of the algorithmic intensity of DG algorithms.  However, this is
 clearly not enough evidence to be certain that such scaling is being observed.
 In particular, on this mesh we see an efficiency saturation above $\ell>5$.
 Moreover, since the mesh itself has only 168 elements, the number of threads
 eventually exceeds the number of elements, making for some intriguing questions
-regarding the observed behavior.  In order to fully understand the observed behavior and effectively optimize the code, a more extensive study is required, including performing
+regarding the observed behavior.  In order to more fully understand the observed behavior more extensive study is required. For example the standard roofline diagnostic \cite{Williams:2009:RIV:1498765.1498785} can be used to ascertain the relationship of locality walls and bandwidth ceilings to the performance of the current implementation, which will be used to help guide optimization.  
+
+
 %a streams
 %
 %NM-- why streams? Streams is just a memory bandwidth benchmark. If this is
 %     expected to be the bottleneck, I would directly address that in the text.
 %CM -- Nick, sorry, I don't understand your point.  I don't know what the bottleneck is because I have not done comprehensive tests, so I can't rule out a bottleneck until I run the tests.  All I can do is guess.  Memory bandwidth may very well be causing a problem, and the vector kernels should be tested.  On the other hand, I think the roofline model would cover this too, so we can delete it if you prefer?
 %benchmark \cite{McCalpin1995} and
-the roofline diagnostic
-\cite{Williams:2009:RIV:1498765.1498785}.
-
 %
 % NM --- feel free to disregard anything I recommend here
 %
