@@ -1,13 +1,14 @@
 \subsection{Gaussian processes}
 \label{sec:chol}
 
-Many uncertainty quantification applications replace an
-expensive model, such as a discretised partial differential equation, with a
-cheap surrogate.  This is done so that during a Markov chain Monte Carlo
-procedure, likelihood evaluations are cheap.  There are a plethora of different
-surrogate choices and strategies for choosing which is appropriate for a
-particular application.  Gaussian processes are a common choice, and we explore
-their scaling on the KNL architecture here.\todo{citations motherclucker, do you have them?}
+Many uncertainty quantification applications replace an expensive model, such
+as a discretised partial differential equation, with a cheap surrogate.  This
+is done so that during a Markov chain Monte Carlo procedure, likelihood
+evaluations are cheap.  There are a plethora of different surrogate choices and
+strategies for choosing which is appropriate for a particular application.
+Gaussian process surrogates are a common choice~\cite{rasmussen2006gaussian,
+higdon2008computer,oakley_hagan_2002,conti2010bayesian,conti2009gaussian,bayarri2009using},
+and we explore their scaling on the KNL architecture here.
 
 Gaussian processes are a probabilistic model for generating random fields
 characterised by a mean $\mu$ function and a covariance function $c$,
