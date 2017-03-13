@@ -1,26 +1,36 @@
 \section{Summary}
 \label{sec:summary}
 
-%
-% achtung! old writing here
-%
-Overall, porting a number of different scientific applications and
-kernels to the KNL architecture was
-%\todo{update this too!}
-straightforward. Successfully ported applications (written in either
-Fortran or C++) include serial codes as well as codes with existing
-OpenMP based threading. Even native compilation of 3rd-party
-libraries was reasonably straightforward, with only a few
-configuration options left unsupported and dynamic library builds not
-successful across all of the libraries considered.
-%uniformly supported.
+On early-access Stampede 2 hardware we studied the ease of portability of a
+diverse set of scientific software packages to KNL.  The software packages
+dealt with in this paper were written in a variety of the most commonly used
+procedural languages and are workhorses for solving problems in many
+disciplines of computational science.
 
-Performance results vary more widely.
-We have demonstrated good strong scaling to large thread counts for some of our computational
-kernels, but others only effectively used a fraction of the MIC's
-potential capability.  However, runtime performance seldom degraded
-for large thread counts on all workloads, and simple changes to
-thread algorithms or affinity settings often delivered further
-improvements.  Different workloads require different settings in order
-to achieve peak performance. Finally, vectorization is critical to
-fully exploit the MIC architecture.
+Overall, our experiences porting scientific applications to the KNL
+architecture was straightforward.  Software at PECOS typically ships with a
+flexible build system and customizing compiler flags for a KNL-specific
+instruction set is simple.  Furthermore, we observe that KNL compute nodes can
+deliver impressive compute power and scalability for relatively little human
+effort.  Contrasting this with experiences on previous generations of Intel
+Xeon Phi MICs~\cite{schulz2012early} it is clear bootable MICs that do not
+require code intervention for offloading onto co-processor MICs such as Knights
+Ferry yield a much larger performance-to-effort ratio for computational
+scientists.
+
+We note that although KNL has several boot-time options that specify memory
+hierarchy and layout, Intel's default Cache-Quadrant mode brings most of the
+benefits of perfomant memory access and bandwidth without the drawbacks of
+explicitly management through ``numactl''.
+
+Lastly, in addition to strong scaling results on KNL, we have presented some
+promising runtime comparisons with a more traditional Haswell Xwon E5-2670 CPU.
+
+% Performance results vary more widely.  We have demonstrated good strong scaling
+% to large thread counts for some of our computational kernels, but others only
+% effectively used a fraction of the MIC's potential capability.  However,
+% runtime performance seldom degraded for large thread counts on all workloads,
+% and simple changes to thread algorithms or affinity settings often delivered
+% further improvements.  Different workloads require different settings in order
+% to achieve peak performance. Finally, vectorization is critical to fully
+% exploit the MIC architecture.
