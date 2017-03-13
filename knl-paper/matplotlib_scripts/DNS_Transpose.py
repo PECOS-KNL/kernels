@@ -49,7 +49,6 @@ plt.yscale('log')
 plt.legend(frameon=False,numpoints=1,fontsize=12)
 plt.xticks(Cores)
 xlabels = ["1","2","4",  "8",  "16",  "32",  "64","128","256"]
-
 fig.gca().set_xticklabels(xlabels)
 plt.xlabel('MPI tasks')
 plt.ylabel('Elapsed  time (sec)')
