@@ -15,21 +15,23 @@ or C++ codes can be compiled and run with relative ease using the Intel compiler
 
 The applications considered in this paper are taken from existing development
 efforts within the PECOS Center (\url{http://pecos.ices.utexas.edu}) at the
-University of Texas at Austin.  This
-paper reports on two main areas: 1) the level of effort required in porting
-software applications from a variety of scientific disciplines written in
-commonly used procedural languages; and 2) observed performance of these
-applications.  The applications cover Fortran, C, and C++ codes, and include
-an example with no prior thread-based parallelism as well as codes with
-existing OpenMP or MPI based threading from the following scientific
-disciplines: 1) computational fluid dynamics; 2) uncertainty quantification;
-3) computational chemistry; and 4) finite element methods.
+University of Texas at Austin.  This paper reports on two main areas: 1) the
+level of effort required in porting software applications from a variety of
+scientific disciplines written in commonly used procedural languages; and 2)
+observed performance of these applications.  The applications cover Fortran, C,
+and C++ codes, and include an example with no prior thread-based parallelism as
+well as codes with existing OpenMP or MPI based threading from the following
+scientific disciplines: 1) computational fluid dynamics; 2) uncertainty
+quantification; 3) computational chemistry; and 4) finite element methods.  We
+comment on both the ease of use of KNL and observed performance of KNL as
+compared to previous generation ``Knights Ferry'' and ``Knights Corner'' Xeon
+Phi MICs~\cite{schulz2012early}.
 
 The remainder of the paper is organized as follows: \S\ref{sec:hardware}
-describes the testing infrastructure, \S\ref{sec:cross_compile} describes cross
-compiling experiences, \S\ref{sec:apps} presents results of the porting efforts
-for each application considered, and \S\ref{sec:summary} summarizes the overall
-experiences.
+describes the early-access Stampede 2 hardware used as testing infrastructure,
+\S\ref{sec:cross_compile} describes cross compiling experiences,
+\S\ref{sec:apps} presents results of the porting efforts for each application
+considered, and \S\ref{sec:summary} summarizes the overall experiences.
 
 \section{Testing Infrastructure}
 \label{sec:hardware}
