@@ -48,7 +48,7 @@ if outside an OpenMP block but run single-threaded within an OpenMP block.
 In the NCC module, there are MKL-library calls both within and outside OpenMP blocks, and best performance is 
 achieved by using only serial MKL calls within OpenMP blocks. This ensures that thread oversubscription never occurs.
 
-For benchmark comparison purposes, the traditional CPUs used for reference were Two Intel Xeon E5-2670 v3 CPUs
+For benchmark comparison purposes, the traditional CPUs used for reference were two Intel Xeon E5-2670 v3 CPUs
 (each with 12 cores) running at 2.30GHz. These CPUs were first available on market in late 2014 and is 
 representative of typical HPC compute nodes in current generation supercomputers. Best performance on this 
 system was achieved with 16 OpenMP threads and the total compute time for the $C_2H_2$ excited state energy 
@@ -97,8 +97,7 @@ Overall, decent performance with CFOUR on KNL systems was easily achieved and re
 gain compared to traditional CPUs. By moving from Haswell to KNL, run time performance for the EOM-CCSDT energy
 of the first excited singlet state of $C_2H_2$ was improved by 35\%. It is interesting to note, that the 
 parallel scalibility of KNL was better than that of a Haswell-based system: haswell compute nodes were only able 
-to see performance improvements up to 16 threads, while on KNL, improvments were seen up to 128 threads. 
+to see performance improvements up to 16 threads, while on KNL, improvements were seen up to 128 threads. 
 This could be attributed to either the higher memory bandwidth available on these systems or to improvements 
-introduced with the AVX512 instruction set. Future work will focus on a new implmentation of the parallelization 
+introduced with the AVX512 instruction set. Future work will focus on a new implementation of the parallelization 
 of NCC to take further advantage of these new systems.
-
