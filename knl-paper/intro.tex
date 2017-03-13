@@ -7,7 +7,7 @@ footprint than general-purpose compute platforms~\cite{gpu_hpc:2009}. However,
 GPU-based acceleration commonly requires special programming constructs (e.g.
 NVIDIA's CUDA language\cite{} or OpenCL\cite{}) for the accelerator to work.
 Intel's Xeon Phi many-core architectures offer a balance with a smaller core count than GPGPUs
-but an x86 architecture and therefore do not need specialised programming
+but an x86 architecture and therefore do not need specialized programming
 paradigms.  Existing MPI or OpenMP~\cite{openmp_standard} threaded Fortran, C,
 or C++ codes can be compiled and run with relative ease using the Intel compilers.
 
@@ -20,7 +20,7 @@ applications.  The applications cover Fortran, C, and C++ codes, and include
 an example with no prior thread-based parallelism as well as codes with
 existing OpenMP or MPI based threading from the following scientific
 disciplines: 1) computational fluid dynamics; 2) uncertainty quantification;
-3) computational chemsitry; and 4) finite element methods.
+3) computational chemistry; and 4) finite element methods.
 
 The remainder of the paper is organized as follows: \S\ref{sec:hardware}
 describes the testing infrastructure, \S\ref{sec:cross_compile} describes cross
@@ -60,7 +60,7 @@ Haswell node is not needed for offloading computation.  We use it only for
 compiling and building software.  Compilation is possible on KNL, but it is
 much slower.
 
-The following software pacakges were compiled for the KNL MIC architecture:
+The following software packages were compiled for the KNL MIC architecture:
 Poongback, QUESO, OCCA, ArcSyn3sis, CFOUR.  Building these libraries
 for the login node environment is a well supported, common task, but building
 them for KNL required cross-compilation.  Many of these libraries utilize a
@@ -81,5 +81,5 @@ As an example, the following configure options were used to build version
 
 These strategies successfully built dynamic libraries and executables for KNL.
 Where appropriate, the kernels used for benchmarking in the subsequent sections have been 
-publicly provided on Github: \url{https://github.com/PECOS-KNL/kernels}. 
+publicly provided on GitHub: \url{https://github.com/PECOS-KNL/kernels}. 
 %\todo{can we comment on if these are actually using avx512 for vectorization?}

@@ -1,22 +1,21 @@
 \subsection{EOM-CCSDT single-node performance}
 \label{sec:cfour}
 
-For the calculations used in this work,
-the CFOUR \cite{cfour:08} program was used. CFOUR
-(Coupled-Cluster techniques for Computational Chemistry) is an
-application for performing high-level quantum chemical calculations
-that is under active development by research groups at UT Austin and
-Universit\"{a}t Mainz, Germany. CFOUR's major strength is its arsenal
-of high-level {\emph ab initio} methods for the calculation of atomic and
-molecular properties.  Virtually all approaches based on M\o
-ller-Plesset (MP) perturbation theory and the coupled-cluster
-approximation (CC) are available.
+For the calculations used in this work, the CFOUR \cite{cfour:08} program was
+used. CFOUR (Coupled-Cluster techniques for Computational Chemistry) is an
+application for performing high-level quantum chemical calculations that is
+under active development by research groups at UT Austin and Universit\"{a}t
+Mainz, Germany. CFOUR's major strength is its arsenal of high-level \emph{ab
+initio} methods for the calculation of atomic and molecular properties.
+Virtually all approaches based on M\o ller-Plesset (MP) perturbation theory and
+the coupled-cluster approximation (CC) are available.
 
 This section will focus on a comparison of optimal single-node performance
-between traditional (Haswell) Intel CPUs and the new KNL compute nodes of Stampede 2. \todo{Should this be `Stampede Upgrade Cluster'?}
-While the scalability of CFOUR on current and emerging architectures will be the focus
-of future work, the results presented here will detail overall runtime performance gains
-from migrating to this new architecture.
+between traditional (Haswell) Intel CPUs and the new KNL compute nodes of
+Stampede 2. \todo{Should this be `Stampede Upgrade Cluster'?} While the
+scalability of CFOUR on current and emerging architectures will be the focus of
+future work, the results presented here will detail overall runtime performance
+gains from migrating to this new architecture.
 
 For this work, the performance of a single calculation, the EOM-CCSDT energy of the first
 excited singlet state of $C_2H_2$, was studied.
@@ -35,18 +34,22 @@ electrons uncorrelated. The nonequilibrium geometry used for this excited single
 This lowest symmetry point group available to $C_2H_2$ was used because it requires the most memory
 and compute time. This establishes an upper bound per computation.
 
-Porting CFOUR to the KNL architecture was straightforward. No modification of the code or the build
-system was required. The compile and link flags previously discussed in Section~\ref{sec:cross_compile}
-were added to corresponding Fortran, C, and C++ environmental variables.
+Porting CFOUR to the KNL architecture was straightforward. No modification of
+the code or the build system was required. The compile and link flags
+previously discussed in Section~\ref{sec:cross_compile} were added to
+corresponding Fortran, C, and C++ environmental variables.
 
-The NCC module in CFOUR is a recent contribution to the code and, as such, has been designed to take
-advantage of many-core architectures. It uses OpenMP for thread-based parallelism and in this work, the
-built-in parallelism of Intel's MKL is also exploited. As discussed previously~\cite{ncc:15},
-on traditional dual Intel CPU compute node systems, best performance is obtained
-by using OMP\_NUM\_THREADS of 16. This relies on the default behavior that MKL will use OMP\_NUM\_THREADS
-if outside an OpenMP block but run single-threaded within an OpenMP block.
-In the NCC module, there are MKL-library calls both within and outside OpenMP blocks, and best performance is
-achieved by using only serial MKL calls within OpenMP blocks. This ensures that thread oversubscription never occurs.
+The NCC module in CFOUR is a recent contribution to the code and, as such, has
+been designed to take advantage of many-core architectures. It uses OpenMP for
+thread-based parallelism and in this work, the built-in parallelism of Intel's
+MKL is also exploited. As discussed previously~\cite{ncc:15}, on traditional
+dual Intel CPU compute node systems, best performance is obtained by using
+OMP\_NUM\_THREADS of 16. This relies on the default behavior that MKL will use
+OMP\_NUM\_THREADS if outside an OpenMP block but run single-threaded within an
+OpenMP block.  In the NCC module, there are MKL-library calls both within and
+outside OpenMP blocks, and best performance is achieved by using only serial
+MKL calls within OpenMP blocks. This ensures that thread oversubscription never
+occurs.
 
 For benchmark comparison purposes, the traditional CPUs used for reference were two Intel Xeon E5-2670 v3 CPUs
 (each with 12 cores) running at 2.30GHz. These CPUs were first available on market in late 2014 and is
@@ -107,7 +110,7 @@ With these changes, total run time for our EOM-CCSDT calculation was 395s.
 Overall, decent performance with CFOUR on KNL systems was easily achieved and resulted in a performance
 gain compared to traditional CPUs. By moving from Haswell to KNL, run time performance for the EOM-CCSDT energy
 of the first excited singlet state of $C_2H_2$ was improved by 35\%. It is interesting to note, that the
-parallel scalibility of KNL was better than that of a Haswell-based system: haswell compute nodes were only able
+parallel scalability of KNL was better than that of a Haswell-based system: haswell compute nodes were only able
 to see performance improvements up to 16 threads, while on KNL, improvements were seen up to 128 threads.
 This could be attributed to either the higher memory bandwidth available on these systems or to improvements
 introduced with the AVX512 instruction set. Future work will focus on a new implementation of the parallelization
