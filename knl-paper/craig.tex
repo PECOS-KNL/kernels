@@ -1,8 +1,7 @@
 \subsection{Blended Isogeometric Discontinuous Galerkin (BIDG) Method}
 \label{sec:isogeometric}
-
 % DG
-The blended isogeometric discontinuous Galerkin (BIDG) method is a hybrid finite element method that seamlessley blends together isogeometric analysis (IGA) with discontinuous Galerk (DG) methods in order to explot the strengths of each, while mitigating their respective drawbacks. Classical DG methods are finite element methods (FEMs) that are appealing in
+The blended isogeometric discontinuous Galerkin (BIDG) method is a hybrid finite element method that seamlessly blends together isogeometric analysis (IGA) with discontinuous Galerkin (DG) methods in order to exploit the strengths of each, while mitigating their respective drawbacks. Classical DG methods are finite element methods (FEMs) that are appealing in
 aspects of their computational efficiency on modern architectures,
 particularly in the context of explicit wave propagation.  In this context, DG allows for localization of
 finite element stencils (e.g nearest edge/face neighbors) in such a way that dynamic problems lead to block
@@ -88,7 +87,7 @@ isogeometric 168 element mesh, and shown at different polynomial order $\ell$.}
 The results of the basic scaling study using OpenMP threads on a single node are shown in
 Fig.~\ref{fig:bidg_scaling}, where the strong scaling efficiency $e_{n}$ for
 $n$ OpenMP threads is defined as $e_{n}= [t_{1}/(nt_{n})]\times 100\%$, and $t_n$ is the time to
-completion. The implementation was relatively straightforward using the OCCA library, with relatively little effort put into code optimization.  The intel icpc compiler was used on Stampede 2 with C and C++ compiler flags {\verb -xCORE-AVX2  -axMIC-AVX512}.  The code was run using explicit fourth-order Runge-Kutta over a short time window ($< 300$ timesteps), and the average over timesteps is reported.  
+completion. The implementation was relatively straightforward using the OCCA library, with relatively little effort put into code optimization.  The Intel icpc compiler was used on Stampede 2 with C and C++ compiler flags {\verb -xCORE-AVX2  -axMIC-AVX512}.  The code was run using explicit fourth-order Runge-Kutta over a short time window ($< 300$ timesteps), and the average over timesteps is reported.  
 
 
 These preliminary results seem to indicate improved scaling as a function of polynomial order $\ell$, which is consistent with the theoretical
