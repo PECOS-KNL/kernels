@@ -93,11 +93,12 @@ combination of environmental variables along with our NCC module results in 128 
 regions, 128 MKL threads outside OpenMP blocks and a dynamic number of MKL threads when called within OpenMP blocks.
 With these changes, total run time for our EOM-CCSDT calculation was 395s.
 
-Overall, obtaining decent performance with CFOUR on KNL systems was easily achieved. By moving from Haswell to 
-KNL, run time performance for the EOM-CCSDT energy of the first excited singlet state of $C_2H_2$ was improved
-by 35\%. It is interesting to note, that the parallel scalibility of KNL was better than that of a Haswell-based
-system: haswell compute nodes were only able to see performance improvements up to 16 threads, while on KNL,
-improvments were seen up to 128 threads. This could be attributed to either the higher memory bandwidth available
-on these systems or to improvements introduced with the AVX512 instruction set. Future work will focus on a new
-implmentation of the parallelization of NCC to take further advantage of these new systems.
+Overall, decent performance with CFOUR on KNL systems was easily achieved and resulted in a performance
+gain compared to traditional CPUs. By moving from Haswell to KNL, run time performance for the EOM-CCSDT energy
+of the first excited singlet state of $C_2H_2$ was improved by 35\%. It is interesting to note, that the 
+parallel scalibility of KNL was better than that of a Haswell-based system: haswell compute nodes were only able 
+to see performance improvements up to 16 threads, while on KNL, improvments were seen up to 128 threads. 
+This could be attributed to either the higher memory bandwidth available on these systems or to improvements 
+introduced with the AVX512 instruction set. Future work will focus on a new implmentation of the parallelization 
+of NCC to take further advantage of these new systems.
 
