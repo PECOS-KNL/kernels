@@ -14,9 +14,9 @@ or C++ codes can be compiled and run with relative ease using the Intel compiler
 The applications considered in this paper are taken from existing development
 efforts within the PECOS Center\cite{} at the University of Texas at Austin.  This
 paper reports on two main areas: 1) the level of effort required in porting
-software applications from a wide array of scientific disciplines written in
+software applications from a variety of scientific disciplines written in
 commonly used procedural languages; and 2) observed performance of these
-applications.  The applications include Fortran, C, and C++ codes, and include
+applications.  The applications cover Fortran, C, and C++ codes, and include
 an example with no prior thread-based parallelism as well as codes with
 existing OpenMP or MPI based threading from the following scientific
 disciplines: 1) computational fluid dynamics; 2) uncertainty quantification;
@@ -35,7 +35,7 @@ The test hardware used for this exercise was the recent Stampede cluster
 upgrade at the Texas Advanced Computing Center.  This upgrade cluster leaves
 the original Stampede cluster hardware untouched and adds compute performance
 capabilities with the newest iteration of Intel's MIC architecture codenamed
-``Knights Landing''.
+``Knights Landing (KNL)''.
 
 The ``Knights Landing'' Xeon Phi 7250 compute nodes in the Stampede Upgrade
 cluster boast 68 cores, each with 4 hardware threads, are bootable and each run
@@ -61,7 +61,7 @@ compiling and building software.  Compilation is possible on KNL, but it is
 much slower.
 
 The following software pacakges were compiled for the KNL MIC architecture:
-\texttt{Poongback, QUESO, OCCA, ArcSyn3sis, CFOUR}.  Building these libraries
+Poongback, QUESO, OCCA, ArcSyn3sis, CFOUR.  Building these libraries
 for the login node environment is a well supported, common task, but building
 them for KNL required cross-compilation.  Many of these libraries utilize a
 build system which supports cross-compilation.  Builds that include
@@ -80,6 +80,6 @@ As an example, the following configure options were used to build version
 }
 
 These strategies successfully built dynamic libraries and executables for KNL.
-Where possible, the kernels used for benchmarking in the subsequent sections have been 
+Where appropriate, the kernels used for benchmarking in the subsequent sections have been 
 publicly provided on Github: \url{https://github.com/PECOS-KNL/kernels}. 
 %\todo{can we comment on if these are actually using avx512 for vectorization?}
