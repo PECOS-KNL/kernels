@@ -49,7 +49,7 @@ depends on inter-element communication through classical upwinding
 
 %% The solution kernel subsequently The volume integral can be written in three nested
 %% loops; the outer looping over elements, and two inner loops over degrees of
-%% freedom in the DG basis.  The surface intergral similarly loops over elements,
+%% freedom in the DG basis.  The surface integral similarly loops over elements,
 %% but then due to an additional interpolation step from the isogeometric
 %% transformation, extends one of these nested loops over the quadrature degrees
 %% of freedom for curved edges.  The resulting linear system that is solved,
@@ -116,6 +116,6 @@ regarding the observed behavior.  In order to more fully understand the observed
 
 %% yar4\todo{discussion of scalability observed}
 
-%Finally, some discussion is needed: is DG ameniable to MICs? Vs typical CPUs? I
+%Finally, some discussion is needed: is DG amenable to MICs? Vs typical CPUs? I
 %naively guess so, since you can essentially vectorize several of the
 %activities.
