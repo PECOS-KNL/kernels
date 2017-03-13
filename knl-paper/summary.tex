@@ -1,30 +1,30 @@
 \section{Summary}
 \label{sec:summary}
 
-On early-access Stampede 2 hardware we studied the ease of portability of a
+Using early-access Stampede 2 hardware, we studied the ease of portability of a
 diverse set of scientific software packages to KNL.  The software packages
-dealt with in this paper were written in a variety of the most commonly used
+used in this paper were written in a variety of the most commonly used
 procedural languages and are workhorses for solving problems in many
 disciplines of computational science.
 
 Overall, our experiences porting scientific applications to the KNL
-architecture was straightforward.  Software at PECOS typically ships with a
+architecture were positve.  Software at PECOS typically ships with a
 flexible build system and customizing compiler flags for a KNL-specific
-instruction set is simple.  Furthermore, we observe that KNL compute nodes can
+instruction set is simple.  Furthermore, we observed that KNL compute nodes can
 deliver impressive compute power and scalability for relatively little human
 effort.  Contrasting this with experiences on previous generations of Intel
-Xeon Phi MICs~\cite{schulz2012early} it is clear bootable MICs that do not
+Xeon Phi MICs~\cite{schulz2012early}, it is clear bootable MICs that do not
 require code intervention for offloading onto co-processor MICs such as Knights
 Ferry yield a much larger performance-to-effort ratio for computational
 scientists.
 
 We note that although KNL has several boot-time options that specify memory
-hierarchy and layout, Intel's default Cache-Quadrant mode brings most of the
-benefits of perfomant memory access and bandwidth without the drawbacks of
-explicitly management through ``numactl''.
+hierarchy and layout, Intel's recommended default cluster mode, Quadrant, along
+with the Cache memory mode brings most of the benefits of performant memory access 
+and bandwidth without the drawbacks of explicitly management through ``numactl''.
 
 Lastly, in addition to strong scaling results on KNL, we have presented some
-promising runtime comparisons with a more traditional Haswell Xwon E5-2670 CPU.
+promising runtime comparisons with traditional Haswell Xeon E5-2670 CPUs.
 
 % Performance results vary more widely.  We have demonstrated good strong scaling
 % to large thread counts for some of our computational kernels, but others only
