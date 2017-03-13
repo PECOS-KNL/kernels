@@ -146,7 +146,7 @@ communication patterns for each sub-communicator. Since MPI-enabled
 FFTW only supports a one dimensionally partitioned domain, a.k.a plane
 decomposition, we separately use FFTW for 1D FFTs and MPI
 communications with ``{\tt fftw\_mpi\_execute\_r2r()}''.\footnote{The
-  orignial idea of using FFTW 3.3 library for global transpose is from
+  original idea of using FFTW for the global transpose is due to
   Dr. Rhys Ulerich.} The part of code used for data reordering
 performs a tensor transpose: {\tt B(i,j,k,l) $\leftarrow$ A(l,i,k,j)}
 or {\tt B(i,j,k) $\leftarrow$ A(j,k,i)}. Unfortunately, cache-line
@@ -193,7 +193,7 @@ Figure~\ref{fig:DNS_strong_scale_transpose}.
 \begin{figure}
  \begin{center}
    \includegraphics[width=0.45\textwidth]{DNS_full_timestep}
-   \caption{Strong scaling results for the total elapsed time for single timestep. The parantheses denote: (MPI tasks $\times$ OpenMP threads).}
+   \caption{Strong scaling results for the total elapsed time for single timestep. The parentheses denote: (MPI tasks $\times$ OpenMP threads).}
 %   \caption{Strong scaling results for the total elapsed time for single timestep. The parantheses denote: (MPI tasks $\times$ OpenMP threads). Hybrid parallelism was found to show the best performance, with nearly perfect scalability until approximately 128 concurrencies.}
    \label{fig:DNS_strong_scale_total_elapsed_time}
  \end{center}

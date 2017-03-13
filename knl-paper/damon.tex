@@ -2,7 +2,7 @@
 \label{sec:chol}
 
 Many uncertainty quantification applications replace an expensive model, such
-as a discretised partial differential equation, with a cheap surrogate.  This
+as a discretized partial differential equation, with a cheap surrogate.  This
 is done so that during a Markov chain Monte Carlo procedure, likelihood
 evaluations are cheap.  There are a plethora of different surrogate choices and
 strategies for choosing which is appropriate for a particular application.
@@ -11,7 +11,7 @@ higdon2008computer,oakley_hagan_2002,conti2010bayesian,conti2009gaussian,bayarri
 and we explore their scaling on the KNL architecture here.
 
 Gaussian processes are a probabilistic model for generating random fields
-characterised by a mean $\mu$ function and a covariance function $c$,
+characterized by a mean $\mu$ function and a covariance function $c$,
 \begin{equation}
   f(x) \sim \mathcal{N}(\mu(x), c(x, x')).
 \end{equation}
@@ -34,7 +34,7 @@ the usual Gaussian probability distribution function we are familiar with,
 \end{equation}
 Notice that evaluation of this probability density function necessitates a
 linear solve $\Sigma u = x$.  Since $\Sigma$ is symmetric and positive-definite
-a Cholesky factorisation is required.  Iterative approaches exist too, but we
+a Cholesky factorization is required.  Iterative approaches exist too, but we
 concentrate on the direct approach for this work.  It is also worth noting that the
 covariance function typically takes an exponential form
 \begin{equation}
@@ -59,22 +59,23 @@ probability density function is:
 \end{enumerate}
 
 QUESO was used to manage the Gaussian process and Markov chain infrastructure.
-QUESO is a C++ library for doing uncertainty quantification.
-QUESO itself stands for Quantification of Uncertainty for Estimation, Simulation and Optimization. 
-It is free and open source software and is available on GitHub: \url{http://libqueso.com}.
-The bulk of the computational cost lies inside the likelihood function which
-necessitates the evaluation of the Gaussian probability density function.
-Extensive use of Intel's MKL was used for both the Cholesky factorisation,
-subsequent linear solve, and determinant calculation.
+QUESO is a C++ library for doing uncertainty quantification.  QUESO itself
+stands for Quantification of Uncertainty for Estimation, Simulation and
+Optimization.  It is free and open source software and is available on GitHub:
+\url{http://libqueso.com}.  The bulk of the computational cost lies inside the
+likelihood function which necessitates the evaluation of the Gaussian
+probability density function.  Extensive use of Intel's MKL was used for both
+the Cholesky factorization, subsequent linear solve, and determinant
+calculation.
 
 Figure~\ref{fig:gp} shows timings of a Gaussian process likelihood evaluation
 as a function of number of OpenMP threads.  The timings only include the
-assembly and the factorisation, since these two procedures are the most
+assembly and the factorization, since these two procedures are the most
 expensive at each iteration of a Markov chain Monte Carlo procedure.  The
 assembly was parallelized with the usual OpenMP preprocessor directives, and
 the factorization was executed by Intel's MKL.  Two cases were run, one
 entirely in MCDRAM and the other entirely in DDR4.  Timings for both of these
-show that for problems that are not memory-bandwith limited, MCDRAM does not
+show that for problems that are not memory-bandwidth limited, MCDRAM does not
 offer a significant payoff.
 
 %
