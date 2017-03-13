@@ -58,7 +58,7 @@ For this study the grid size used was $1024\times128\times512$, which is
 comparable to the $Re_\tau = 180$ simulation from
 Kim\cite{Kim:1987ub}. For every benchmark cases, MCDRAM is
 used as a cache memory between processors and DRAM. The simulation code
-was compiled with the flag ``{\tt -xMIC-AVX512}.'' \todo{should this be -ax not -x? MK: -x is okay if you are going to run it on compute node only.} Also, the FFTW-3.3.5
+was compiled with the flag ``{\tt -xMIC-AVX512}.'' Also, the FFTW-3.3.5
 library is installed with the options ``{\tt --enable-avx512}'' and
 ``{\tt --enable-mpi}.''~\cite{Frigo:2005tu}. We used double-precision
 operations for all the kernels and elapsed times were measured by ``{\tt
@@ -127,44 +127,45 @@ HPCG\cite{Park:2014:ESI:2683593.2683696}.
  \end{center}
 \end{figure}
 
-The last kernel of PoongBack is the data transpose in a two dimensionally
-partitioned domain. This kernel is to ensure data alignment for FFTs and
-linear problems when solving the Navier-Stokes equations and does not include
-any floating point operations. However, more than 50\% of the simulation
-time occurs during this operation. The data transpose kernel includes two
-subsequent parts: 1) All-to-All type MPI communication in two
-sub-communicators; and 2) data reordering to maximize MPI message size
-and to finalize memory alignment after MPI communication. As the
-domain is partitioned in two dimensions, MPI communication needs to be
-performed in both dimensions. This is accomplished using MPI sub-communicators.
-The communication in each direction is logically All-to-All, but other communication
-patterns can be faster than ``{\tt mpi\_alltoall}'' depending on the 2D
-communication topology. We have used MPI-enabled FFTW (version 3.3 or
-higher), which dynamically determines the optimal communication patterns for each
-sub-communicator. Since MPI-enabled FFTW only supports a one dimensionally
-partitioned domain, a.k.a plane decomposition, we separately use
-FFTW for 1D FFTs and MPI communications with ``{\tt
-fftw\_mpi\_execute\_r2r()}'', an idea originally attributable to Dr. Rhys
-Ulerich. \todo{Maybe put Rhys in the acknowledgements? / MK: I think footnote is better. But I don't know if it is allowed.} The part of code used
-for data reordering performs a tensor
-transpose: {\tt B(i,j,k,l) $\leftarrow$ A(l,i,k,j)} or {\tt
-B(i,j,k) $\leftarrow$ A(j,k,i)}. Unfortunately, cache-line
+The last kernel of PoongBack is the data transpose in a two
+dimensionally partitioned domain. This kernel is to ensure data
+alignment for FFTs and linear problems when solving the Navier-Stokes
+equations and does not include any floating point operations. However,
+more than 50\% of the simulation time occurs during this
+operation. The data transpose kernel includes two subsequent parts: 1)
+All-to-All type MPI communication in two sub-communicators; and 2)
+data reordering to maximize MPI message size and to finalize memory
+alignment after MPI communication. As the domain is partitioned in two
+dimensions, MPI communication needs to be performed in both
+dimensions. This is accomplished using MPI sub-communicators.  The
+communication in each direction is logically All-to-All, but other
+communication patterns can be faster than ``{\tt mpi\_alltoall}''
+depending on the 2D communication topology. We have used MPI-enabled
+FFTW (version 3.3 or higher), which dynamically determines the optimal
+communication patterns for each sub-communicator. Since MPI-enabled
+FFTW only supports a one dimensionally partitioned domain, a.k.a plane
+decomposition, we separately use FFTW for 1D FFTs and MPI
+communications with ``{\tt fftw\_mpi\_execute\_r2r()}''.\footnote{The
+  orignial idea of using FFTW 3.3 library for global transpose is from
+  Dr. Rhys Ulerich.} The part of code used for data reordering
+performs a tensor transpose: {\tt B(i,j,k,l) $\leftarrow$ A(l,i,k,j)}
+or {\tt B(i,j,k) $\leftarrow$ A(j,k,i)}. Unfortunately, cache-line
 optimization cannot be achieved for both load and store at the same
 time. In this work we preferentially loaded the order of transpose.
-The performance of MPI communication and data reordering is
-shown in Figure~\ref{fig:DNS_strong_scale_transpose}. Similar to the FFT
-scaling and Navier-Stokes scaling in Figure~\ref{fig:DNS_strong_scale_fft_wave},
-data reordering also shows nearly
-perfect linear scalability up to 64 cores. Indeed, the performance
-continues to increase even with hardware threading.
-On the other hand, profiling the MPI communication shows performance
-increases as the number of cores increases even with more than one
-MPI tasks for each hardware thread. Admittedly, the scalability is far from
-linear. This result is interesting because PoongBack benchmark results
-on other HPC systems show that MPI communication takes more than five
-times the elapsed time for data reordering~\cite{Lee:2013kv}. This
-may imply that the performance could be increased by fine tuning
-the data reordering for KNL nodes.
+The performance of MPI communication and data reordering is shown in
+Figure~\ref{fig:DNS_strong_scale_transpose}. Similar to the FFT
+scaling and Navier-Stokes scaling in
+Figure~\ref{fig:DNS_strong_scale_fft_wave}, data reordering also shows
+nearly perfect linear scalability up to 64 cores. Indeed, the
+performance continues to increase even with hardware threading.  On
+the other hand, profiling the MPI communication shows performance
+increases as the number of cores increases even with more than one MPI
+tasks for each hardware thread. Admittedly, the scalability is far
+from linear. This result is interesting because PoongBack benchmark
+results on other HPC systems show that MPI communication takes more
+than five times the elapsed time for data
+reordering~\cite{Lee:2013kv}. This may imply that the performance
+could be increased by fine tuning the data reordering for KNL nodes.
 
 \begin{figure}
  \begin{center}
