@@ -34,18 +34,19 @@ experiences.
 \section{Testing Infrastructure}
 \label{sec:hardware}
 
-The test hardware used for this exercise was the recent Stampede cluster
-upgrade at the Texas Advanced Computing Center.  This upgrade cluster leaves
+The test hardware used for this exercise was early-access hardware for the
+upcoming Stampede 2 cluster at the Texas Advanced Computing Center.  This early
+access hardware leaves
 the original Stampede cluster hardware untouched and adds compute performance
 capabilities with the newest iteration of Intel's MIC architecture codenamed
 ``Knights Landing (KNL)''.
 
-The ``Knights Landing'' Xeon Phi 7250 compute nodes in the Stampede Upgrade
+The ``Knights Landing'' Xeon Phi 7250 compute nodes in the Stampede 2
 cluster boast 68 cores, each with 4 hardware threads, are bootable and each run
 a lightweight CentOS 7 Linux kernel.  They also have 16GB of high-bandwidth
 Multi-Channel Dynamic Random Access Memory (MCDRAM) and 96GB of DDR4-2400.
 
-The login node of the Stampede Upgrade (KNL) cluster is a 14 core (28 thread)
+The login node of the early-access Stampede 2 (KNL) cluster is a 14 core (28 thread)
 Haswell generation Intel Xeon E5-2695v3 processor with a clock speed of
 2.30GHz.  This was used to cross-compile scientific applications for the KNL
 compute nodes.  Applications were built with version 17.0.0 20160721 of Intel's
@@ -58,7 +59,7 @@ As with many scientific research groups, application development at the PECOS
 center employs many open-source libraries.  Fortunately, TACC's module system
 built on top of \texttt{lmod} provides many commonly used scientific packages
 already compiled with the necessary instructions supported by KNL.  Moreover,
-since the Stampede Upgrade cluster contains only bootable KNL nodes, the login
+since the Stampede 2 cluster contains only bootable KNL nodes, the login
 Haswell node is not needed for offloading computation.  We use it only for
 compiling and building software.  Compilation is possible on KNL, but it is
 much slower.
