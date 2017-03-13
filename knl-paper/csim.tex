@@ -63,14 +63,25 @@ as such only 96 GB of DDR4 RAM is presented to the operating system. Flat mode p
 DDR RAM to the operating system and the user can use the ``numactl'' utility to decide at run time if memory
 allocations should be directed to the 16 GB of MCDRAM or the 96 GB of DDR RAM. For these comparisons, 16 OpenMP
 threads and Intel's recommended default cluster mode of ``Quadrant'' are used.
-
-Quadrant mode attempts to localize communication without requiring explicit memory management by the user.
-It does this by grouping tiles into four logical/virtual (not physical) quadrants, then requiring each tile
-to manage MCDRAM addresses only in its own quadrant (and DDR addresses in its own half of the chip).
-This reduces the average number of ``hops'' that tile-to-memory requests require compared to all-to-all mode,
-which can reduce latency and congestion on the mesh. This results in three different runtime configurations:
-Flat mode with DDR RAM in Quadrant mode (828s), Flat mode with MCDRAM in Quadrant mode(789s), and
-Cache-Quadrant mode (793s).
+%Quadrant mode attempts to localize communication without requiring explicit memory management by the user.
+%It does this by grouping tiles into four logical/virtual (not physical) quadrants, then requiring each tile
+%to manage MCDRAM addresses only in its own quadrant (and DDR addresses in its own half of the chip).
+%This reduces the average number of ``hops'' that tile-to-memory requests require compared to all-to-all mode,
+%which can reduce latency and congestion on the mesh. 
+This results in three different runtime configurations:
+Flat mode with DDR RAM in Quadrant mode, Flat mode with MCDRAM in Quadrant mode, and
+Cache-Quadrant mode. These results are presented in Table 1.
+\begin{table}[]
+\centering
+\caption{Comparison of runtimes for EOM-CCSDT energy calculation with 16 OpenMP threads for 3 different KNL configurations }
+\label{my-label}
+\begin{tabular}{llll}
+                & Mem Mode      & Mem Used    & Runtime (s) \\
+		Config 1        & Flat        & DDR RAM                                                          &  828         \\
+		Config 2        & Flat        & MCDRAM                                                           &  789         \\
+		Config 3        & Cache       & \begin{tabular}[c]{@{}l@{}}MCDRAM (cache)\\ DDR RAM\end{tabular} &  793        
+		\end{tabular}
+		\end{table}
 
 The total memory required for this EOM-CCSDT calculation is 10 GB. As such, the entire calculation can
 be fit into the fast MCDRAM. While this does result in a small performance increase (789s vs 828s), it is important
