@@ -33,11 +33,15 @@ Cores=[1, 2, 4, 8, 16, 32, 64, 128, 256]
 Elapsed_time=[340.515304,167.247222,83.185743,42.512198,21.1418785,10.6050198,5.7294567,4.1665168,3.6036324]
 Ideal=[340.515304,170.257652,85.128826,42.564413,21.2822065,10.64110325,5.320551625,2.660275813,1.330137906]
 
-
+Cores_LS5=[1, 2, 4, 8, 16]
+Elapsed_time_LS5=[113.00541,51.381809,24.368666,13.313447,7.637091]
+Ideal_LS5=[113.00541,56.502705,28.2513525,14.12567625,7.062838125]
 
 fig=plt.figure(1,figsize=(6,4))
-plt.plot(Cores,Elapsed_time,'b-o',label='Full Timestep')
+plt.plot(Cores,Elapsed_time,'b-o',label='Stampede-KNL')
+plt.plot(Cores_LS5,Elapsed_time_LS5,'r-s',label='Lonestar5')
 plt.plot(Cores,Ideal,'k--',label='Linear Scalability')
+plt.plot(Cores_LS5,Ideal_LS5,'k--')
 plt.xscale('log')
 plt.xlim([0.5,512])
 plt.yscale('log')
