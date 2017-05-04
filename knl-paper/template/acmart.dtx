@@ -123,12 +123,14 @@
 % At this address you can file a bug report---or even contribute your
 % own enhancement making a pull request.
 %
-% If you decide to install the package yourself, follow the standard
-% rules:
+%
+% Most users should not attempt to install this package themselves,
+% and rather rely on their \TeX\ distributions to provide it.  If you
+% decide to install the package yourself, follow the standard rules:
 % \begin{enumerate}
 % \item Run \progname{latex} on |acmart.ins|.  This will produce the file
 % |acmart.cls|.
-% \item Put the file |acmart.cls| and the bibligoraphy files |*.bst|
+% \item Put the file |acmart.cls| and the bibliography files |*.bst|
 %   to the places where \LaTeX{} can find them (see \cite{TeXFAQ} or
 %   the documentation for your \TeX{} system).\label{item:install}
 % \item Update the database of file names.  Again, see \cite{TeXFAQ}
@@ -153,6 +155,9 @@
 % \item \textsl{binhex}, \url{http://www.ctan.org/pkg/binhex}
 % \item \textsl{caption}, \url{http://www.ctan.org/pkg/caption}
 % \item \textsl{comment}, \url{http://www.ctan.org/pkg/comment}
+% \item \textsl{cm-super}, \url{http://www.ctan.org/pkg/cm-super}
+% \item \textsl{cmap}, \url{http://www.ctan.org/pkg/cmap}
+% \item \textsl{draftwatermark}, \url{http://www.ctan.org/pkg/draftwatermark}
 % \item \textsl{environ}, \url{http://www.ctan.org/pkg/environ}
 % \item \textsl{fancyhdr}, \url{http://www.ctan.org/pkg/fancyhdr}
 % \item \textsl{float}, \url{http://www.ctan.org/pkg/float}
@@ -167,6 +172,7 @@
 % \item \textsl{libertine}, \url{http://www.ctan.org/pkg/libertine}
 % \item \textsl{manyfoot}, \url{http://www.ctan.org/pkg/manyfoot}
 % \item \textsl{microtype}, \url{http://www.ctan.org/pkg/microtype}
+% \item \textsl{mmap}, \url{http://www.ctan.org/pkg/mmap}
 % \item \textsl{ms}, \url{http://www.ctan.org/pkg/ms}
 % \item \textsl{mweights}, \url{http://www.ctan.org/pkg/mweights}
 % \item \textsl{natbib}, \url{http://www.ctan.org/pkg/natbib}
@@ -211,7 +217,12 @@
 % The possible formats are listed in
 % Table~\ref{tab:opts_format}.  Note that formats starting with |acm|
 % are intended for journals and transactions, while formats starting
-% with |sig| are intended for proceedings published as books.
+% with |sig| are intended for proceedings published as books.  
+%
+% Note that sometimes conference proceedings are published as a
+% special issue (or issues) of an ACM journal.  In this case you
+% should use the journal format for a conference paper.  Please
+% contact your conference committee if in doubt.  
 %
 % \begin{table}
 %   \centering
@@ -228,20 +239,19 @@
 %            TOCS, TOCT, TODAES, TODS, TOIS, TOIT, TOMACS, TOMM (formerly
 %            TOMCCAP), TOMPECS, TOMS, TOPC, TOPLAS, TOPS,
 %            TOS, TOSEM, TOSN, TRETS,
-%            TSAS, TSC, TSLP, TWEB\@. \\
+%            TSAS, TSC, TSLP, TWEB, including special issues. \\
 %           acmlarge  & Large single column format, used for
-%           IMWUT, JOCCH, PACMPL, TAP \\
+%           IMWUT, JOCCH, PACMPL, POMACS, TAP, including special issues. \\
 %            acmtog   & Large double column format, used for
-%          TOG\\
+%          TOG, including special issues.\\
 %           sigconf & Proceedings format for most of ACM
 %          conferences (with the exceptions listed below) and all ICPS
-%          volumes\\
-%           siggraph & Proceedings format for SIGGRAPH and SIGGRAPH
-%          Asia conferences, published in ACM Transactions on Graphics
-%          journal issues \\
-%            sigplan & Proceedings format for SIGPLAN conferences\\
-%            sigchi  & Proceedings format for SIGCHI conferences\\
-%           sigchi-a & Format for SIGCHI extended abstract\\
+%          volumes.\\
+%           siggraph & As of March 2017, this format is no longer
+%           used.  Please use sigconf for SIGGRAPH conferences. \\
+%            sigplan & Proceedings format for SIGPLAN conferences.\\
+%            sigchi  & Proceedings format for SIGCHI conferences.\\
+%           sigchi-a & Format for SIGCHI extended abstract.\\
 %   \bottomrule
 %   \end{tabularx}
 % \end{table}
@@ -269,7 +279,21 @@
 %
 % The option |anonymous| is used
 % for anonymous review process: all author information becomes
-% obscured.  
+% obscured.
+%
+% The option |timestamp| is used to include a time stamp in the
+% footer of each page.  When preparing a document, this can help avoid
+% confusing different revisions.  The footer also include the page range of
+% the document.  This helps detect missing pages in hard copies.
+%
+% The option |authordraft| is intended for the authors' drafts, not
+% intended for distribution.  It typesets copyright block to give the
+% authors the idea of its size and overall size of the paper, but
+% overprints it with the phrase ``Unpublished working draft. Not for
+% distribution'', which also is used as a watermark.  This option sets
+% |timestamp| and |review| to |true|, but these decisions can be
+% overriden by setting these options to |false| \emph{after}
+% |authordraft|.  
 %
 % \begin{table}
 %   \centering
@@ -287,7 +311,10 @@
 %     anonymous & false & Whether to make author(s) anonymous\\
 %     authorversion & false & Whether to generate a special
 %     version for authors' personal use or posting (see
-%     Section~\ref{sec:ug_topmatter})\\ 
+%     Section~\ref{sec:ug_topmatter})\\
+%     timestamp & false & Whether to put a time stamp in the
+%     footer of each page\\
+%     authordraft & false & Whether author's draft mode is enabled\\
 %     \bottomrule
 %   \end{tabularx}
 % \end{table}
@@ -345,6 +372,7 @@
 %     JETC & ACM Journal on Emerging Technologies in Computing Systems \\
 %     JOCCH & ACM Journal on Computing and Cultural Heritage \\
 %     PACMPL & PACM on Programming Languages \\
+%     POMACS & PACM on Measurement and Analysis of Computing Systems \\
 %     TAAS & ACM Transactions on Autonomous and Adaptive Systems\\
 %     TACCESS & ACM Transactions on Accessible Computing\\
 %     TACO & ACM Transactions on Architecture and Code Optimization \\
@@ -471,7 +499,7 @@
 % \end{verbatim}
 % Similarly you can repeat \cs{email} command.
 %
-% You may have several authors with the same afifliation, different
+% You may have several authors with the same affiliation, different
 % affiliations or overlapping affiliations (author~$A_1$ is affiliated
 % with institutions $I_1$ and $I_2$, while author $A_2$ is affiliated
 % with $I_2$ only, and author $A_3$ is affiliated with
@@ -613,6 +641,51 @@
 % \end{verbatim}
 %
 %
+% The command \cs{affiliation} formats the output according to
+% American conventions.  This might be wrong for some cases.
+% Consider, for example, a German address.  In Germany postcode is put
+% before city and is not separated by a comma.  We can handle this
+% order using
+% \begin{verbatim}
+% \affiliation{%
+%   \institution{Fluginstitut}
+%   \streetaddress{Sonnenallee 17}
+%   \postcode{123456}
+%   \city{Helm}
+%   \country{Germany}
+% }
+% \end{verbatim}
+% However, the comma after postcode is unfortunate:  the address will
+% be typeset (with a SIG format) as
+% \begin{verbatim}
+% Fluginstitut
+% Sonenallee 17
+% 123456, Helm, Germany
+% \end{verbatim}
+% 
+%
+% To overcome this problem, the command \cs{affiliation} has an
+% optional parameter |obeypunctuation|, which can be |false| (the
+% default) or |true|.  If this parameter is |true|, \cs{afffiliation}
+% obeys the author's command.  Thus 
+% \begin{verbatim}
+% \affiliation[obeypuctuation=true]{%
+%   \institution{Fluginstitut}\\
+%   \streetaddress{Sonnenallee 17}\\
+%   \postcode{123456}
+%   \city{Helm},
+%   \country{Germany}
+% }
+% \end{verbatim}
+% will be typeset as
+% \begin{verbatim}
+% Fluginstitut
+% Sonenallee 17
+% 123456 Helm, Germany
+% \end{verbatim}
+%
+% Note that you should \emph{not} use this option for journals.  
+%
 % It is expected that these commands are inserted by the author of the
 % manuscript.
 %
@@ -682,15 +755,25 @@
 % \acmArticleSeq{5} % We redefine it to 5
 % \end{verbatim}
 %
-%
+% \DescribeMacro{\acmSubmissionID}%
+% If you paper got a Submission~ID from the Conference Management
+% System, put it here:
+% \begin{verbatim}
+% \acmSubmissionID{123-A56-BU3}
+% \end{verbatim}
+% 
 %
 % \DescribeMacro{\acmPrice}%
 % The macro \cs{acmPrice}\marg{price} sets the price for the article
-% (by default 15.00), for example,
 % \begin{verbatim}
 % \acmPrice{25.00}
 % \end{verbatim}
-%
+% Note that you do not need to put the dollar sign here, just the
+% amount.  By default the price is \$15.00, unless the copyright is
+% set to |usgov| or |rightsretained|, when it is suppressed  Note that to
+% override the defaults you need to set the price \emph{after} the
+% \cs{setcopyright} command to override the default.  Also, the
+% command |\acmPrice{}| suppresses the printing of the price.
 %
 % \DescribeMacro{\acmISBN}%
 % Book-like volumes have ISBN numbers attached to them.  The macro
@@ -740,12 +823,11 @@
 %
 % \DescribeMacro{\terms}%
 % \DescribeMacro{\keywords}%
-% The macros \cs{terms}\marg{term, term,\ldots} and
-% \cs{keywords}\marg{keyword, keyword,\ldots} set the main terms and
-% the additional keywords for the article.  Term and keywords must be
+% The command
+% \cs{keywords}\marg{keyword, keyword,\ldots} sets keywords for the
+% article.  They must be 
 % separated by commas, for example,
 % \begin{verbatim}
-% \terms{wireless, interference}
 % \keywords{wireless sensor networks, media access control,
 % multi-channel, radio interference, time synchronization}
 % \end{verbatim}
@@ -1046,13 +1128,14 @@
 % theorem environments:
 % \begin{description}
 % \item[acmplain:] this is  the style used for
-% |theorem|,
-% |conjecture|,
-% |proposition|,
-% |lemma|,
-% |corollary|, and
-% \item[acmdefinition:] this is the style used for |example| and
-% |definition|.
+%   |theorem|,
+%   |conjecture|,
+%   |proposition|,
+%   |lemma|, and
+%   |corollary|, and
+% \item[acmdefinition:] this is the style used for
+%   |example| and
+%   |definition|.
 % \end{description}
 %
 %
@@ -1125,8 +1208,7 @@
 %
 % As for |printonly| and |screenonly| environments,
 % |\begin{acks}| and |\end{acls}| should start the
-% line of their own (no leading or trailing spaces).  
-
+% line of their own (no leading or trailing spaces).
 %
 % \DescribeMacro{\grantsponsor}%
 % \DescribeMacro{\grantnum}%
@@ -1161,7 +1243,7 @@
 %   their valuable comments and helpful suggestions. The work is
 %   supported by the \grantsponsor{GS501100001809}{National Natural
 %   Science Foundation of
-%   China}{http://dx.doi.org/10.13039/501100001809} under Grant
+%   China}{https://doi.org/10.13039/501100001809} under Grant
 %   No.:~\grantnum{GS501100001809}{61273304}
 %   and~\grantnum[http://www.nnsf.cn/youngscientsts]{GS501100001809}{Young 
 %   Scientsts' Support Program}.
@@ -1207,14 +1289,14 @@
 %
 % The style supports fields \path{doi} and \path{url}, for example,
 % \begin{verbatim}
-%  doi = "10.1145/1188913.1188915",
-%  url = "http://ccrma.stanford.edu/~jos/bayes/bayes.pdf",
+%  doi =          "10.1145/1188913.1188915",
+%  url =          "http://ccrma.stanford.edu/~jos/bayes/bayes.pdf",
 % \end{verbatim}
 % 
 % The style supports arXiv recommended fields \path{eprint} and
 % (optionally) \path{primaryclass}, for example,
 % \begin{verbatim}
-%  eprint      = "960935712",
+%  eprint =       "960935712",
 %  primaryclass = "cs",
 % \end{verbatim}
 % See the examples at \url{http://arxiv.org/hypertex/bibstyles/}.
@@ -1223,11 +1305,11 @@
 % \path{game} for Web pages and games, for example,
 % \begin{verbatim}
 % @online{Thornburg01,
-%  author = "Harry Thornburg",
-%  year =   "2001",
-%  title =  "Introduction to Bayesian Statistics",
-%  url =    "http://ccrma.stanford.edu/~jos/bayes/bayes.html",
-%  month =   mar,
+%  author =       "Harry Thornburg",
+%  year =         "2001",
+%  title =        "Introduction to Bayesian Statistics",
+%  url =          "http://ccrma.stanford.edu/~jos/bayes/bayes.html",
+%  month =        mar,
 %  lastaccessed = "March 2, 2005",
 % }
 % \end{verbatim}
@@ -1240,13 +1322,13 @@
 % entry, setting there \path{howpublished} field, for example,
 % \begin{verbatim}
 % @online{Obama08,
-%  author = "Barack Obama",
-%  year   = "2008",
-%  title  = "A more perfect union",
-%  howpublished  = "Video",
-%  day 	  = "5",
-%  url    = "http://video.google.com/videoplay?docid=6528042696351994555",
-%  month  = mar,
+%  author =       "Barack Obama",
+%  year   =       "2008",
+%  title  =       "A more perfect union",
+%  howpublished = "Video",
+%  day    =       "5",
+%  url    =       "http://video.google.com/videoplay?docid=6528042696351994555",
+%  month  =       mar,
 %  lastaccessed = "March 21, 2008",
 % }
 % \end{verbatim}
@@ -1258,15 +1340,14 @@
 % @Inproceedings{Novak03,
 %  author =       "Dave Novak",
 %  title =        "Solder man",
-%  booktitle =    {ACM SIGGRAPH 2003 Video Review on Animation theater 
-%                  Program},
+%  booktitle =    "ACM SIGGRAPH 2003 Video Review on Animation theater Program",
 %  year =         "2003",
-%  publisher = 	 "ACM Press",
-%  address = 	 "New York, NY",
+%  publisher =    "ACM Press",
+%  address =      "New York, NY",
 %  pages =        "4",
-%  month = 	 "March 21, 2008",
-%  doi = 	 "99.9999/woot07-S422",
-%  howpublished = "Video"
+%  month =        "March 21, 2008",
+%  doi =          "10.9999/woot07-S422",
+%  howpublished = "Video",
 % }
 % \end{verbatim}
 % 
@@ -1274,17 +1355,17 @@
 % \path{periodical} is intended for this:
 % \begin{verbatim}
 % @periodical{JCohen96,
-%  key = 	 "Cohen",
+%  key =          "Cohen",
 %  editor =       "Jacques Cohen",
 %  title =        "Special issue: Digital Libraries",
-%  journal =      CACM,
+%  journal =      "Communications of the {ACM}",
 %  volume =       "39",
-%  number = 	 "11",
-%  month =	 nov,
-%  year = 	 "1996",
+%  number =       "11",
+%  month =        nov,
+%  year =         "1996",
 % }
-%
 % \end{verbatim}
+%
 % 
 %
 %\subsection{Colors}
@@ -1297,6 +1378,39 @@
 % |ACMPurple|, |ACMDarkBlue|.  You can use them in the color
 % assignments.
 %
+% ACM provides the following recommendation on color use.
+%
+% The most accessible approach would be to ensure that your article is
+% still readable when printed in greyscale. The most notable reasons
+% for this are: 
+% \begin{enumerate}
+% \item The most common type of inherited Color Vision Deficiency
+% (CVD) is red-green (in which similar-brightness colors that only
+% differ in their amounts of red or green are often confused), and it
+% affects up to 8\% of males and 0.5\% of females of Northern European
+% descent. 
+% \item The most common type of acquired Color Vision Deficiency (CVD)
+% is blue-yellow (including mild cases for many older adults).
+% \item Most printing is in Black \& White.
+% \item Situational impairments (e.g., bright sunlight shining on a
+% mobile screen) tend to reduce the entire color gamut, reducing color
+% discriminability.
+% \end{enumerate}
+% 
+% \textbf{Note:} It is \emph{not} safe to encode information using
+% only variations in color (i.e., only differences in hue and/or
+% saturation), as there is bound to be someone affected! 
+%
+% To ensure that you are using the most accessible colors, ACM
+% recommends that you choose sets of colors to help ensure suitable
+% variations in Black \& White using either of the following tools: 
+% \begin{enumerate}
+%  \item ColourBrewer: \url{http://colorbrewer2.org/}
+%  \item ACE: The Accessible Colour Evaluator:
+%    \url{http://daprlab.com/ace/} for designing WCAG 2.0 compliant
+%    palettes.
+%  \end{enumerate}
+%  
 %
 %\subsection{Other notable packages and typographic remarks}
 %\label{sec:ug_other}
@@ -1330,6 +1444,48 @@
 %
 %
 %
+%\subsection{A note for wizards: \texttt{acmart-preload-hook.tex}}
+%\label{sec:ug_preload}
+%
+% Sometimes you need to change the behavior of |acmart|.  The
+% usual way to do this is to redefine commands in the preamble.
+% However, these definitions are executed \emph{after} |acmart| is
+% loaded, and certain decisions are made.  This presents a number of
+% problems.  
+%
+% For example, one may want to use  |titletoc| package with |acmart|.
+% This package should be loaded before |hyperref|.  However, since
+% |acmart| loads |hyperref| itself, the line |\usepackage{titletoc}|
+% in the preamble will lead to grief (see
+% \url{http://tex.stackexchange.com/questions/357265/using-titletoc-with-acm-acmart-style}). 
+%
+% Another example is passing options to package.  Suppose you want to
+% use |dvipsnames| option of |xcolor| package.  Normally you cannot do
+% this because |acmart| loads this package itself without options.
+%
+% The file |acmart-preload-hook.tex| may be used to solve these
+% problems.  If this file exists, it will be processed before any other
+% package.  You can use this file to load packages or pass options to
+% them.  For example, if you put in this file
+% \begin{verbatim}
+% \let\LoadClassOrig\LoadClass
+% \renewcommand\LoadClass[2][]{\LoadClassOrig[#1]{#2}%
+% \usepackage{titletoc}}
+% \end{verbatim}
+% then |titletoc| will be loaded before |hyperref|.  If you put in
+% this file
+% \begin{verbatim}
+% \PassOptionsToPackage{dvipsnames}{xcolor}
+% \end{verbatim}
+% you will pass |dvipsnames| to |xcolor|.
+%
+% \textbf{Important note.}  This hook makes it too easy to create a
+% manuscript which is not acceptable by ACM.  Even easier it is to
+% create a file which cannot be compiled.  So please do not use it
+% \emph{unless you know what you are doing.}  And if you use it,
+% \emph{do not ask for support.}  If you decided to use this hook, you
+% are on your own.
+%
 % \StopEventually{
 % \clearpage
 % \bibliography{acmart}
@@ -1353,7 +1509,7 @@
 \ProvidesFile{acmart.dtx}
 %</gobble>
 %<class>\ProvidesClass{acmart}
-[2017/03/04 v1.31 Typesetting articles for Association of
+[2017/04/23 v1.35 Typesetting articles for Association of
 Computing Machinery]
 %    \end{macrocode}
 %
@@ -1397,6 +1553,15 @@ Computing Machinery]
 % \changes{v1.30}{2017/02/04}{Bibtex style now recognizes https:// in
 % doi} 
 % \changes{v1.31}{2017/03/04}{Documentation changes} 
+% \changes{v1.32}{2017/03/07}{Format siggraph is now obsolete} 
+% \changes{v1.32}{2017/03/07}{Added POMACS journal option} 
+% \changes{v1.33}{2017/03/12}{BibTeX crossref bug corrected} 
+% \changes{v1.33}{2017/03/18}{BibTeX comma before articleno bug
+% corrected} 
+% \changes{v1.33}{2017/03/18}{BibTeX numpages bug corrected} 
+% \changes{v1.33}{2017/03/28}{Added acmart-preload-hook} 
+% \changes{v1.33}{2017/03/33}{Documentation updates} 
+% \changes{v1.35}{2017/04/23}{BibTeX bug fixed: et al.}
 %
 %
 % And the driver code:
@@ -1404,7 +1569,7 @@ Computing Machinery]
 %<*gobble>
 \documentclass{ltxdoc}
 \usepackage{array,booktabs,amsmath,graphicx,fancyvrb,tabularx}
-\usepackage[tt=false]{libertine}
+\usepackage[tt=false, type1=true]{libertine}
 \usepackage[varqu]{zi4}
 \usepackage[libertine]{newtxmath}
 \usepackage[tableposition=top]{caption}
@@ -1421,6 +1586,19 @@ Computing Machinery]
 \def\@classname{acmart}
 %    \end{macrocode}
 %
+%
+%
+%\subsection{Preload}
+%\label{sec:preload}
+%
+% We preload |acmart-preload-hook|:
+%    \begin{macrocode}
+\InputIfFileExists{acmart-preload-hook.tex}{%
+  \ClassWarning{\@classname}{%
+    I am loading acmart-preload-hook.tex. You are fully responsible
+    for any problems from now on.}}{}
+%    \end{macrocode}
+% 
 % \subsection{Options}
 % \label{sec:options}
 %
@@ -1428,6 +1606,8 @@ Computing Machinery]
 %    \begin{macrocode}
 \RequirePackage{xkeyval}
 %    \end{macrocode}
+%
+%
 %
 % \begin{macro}{format}
 %   The possible formats
@@ -1503,25 +1683,20 @@ Computing Machinery]
 %
 % \begin{macro}{\if@ACM@natbib@override}
 % \changes{v1.12}{2016/05/30}{Added macro}
-%   Whether to override the format decision about \textsl{natbib}
-%    \begin{macrocode}
-\newif\if@ACM@natbib@override
-\@ACM@natbib@overridefalse
-%    \end{macrocode}
-%   
+% \changes{v1.33}{2017/03/28}{Deleted macro}
 % \end{macro}
 %
 % \begin{macro}{\if@ACM@natbib}
 %   Whether we use natbib mode
 %    \begin{macrocode}
 \define@boolkey+{acmart.cls}[@ACM@]{natbib}[true]{%
-  \@ACM@natbib@overridetrue
   \if@ACM@natbib
     \PackageInfo{\@classname}{Explicitly selecting natbib mode}%
   \else
     \PackageInfo{\@classname}{Explicitly deselecting natbib mode}%
   \fi}{\PackageError{\@classname}{Option natbib can be either true or
     false}}
+\ExecuteOptionsX{natbib=true}
 %    \end{macrocode}
 %
 % \end{macro}
@@ -1541,6 +1716,43 @@ Computing Machinery]
 %    \end{macrocode}
 %
 % \end{macro}
+%
+%
+% \begin{macro}{\if@ACM@timestamp}
+% \changes{v1.33}{2017/03/10}{Added macro (Michael D.~Adams)}
+%   Whether we use timestamp mode
+%    \begin{macrocode}
+\define@boolkey+{acmart.cls}[@ACM@]{timestamp}[true]{%
+  \if@ACM@timestamp
+    \PackageInfo{\@classname}{Using timestamp mode}%
+  \else
+    \PackageInfo{\@classname}{Not using timestamp mode}%
+  \fi}{\PackageError{\@classname}{Option timestamp can be either true or
+    false}}
+\ExecuteOptionsX{timestamp=false}
+%    \end{macrocode}
+%
+% \end{macro}
+%
+%
+% \begin{macro}{\if@ACM@authordraft}
+% \changes{v1.33}{2017/03/28}{Added macro}
+%   Whether we use authordraft mode
+%    \begin{macrocode}
+\define@boolkey+{acmart.cls}[@ACM@]{authordraft}[true]{%
+  \if@ACM@authordraft
+    \PackageInfo{\@classname}{Using authordraft mode}%
+    \@ACM@timestamptrue
+    \@ACM@reviewtrue
+  \else
+    \PackageInfo{\@classname}{Not using authordraft mode}%
+  \fi}{\PackageError{\@classname}{Option authordraft can be either true or
+    false}}
+\ExecuteOptionsX{timestamp=false}
+%    \end{macrocode}
+%
+% \end{macro}
+%
 %
 % \begin{macro}{\ACM@fontsize}
 %   The font size to pass to the base class
@@ -1598,6 +1810,11 @@ Computing Machinery]
 %
 % Setting up switches
 %    \begin{macrocode}
+\ifnum\ACM@format@nr=5\relax % siggraph
+  \ClassWarning{\@classname}{The format `siggraph' is now obsolete.
+    I am switching to sigconf.}
+  \setkeys{acmart.cls}{format=sigconf}
+\fi
 \ifnum\ACM@format@nr=0\relax
   \@ACM@manuscripttrue
 \else
@@ -1627,14 +1844,6 @@ Computing Machinery]
 \fi
 %    \end{macrocode}
 %
-% A format sets up \cs{if@ACM@natbib} only if
-% \cs{@ACM@natbib@override} is false (i.e. user did \emph{not}
-% overrode format's selection):
-%    \begin{macrocode}
-\if@ACM@natbib@override\else
-    \@ACM@natbibtrue
-\fi
-%    \end{macrocode}
 % 
 %
 %\subsection{Loading base class and package}
@@ -1785,12 +1994,13 @@ Computing Machinery]
 % \changes{v1.13}{2016/06/06}{Added macro}
 % \changes{v1.14}{2016/06/09}{Moved def of \cs{bibstyle@acmauthoryear}
 %   before use}
+% \changes{v1.35}{2017/04/13}{Square brackets for author-year style}
 %   The default author-year format:
 %    \begin{macrocode}
 \newcommand{\bibstyle@acmauthoryear}{%
   \setcitestyle{%
     authoryear,%
-    open={(},close={)},citesep={;},%
+    open={[},close={]},citesep={;},%
     aysep={},yysep={,},%
     notesep={, }}}
 %    \end{macrocode}
@@ -2000,6 +2210,8 @@ Computing Machinery]
 %    \end{macrocode}
 %
 % Bibliography mangling. 
+% \changes{v1.33}{2017/03/23}{Moved \cs{citename} definition for
+% non-natbib bibliography, so a package may redefine it} 
 %    \begin{macrocode}
 \if@ACM@natbib
   \let\citeN\cite
@@ -2014,9 +2226,12 @@ Computing Machinery]
        \let\NAT@ctype\@ne\NAT@partrue\NAT@fullfalse\NAT@open\NAT@citetp}%
   \providecommand\newblock{}%
 \else
-  \providecommand\citename[1]{#1}
+  \AtBeginDocument{%
+    \let\shortcite\cite%
+    \providecommand\citename[1]{#1}}
 \fi
-\def\shortcite#1{\ifNAT@numbers\cite{#1}\else\citeyear{#1}\fi}
+\newcommand\shortcite[2][]{%
+  \ifNAT@numbers\cite[#1]{#2}\else\citeyear[#1]{#2}\fi}
 %    \end{macrocode}
 %
 %
@@ -2052,6 +2267,19 @@ Computing Machinery]
 \definecolor[named]{ACMGreen}{cmyk}{0.20,0,1,0.19}
 \definecolor[named]{ACMPurple}{cmyk}{0.55,1,0,0.15}
 \definecolor[named]{ACMDarkBlue}{cmyk}{1,0.58,0,0.21}
+%    \end{macrocode}
+% 
+%
+% Author draft mode
+%    \begin{macrocode}
+\if@ACM@authordraft
+  \RequirePackage{draftwatermark}
+  \SetWatermarkFontSize{0.5in}
+  \SetWatermarkColor[gray]{.9}
+  \SetWatermarkText{\parbox{12em}{\centering
+      Unpublished working draft\\ 
+      Not for distribution}}
+\fi
 %    \end{macrocode}
 % 
 %
@@ -2281,7 +2509,20 @@ Computing Machinery]
 %\label{sec:fonts}
 %
 % \changes{v1.12}{2016/05/30}{Added graceful behavior when libertine
-% fonts are absent}%
+% fonts are absent}
+% \changes{v1.33}{2017/03/29}{Added cmap and glyphtounicode}
+%
+% Somehow PDFTeX and XeTeX require different incantations to make PDF
+% compliant with the current Acrobat bugs.  Xpdf is much better.
+%    \begin{macrocode}
+\RequirePackage{iftex}
+\ifPDFTeX
+\input{glyphtounicode}
+\pdfgentounicode=1
+\fi
+\RequirePackage{cmap}
+%    \end{macrocode}
+% 
 %
 % \begin{macro}{\if@ACM@newfonts}
 % \changes{v1.12}{2016/05/30}{Added macro}%
@@ -2303,10 +2544,12 @@ Computing Machinery]
 % 
 % \changes{v1.30}{2017/02/15}{Switched to T1: looks like libertine has
 % problems with \cs{l} in OT1}%
+% \changes{v1.33}{2017/03/12}{Switched to Type~1 fonts for libertine
+% even if OTF-capable engine is used (Kai Mindermann)} 
 % We use Libertine throughout.
 %    \begin{macrocode}
 \if@ACM@newfonts
-\RequirePackage[tt=false]{libertine}
+\RequirePackage[tt=false, type1=true]{libertine}
 \RequirePackage[varqu]{zi4}
 \RequirePackage[libertine]{newtxmath}
 \RequirePackage[T1]{fontenc}
@@ -2539,6 +2782,7 @@ Computing Machinery]
   JETC,%
   JOCCH,%
   PACMPL,%
+  POMACS,%
   TAAS,%
   TACCESS,%
   TACO,%
@@ -2620,6 +2864,10 @@ Computing Machinery]
   \def\@journalName{Proceedings of the ACM on Programming Languages}%
   \def\@journalName{Proc. ACM Program. Lang.}%
   \def\@permissionCodeOne{2475-1421}%
+\or % POMACS
+  \def\@journalName{Proceedings of the ACM on Measurement and Analysis of Computing Systems}%
+  \def\@journalName{Proc. ACM Meas. Anal. Comput. Syst.}%
+  \def\@permissionCodeOne{2476-1249}%
 \or % TAAS
   \def\@journalName{ACM Transactions on Autonomous and Adaptive Systems}%
   \def\@journalNameShort{ACM Trans. Autonom. Adapt. Syst.}%
@@ -2889,8 +3137,8 @@ Computing Machinery]
 % \begin{macro}{\affiliation}
 % \changes{v1.15}{2016/06/25}{Added code for author groups}
 %   The macro \cs{affiliation} mimics \cs{address} from |amsart|.
-%   Note that it has an optional argument we do not currently need,
-%   but keep for the possible future use.
+%   Note that it has an optional argument, which we use differently
+%   from |amsart|.
 %    \begin{macrocode}
 \newcommand{\affiliation}[2][]{%
   \global\@insideauthorgroupfalse
@@ -2900,6 +3148,19 @@ Computing Machinery]
 %    \end{macrocode}
 %
 % \end{macro}
+%
+% \begin{macro}{\if@ACM@affiliation@obeypunctuation}
+% \changes{v1.33}{2017/03/28}{Added macro}
+%   Whether to use author's punctuation (by default false = add
+%   American punctuation)
+%    \begin{macrocode}
+\define@boolkey+{@ACM@affiliation@}[@ACM@affiliation@]{obeypunctuation}%
+[true]{}{\ClassError{\@classname}{obeypunctuation must be true or false}}
+%    \end{macrocode}
+%
+% \end{macro}
+%
+%
 %
 % \begin{macro}{\additionalaffiliation}
 % \changes{v1.31}{2017/03/04}{Added macro}
@@ -3101,6 +3362,18 @@ Computing Machinery]
 %
 % \end{macro}
 %
+%
+% \begin{macro}{\acmSubmissionID}
+% \changes{v1.33}{2017/03/29}{Added macro}
+%   The submission id
+%    \begin{macrocode}
+\def\acmSubmissionID#1{\def\@acmSubmissionID{#1}}
+\acmSubmissionID{}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+%
 % \begin{macro}{\acmISBN}
 % \changes{v1.04}{2016/04/26}{Name change by Matthew Fluet}
 %   The book isbn
@@ -3200,11 +3473,12 @@ Computing Machinery]
 % \end{macro}
 %
 % \begin{macro}{\terms}
-%   Terms are mostly obsolete, we use CCS now.  Still it makes
-%   sense to keep them for compatibility.
+% \changes{v1.34}{2017/04/09}{The \cs{terms} command now just produces
+% a warning} 
+%   Terms are obsolete, we use CCS now. 
 %    \begin{macrocode}
-\def\terms#1{\def\@terms{#1}}
-\terms{}
+\def\terms#1{\ClassWarning{\@classname}{The command \string\terms{} is
+    obsolete.  I am going to ignore it}}
 %    \end{macrocode}
 %
 % \end{macro}
@@ -3377,7 +3651,7 @@ Computing Machinery]
 % \changes{v1.29}{2017/01/22}{Add spacing after bullet and around
 % rightarrow; semicolon separators no longer in bold/italic (John Wickerson)}
 %   The parser of the expression |Significance~General~Specific| (we need
-%   |textcomp| for |\\textrightarrow|:
+%   |textcomp| for |\\textrightarrow|):
 %    \begin{macrocode}
 \RequirePackage{textcomp}
 \def\ccsdesc@parse#1~#2~#3~{%
@@ -3426,6 +3700,8 @@ Computing Machinery]
 % \end{macro}
 %
 % \changes{v1.10}{2016/05/22}{Changes of `licensedothergov' wording}
+% \changes{v1.35}{2017/04/22}{If the copyright is set to usgov or
+% rigtsretained, the price is suppressed}
 % Keys:
 %    \begin{macrocode}
 \define@choicekey*{ACM@}{acmcopyrightmode}[%
@@ -3445,11 +3721,13 @@ Computing Machinery]
   \fi
   \ifnum\acm@copyrightmode=3\relax % rightsretained
    \@acmownedfalse
+   \acmPrice{}%
   \fi
   \ifnum\acm@copyrightmode=4\relax % usgov
    \@printpermissiontrue
    \@printcopyrightfalse
    \@acmownedfalse
+   \acmPrice{}%
   \fi
   \ifnum\acm@copyrightmode=6\relax % cagov
    \@acmownedfalse
@@ -3484,30 +3762,30 @@ Computing Machinery]
 \def\@copyrightowner{%
   \ifcase\acm@copyrightmode\relax % none
   \or % acmcopyright
-  ACM\@.
+  Association for Computing Machinery.
   \or % acmlicensed
   Copyright held by the owner/author(s). Publication rights licensed to
-  ACM\@.
+  Association for Computing Machinery.
   \or % rightsretained
   Copyright held by the owner/author(s).
   \or % usgov
   \or % usgovmixed
-  ACM\@.
+  Association for Computing Machinery.
   \or % cagov
   Crown in Right of Canada.
   \or %cagovmixed
-  ACM\@.
+  Association for Computing Machinery.
   \or %licensedusgovmixed
   Copyright held by the owner/author(s). Publication rights licensed to
-  ACM\@.
+  Association for Computing Machinery.
   \or %licensedcagovmixed
   Copyright held by the owner/author(s). Publication rights licensed to
-  ACM\@.
+  Association for Computing Machinery.
   \or % othergov
-  ACM\@.
+  Association for Computing Machinery.
   \or % licensedothergov
   Copyright held by the owner/author(s). Publication rights licensed to
-  ACM\@.
+  Association for Computing Machinery.
   \fi}
 %    \end{macrocode}
 %
@@ -3515,9 +3793,10 @@ Computing Machinery]
 %
 % \begin{macro}{\@formatdoi}
 % \changes{v1.03}{2016/04/22}{Added macro}
+% \changes{v1.32}{2017/04/07}{New doi format}
 %   Print a clickable doi
 %    \begin{macrocode}
-\def\@formatdoi#1{\url{http://dx.doi.org/#1}}
+\def\@formatdoi#1{\url{https://doi.org/#1}}
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -3708,6 +3987,12 @@ Computing Machinery]
 % and author vertsion,
 % \url{https://github.com/borisveytsman/acmart/issues/36}} 
 % \changes{v1.12}{2016/05/30}{Moved thankses to copyrightpermission box}
+% \changes{v1.33}{2017/03/27}{Fixed the bug with figures on top and
+% bottom of the title page, thanks to David Epstein}
+% \changes{v1.34}{2017/04/09}{Deleted `DOI' from doi numbers}
+% \changes{v1.34}{2017/04/09}{Added date to the bibstrip in conf proceedings}
+% \changes{v1.34}{2017/04/09}{The \cs{terms} command is now obsolete}
+% \changes{v1.34}{2017/04/11}{Rearranged bibstrip}
 %   The (in)famous \cs{maketitle}.  Note that in sigchi-a mode authors
 %   are \emph{not} in the title box.
 %
@@ -3725,8 +4010,9 @@ Computing Machinery]
   \let\@footnotemark\@footnotemark@nolink
   \let\@footnotetext\@footnotetext@nolink
   \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
-  \@topnum\z@ % this prevents figures from falling at the top of page
-              % 1
+  \global\@topnum\z@ % this prevents floats from falling 
+                     % at the top of page 1
+  \global\@botnum\z@ % we do not want them to be on bottom either
   \hsize=\textwidth
   \def\@makefnmark{\hbox{\@textsuperscript{\@thefnmark}}}%
   \@mktitle\if@ACM@sigchiamode\else\@mkauthors\fi\@mkteasers
@@ -3743,49 +4029,56 @@ Computing Machinery]
     \footnotetextcopyrightpermission{%
       \def\par{\let\par\@par}\parindent\z@\@setthanks}%
   \fi
-  \footnotetextcopyrightpermission{\parindent\z@\parskip0.1\baselineskip
-  \if@ACM@authorversion\else
-    \if@printpermission\@copyrightpermission\par\fi
-  \fi
-  \if@ACM@manuscript\else
-    \if@ACM@journal\else % Print the conference short name
-      {\itshape \acmConference@shortname, \acmConference@venue}\par
+  \footnotetextcopyrightpermission{%
+    \if@ACM@authordraft
+        \raisebox{-2ex}[\z@][\z@]{\makebox[0pt][l]{\large\bfseries 
+            Unpublished
+            working draft. Not for distribution}}% 
+       \color[gray]{0.9}%
     \fi
-  \fi
-  \if@printcopyright
-    \copyright\ \@copyrightyear\ \@copyrightowner\
-  \else
-    \@copyrightyear.\
-  \fi
-  \if@ACM@manuscript
-    Manuscript submitted to ACM\\
-  \else
-    \if@ACM@authorversion
-        This is the author's version of the work. It is posted here for
-        your personal use. Not for redistribution. The definitive Version
-        of Record was published in 
-        \if@ACM@journal
-          \emph{\@journalName}%
+    \parindent\z@\parskip0.1\baselineskip
+    \if@ACM@authorversion\else
+      \if@printpermission\@copyrightpermission\par\fi
+    \fi
+    \if@ACM@manuscript\else
+       \if@ACM@journal\else % Print the conference information
+         {\itshape \acmConference@shortname, \acmConference@date, \acmConference@venue}\par
+       \fi
+    \fi
+    \if@printcopyright
+      \copyright\ \@copyrightyear\ \@copyrightowner\\
+    \else
+     \@copyrightyear.\
+    \fi
+    \if@ACM@manuscript
+      Manuscript submitted to ACM\\
+    \else
+      \if@ACM@authorversion
+          This is the author's version of the work. It is posted here for
+          your personal use. Not for redistribution. The definitive Version
+          of Record was published in 
+          \if@ACM@journal
+            \emph{\@journalName}%
+          \else
+            \emph{Proceedings of \acmConference@name, \acmConference@date}%
+          \fi
+          \ifx\@acmDOI\@empty
+          .
+          \else
+            , \@formatdoi{\@acmDOI}.
+          \fi\\
         \else
-          \emph{Proceedings of \acmConference@name, \acmConference@date}%
+          \if@ACM@journal
+            \@permissionCodeOne/\@acmYear/\@acmMonth-ART\@acmArticle
+            \ifx\@acmPrice\@empty\else\ \$\@acmPrice\fi\\
+            \@formatdoi{\@acmDOI}%
+          \else % Conference
+             ACM~ISBN~\@acmISBN
+             \ifx\@acmPrice\@empty.\else\dots\$\@acmPrice\fi\\
+             \@formatdoi{\@acmDOI}%
+          \fi
         \fi
-        \ifx\@acmDOI\@empty
-        .
-        \else
-          , \@formatdoi{\@acmDOI}.
-        \fi\\
-      \else
-        \if@ACM@journal
-          \@permissionCodeOne/\@acmYear/\@acmMonth-ART\@acmArticle\
-          \$\@acmPrice\\
-          DOI: \nolinkurl{\@acmDOI}%
-        \else % Conference
-           \@acmISBN
-           \ifx\@acmPrice\@empty.\else\dots\$\@acmPrice\fi\\
-           DOI: \nolinkurl{\@acmDOI}%
-        \fi
-      \fi
-    \fi}%
+      \fi}
   \endgroup
   \setcounter{footnote}{0}%
   \@mkabstract
@@ -3794,10 +4087,6 @@ Computing Machinery]
       {\@specialsection{CCS Concepts}%
          \@concepts\par}\egroup
      \fi
-   \fi
-   \if\@terms\@empty\else\bgroup
-      {\@specialsection{General Terms}%
-         \@terms\par}\egroup
    \fi
    \ifx\@keywords\@empty\else\bgroup
       {\if@ACM@journal
@@ -3967,9 +4256,10 @@ Computing Machinery]
 %
 % \begin{macro}{\@subtitlefont}
 % \changes{v1.06}{2016/05/01}{Added macro}
+% \changes{v1.33}{2017/03/12}{Added \cs{normalsize}}
 %   The font to typeset title
 %    \begin{macrocode}
-\def\@subtitlefont{%
+\def\@subtitlefont{\normalsize
   \ifcase\ACM@format@nr
   \relax % manuscript
     \mdseries
@@ -4096,6 +4386,7 @@ Computing Machinery]
 %
 % \begin{macro}{\@ACM@addtoaddress}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 %   The macro adds an item to address using the following rules:
 %   \begin{enumerate}
 %   \item If we start a paragraph, add the item
@@ -4107,30 +4398,39 @@ Computing Machinery]
 \newbox\@ACM@commabox
 \def\@ACM@addtoaddress#1{%
   \ifvmode\else
+    \if@ACM@affiliation@obeypunctuation\else
     \setbox\@ACM@commabox=\hbox{, }%
     \unskip\cleaders\copy\@ACM@commabox\hskip\wd\@ACM@commabox
-  \fi
+  \fi\fi
   #1}
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\institution}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 % \begin{macro}{\position}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 % \begin{macro}{\department}
 % \changes{v1.15}{2016/07/03}{Added macro}
 % \changes{v1.30}{2017/02/10}{Added optional parameter}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 % \begin{macro}{\streetaddress}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 % \begin{macro}{\city}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 % \begin{macro}{\state}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 % \begin{macro}{\postcode}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 % \begin{macro}{\country}
 % \changes{v1.15}{2016/07/03}{Added macro}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 %   Theoretically we can define the macros for \cs{affiliation} inside
 %   the \cs{@mkauthors}-style commands.  However, this would lead to a
 %   strange error if an author uses them outside \cs{affiliation}.  Of
@@ -4149,13 +4449,14 @@ Computing Machinery]
   \let\postcode\@gobble
   \let\country\@gobble
 \else
-  \def\position#1{#1\par}%
-  \def\institution#1{#1\par}%
-  \newcommand\department[2][0]{#2\par}%
-  \def\streetaddress#1{#1\par}%
+  \def\position#1{\if@ACM@affiliation@obeypunctuation#1\else#1\par\fi}%
+  \def\institution#1{\if@ACM@affiliation@obeypunctuation#1\else#1\par\fi}%
+  \newcommand\department[2][0]{\if@ACM@affiliation@obeypunctuation
+    #2\else#2\par\fi}%
+  \def\streetaddress#1{\if@ACM@affiliation@obeypunctuation#1\else#1\par\fi}%
   \let\city\@ACM@addtoaddress
   \let\state\@ACM@addtoaddress
-  \def\postcode#1{\unskip\space#1}%
+  \def\postcode#1{\if@ACM@affiliation@obeypunctuation#1\else\unskip\space#1\fi}%
   \let\country\@ACM@addtoaddress
 \fi
 %    \end{macrocode}
@@ -4268,7 +4569,8 @@ Computing Machinery]
 %
 % \begin{macro}{\@mkauthors@i}
 % \changes{v1.18}{2016/07/12}{Now we andify affiliations}
-%   This is version used in most formats.  Note that \cs{and} between
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
+%   This is version used in most journal formats.  Note that \cs{and} between
 %   authors with the same affiliation becomes \verb*| and |:
 %    \begin{macrocode}
 \def\@mkauthors@i{%
@@ -4286,9 +4588,14 @@ Computing Machinery]
   \def\affiliation##1##2{%
     \def\@tempa{##2}\ifx\@tempa\@empty\else
        \ifx\@currentaffiliations\@empty
-          \gdef\@currentaffiliations{\@affiliationfont##2}%
+          \gdef\@currentaffiliations{%
+            \setkeys{@ACM@affiliation@}{obeypunctuation=false}%
+            \setkeys{@ACM@affiliation@}{##1}%
+            \@affiliationfont##2}%
        \else
-         \g@addto@macro{\@currentaffiliations}{\and##2}%
+         \g@addto@macro{\@currentaffiliations}{\and
+           \setkeys{@ACM@affiliation@}{obeypunctuation=false}%
+           \setkeys{@ACM@affiliation@}{##1}##2}%
       \fi
     \fi
      \global\let\and\@typeset@author@line}%
@@ -4350,6 +4657,7 @@ Computing Machinery]
 %
 % \begin{macro}{\@mkauthors@iii}
 % \changes{v1.15}{2016/07/04}{New authors system}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 %   The |sigconf| version.  Here we use centered design with each
 %   author in a separate box.
 %    \begin{macrocode}
@@ -4393,9 +4701,13 @@ Computing Machinery]
     \g@addto@macro\@currentaffiliation{\par\nolinkurl{##2}}%
   \fi}%
   \def\affiliation##1##2{\ifx\@currentaffiliation\@empty
-    \gdef\@currentaffiliation{##2}%
+    \gdef\@currentaffiliation{%
+      \setkeys{@ACM@affiliation@}{obeypunctuation=false}%
+      \setkeys{@ACM@affiliation@}{##1}##2}%
   \else
-    \g@addto@macro\@currentaffiliation{\par##2}%
+    \g@addto@macro\@currentaffiliation{\par
+      \setkeys{@ACM@affiliation@}{obeypunctuation=false}%
+      \setkeys{@ACM@affiliation@}{##1}##2}%
   \fi
   \global\let\and\@typeset@author@bx
 }%
@@ -4413,6 +4725,7 @@ Computing Machinery]
 %
 %
 % \begin{macro}{\@mkauthors@iv}
+% \changes{v1.33}{2017/03/28}{Added obeypunctuation code}
 %   The |sigchia| version.  Now we put
 %   authors in the main text, and no more than 2 authors per line.
 %    \begin{macrocode}
@@ -4450,9 +4763,13 @@ Computing Machinery]
     \g@addto@macro\@currentaffiliation{\par\nolinkurl{##2}}%
   \fi}%
   \def\affiliation##1##2{\ifx\@currentaffiliation\@empty
-    \gdef\@currentaffiliation{##2}%
+    \gdef\@currentaffiliation{%
+      \setkeys{@ACM@affiliation@}{obeypunctuation=false}%
+           \setkeys{@ACM@affiliation@}{##1}##2}%
   \else
-    \g@addto@macro\@currentaffiliation{\par##2}%
+    \g@addto@macro\@currentaffiliation{\par
+      \setkeys{@ACM@affiliation@}{obeypunctuation=false}%
+      \setkeys{@ACM@affiliation@}{##1}##2}%
   \fi
   \global\let\and\@typeset@author@bx}%
 %
@@ -4522,6 +4839,7 @@ Computing Machinery]
 % \changes{v1.17}{2016/07/10}{Changed format for sigs}
 % \changes{v1.17}{2016/07/10}{Added \cs{nobreak}}
 % \changes{v1.31}{2017/03/04}{Disabled linebreak}
+% \changes{v1.34}{2017/04/09}{Deleted DOI from doi numbers}
 %   Print bibcitation format
 %    \begin{macrocode}
 \def\@mkbibcitation{\bgroup
@@ -4543,7 +4861,7 @@ Computing Machinery]
          \ (\acmConference@shortname)\fi
          ,} \ref{TotPages}~pages.
   \fi\par
-  \noindent DOI: \nolinkurl{\@acmDOI}
+  \noindent\@formatdoi{\@acmDOI}
 \par\egroup}
 %    \end{macrocode}
 %
@@ -4596,27 +4914,34 @@ Computing Machinery]
 %    \end{macrocode}
 %
 % \begin{macro}{\ACM@linecount@bx}
+% \changes{v1.34}{2017/04/10}{Rulers now are continuous}
 %   This is the box displayed in the review mode
 %    \begin{macrocode}
 \if@ACM@review
   \newsavebox{\ACM@linecount@bx}
-  \savebox{\ACM@linecount@bx}[4em][t]{\parbox[t]{4em}{%
-      \newlength\ACM@linecount@bxht\setlength{\ACM@linecount@bxht}{-\baselineskip}
-      \@tempcnta\@ne\relax
-      \loop{\color{ACMRed}\scriptsize\the\@tempcnta}\\
-      \advance\@tempcnta by \@ne
-      \addtolength{\ACM@linecount@bxht}{\baselineskip}
-      \ifdim\ACM@linecount@bxht<\textheight\repeat}}
+  \newlength\ACM@linecount@bxht
+  \newcount\ACM@linecount
+  \ACM@linecount\@ne\relax
+  \def\ACM@mk@linecount{%
+    \savebox{\ACM@linecount@bx}[4em][t]{\parbox[t]{4em}{%
+        \setlength{\ACM@linecount@bxht}{-\baselineskip}%
+        \loop{\color{ACMRed}\scriptsize\the\ACM@linecount}\\
+        \global\advance\ACM@linecount by \@ne
+        \addtolength{\ACM@linecount@bxht}{\baselineskip}%
+        \ifdim\ACM@linecount@bxht<\textheight\repeat}}}
 \fi
 %    \end{macrocode}
 %
 % \end{macro}
 %
-% \begin{macro}{\ACM@linecount}
-%   How to display the box
+% \begin{macro}{\ACM@linecountL}
+% \changes{v1.33}{2017/03/29}{Renamed macro}
+% \changes{v1.34}{2017/04/10}{Rulers now are continuous}
+%   How to display the box on the left
 %    \begin{macrocode}
-\def\ACM@linecount{%
+\def\ACM@linecountL{%
   \if@ACM@review
+  \ACM@mk@linecount
   \begin{picture}(0,0)%
     \put(-26,-22){\usebox{\ACM@linecount@bx}}%
   \end{picture}%
@@ -4625,6 +4950,48 @@ Computing Machinery]
 %
 % \end{macro}
 %
+% \begin{macro}{\ACM@linecountR}
+% \changes{v1.33}{2017/03/29}{Added macro}
+% \changes{v1.34}{2017/04/10}{Rulers now are continuous}
+%   How to display the box on the right
+%    \begin{macrocode}
+\def\ACM@linecountR{%
+  \if@ACM@review
+  \ACM@mk@linecount
+  \begin{picture}(0,0)%
+    \put(20,-22){\usebox{\ACM@linecount@bx}}%
+  \end{picture}%
+  \fi}
+%    \end{macrocode}
+%
+% \end{macro}
+%
+% \begin{macro}{\ACM@timestamp}
+% \changes{v1.33}{2017/03/10}{Added macro (Michael D.~Adams)}
+% \changes{v1.33}{2017/03/28}{Added current page number}
+% \changes{v1.33}{2017/03/29}{Added submission id}
+%  The timestamp system
+%    \begin{macrocode}
+\if@ACM@timestamp
+  % Subtracting 30 from \time gives us the effect of rounding-down despite
+  % \numexpr rounding to nearest
+  \newcounter{ACM@time@hours}
+  \setcounter{ACM@time@hours}{\numexpr (\time - 30) / 60 \relax}
+  \newcounter{ACM@time@minutes}
+  \setcounter{ACM@time@minutes}{\numexpr \time - \theACM@time@hours * 60 \relax}
+  \newcommand\ACM@timestamp{%
+    \footnotesize%
+    \the\year-\two@digits{\the\month}-\two@digits{\the\day}{ }%
+    \two@digits{\theACM@time@hours}:\two@digits{\theACM@time@minutes}{ }%
+    page~\thepage\ (pp. \@startPage-\pageref*{TotPages})%
+    \ifx\@acmSubmissionID\@empty\relax\else
+    ~Submission~ID: \@acmSubmissionID
+    \fi
+  }
+\fi
+%    \end{macrocode}
+% \end{macro}
+% 
 % \begin{macro}{\@shortauthors}
 % \changes{v1.15}{2016/07/04}{Introduced macro}
 %   Even if the author redefined \cs{shortauthors}, we do not print
@@ -4673,6 +5040,8 @@ Computing Machinery]
 % \changes{v1.16}{2016/07/07}{Customize header/footer text font}
 % \changes{v1.17}{2016/07/10}{Added paper title to sigs}
 % \changes{v1.29}{2017/01/22}{Corrected printfolios (Matthew Fluet)}
+% \changes{v1.33}{2017/03/10}{Added timestamp (Michael D.~Adams)}
+% \changes{v1.33}{2017/03/29}{Added right linecount for two column formats}
 %   The pagestyle for all pages but the first one
 %    \begin{macrocode}
 \fancypagestyle{standardpagestyle}{%
@@ -4681,45 +5050,49 @@ Computing Machinery]
   \renewcommand{\footrulewidth}{\z@}%
   \ifcase\ACM@format@nr
   \relax % manuscript
-    \fancyhead[LE]{\ACM@linecount\if@ACM@printfolios\thepage\fi}%
+    \fancyhead[LE]{\ACM@linecountL\if@ACM@printfolios\thepage\fi}%
     \fancyhead[RO]{\if@ACM@printfolios\thepage\fi}%
     \fancyhead[RE]{\@shortauthors}%
-    \fancyhead[LO]{\ACM@linecount\shorttitle}%
+    \fancyhead[LO]{\ACM@linecountL\shorttitle}%
     \fancyfoot[RO,LE]{\footnotesize Manuscript submitted to ACM}%
   \or % acmsmall
-    \fancyhead[LE]{\ACM@linecount\@headfootfont\@acmArticle\if@ACM@printfolios:\thepage\fi}%
+    \fancyhead[LE]{\ACM@linecountL\@headfootfont\@acmArticle\if@ACM@printfolios:\thepage\fi}%
     \fancyhead[RO]{\@headfootfont\@acmArticle\if@ACM@printfolios:\thepage\fi}%
     \fancyhead[RE]{\@headfootfont\@shortauthors}%
-    \fancyhead[LO]{\ACM@linecount\@headfootfont\shorttitle}%
+    \fancyhead[LO]{\ACM@linecountL\@headfootfont\shorttitle}%
     \fancyfoot[RO,LE]{\footnotesize \@journalName, Vol. \@acmVolume, No.
     \@acmNumber, Article \@acmArticle.  Publication date: \@acmPubDate.}%
   \or % acmlarge
-    \fancyhead[LE]{\ACM@linecount\@headfootfont
+    \fancyhead[LE]{\ACM@linecountL\@headfootfont
       \@acmArticle\if@ACM@printfolios:\thepage\fi\quad\textbullet\quad\@shortauthors}%
-    \fancyhead[LO]{\ACM@linecount}%
+    \fancyhead[LO]{\ACM@linecountL}%
     \fancyhead[RO]{\@headfootfont
       \shorttitle\quad\textbullet\quad\@acmArticle\if@ACM@printfolios:\thepage\fi}%
     \fancyfoot[RO,LE]{\footnotesize \@journalName, Vol. \@acmVolume, No.
     \@acmNumber, Article \@acmArticle.  Publication date: \@acmPubDate.}%
   \or % acmtog
-    \fancyhead[LE]{\ACM@linecount\@headfootfont
+    \fancyhead[LE]{\ACM@linecountL\@headfootfont
       \@acmArticle\if@ACM@printfolios:\thepage\fi\quad\textbullet\quad\@shortauthors}%
-    \fancyhead[LO]{\ACM@linecount}%
+    \fancyhead[LO]{\ACM@linecountL}%
+    \fancyhead[RE]{\ACM@linecountR}%
     \fancyhead[RO]{\@headfootfont
-      \shorttitle\quad\textbullet\quad\@acmArticle\if@ACM@printfolios:\thepage\fi}%
+      \shorttitle\quad\textbullet\quad\@acmArticle\if@ACM@printfolios:\thepage\fi\ACM@linecountR}%
     \fancyfoot[RO,LE]{\footnotesize \@journalName, Vol. \@acmVolume, No.
     \@acmNumber, Article \@acmArticle.  Publication date: \@acmPubDate.}%
   \else % Proceedings
     \fancyfoot[C]{\if@ACM@printfolios\footnotesize\thepage\fi}%
-    \fancyhead[LO]{\ACM@linecount\@headfootfont\shorttitle}%
-    \fancyhead[RE]{\@headfootfont\@shortauthors}%
-    \fancyhead[LE]{\ACM@linecount\@headfootfont\acmConference@shortname,
+    \fancyhead[LO]{\ACM@linecountL\@headfootfont\shorttitle}%
+    \fancyhead[RE]{\@headfootfont\@shortauthors\ACM@linecountR}%
+    \fancyhead[LE]{\ACM@linecountL\@headfootfont\acmConference@shortname,
       \acmConference@date, \acmConference@venue}%
     \fancyhead[RO]{\@headfootfont\acmConference@shortname,
-      \acmConference@date, \acmConference@venue}%
+      \acmConference@date, \acmConference@venue\ACM@linecountR}%
   \fi
   \if@ACM@sigchiamode
      \fancyheadoffset[L]{\dimexpr(\marginparsep+\marginparwidth)}%
+  \fi
+  \if@ACM@timestamp
+     \fancyfoot[LO,RE]{\ACM@timestamp}
   \fi
 }
 \pagestyle{standardpagestyle}
@@ -4794,6 +5167,8 @@ Computing Machinery]
 % \end{macro}
 %
 % \begin{macro}{firstpagestyle}
+% \changes{v1.33}{2017/03/10}{Added timestamp (Michael D.~Adams)}
+% \changes{v1.33}{2017/03/29}{Added right linecount for two column formats}
 %   The pagestyle for the first page only.
 %    \begin{macrocode}
 \fancypagestyle{firstpagestyle}{%
@@ -4802,15 +5177,15 @@ Computing Machinery]
   \renewcommand{\footrulewidth}{\z@}%
   \ifcase\ACM@format@nr
   \relax % manuscript
-    \fancyhead[L]{\ACM@linecount}%
+    \fancyhead[L]{\ACM@linecountL}%
     \fancyfoot[RO,LE]{\if@ACM@printfolios\small\thepage\fi}%
     \fancyfoot[RE,LO]{\footnotesize Manuscript submitted to ACM}%
   \or % acmsmall
     \fancyfoot[RO,LE]{\footnotesize \@journalName, Vol. \@acmVolume, No.
     \@acmNumber, Article \@acmArticle.  Publication date:
     \@acmPubDate.}%
-    \fancyhead[LE]{\ACM@linecount\@folioblob}%
-    \fancyhead[LO]{\ACM@linecount}%
+    \fancyhead[LE]{\ACM@linecountL\@folioblob}%
+    \fancyhead[LO]{\ACM@linecountL}%
     \fancyhead[RO]{\@folioblob}%
     \fancyheadoffset[RO,LE]{0.6\@folio@wd}%
   \or % acmlarge
@@ -4818,17 +5193,27 @@ Computing Machinery]
     \@acmNumber, Article \@acmArticle.  Publication date:
     \@acmPubDate.}%
     \fancyhead[RO]{\@folioblob}%
-    \fancyhead[LE]{\ACM@linecount\@folioblob}%
-    \fancyhead[LO]{\ACM@linecount}%
+    \fancyhead[LE]{\ACM@linecountL\@folioblob}%
+    \fancyhead[LO]{\ACM@linecountL}%
     \fancyheadoffset[RO,LE]{1.4\@folio@wd}%
   \or % acmtog
     \fancyfoot[RO,LE]{\footnotesize \@journalName, Vol. \@acmVolume, No.
     \@acmNumber, Article \@acmArticle.  Publication date:
     \@acmPubDate.}%
-    \fancyhead[L]{\ACM@linecount}%
+    \fancyhead[L]{\ACM@linecountL}%
+    \fancyhead[R]{\ACM@linecountR}%
   \else % Conference proceedings
-    \fancyhead[L]{\ACM@linecount}%
+    \fancyhead[L]{\ACM@linecountL}%
+    \fancyhead[R]{\ACM@linecountR}%
     \fancyfoot[C]{\if@ACM@printfolios\footnotesize\thepage\fi}%
+  \fi
+  \if@ACM@timestamp
+    \ifnum\ACM@format@nr=0\relax % Manuscript
+    \fancyfoot[LO,RE]{\ACM@timestamp\quad
+      \footnotesize Manuscript submitted to ACM}
+    \else
+    \fancyfoot[LO,RE]{\ACM@timestamp}
+    \fi
   \fi
 }
 %    \end{macrocode}
@@ -5249,7 +5634,7 @@ Computing Machinery]
 % The command \cs{showeprint} has two arguments: the (optional) prefix
 % and the eprint number.  Right now the only prefix we understand is
 % the (lowercase) word `arxiv' (see
-% \url{http://arxiv.org/hypertex/bibstyles/}.
+% \url{http://arxiv.org/hypertex/bibstyles/}).
 %    \begin{macrocode}
 \newcommand\showeprint[2][arxiv]{%
   \def\@tempa{#1}%
