@@ -1,0 +1,143 @@
+Dear Nicholas,
+
+Congratulations! We are delighted to inform you that your PEARC17 Paper
+Submission  Experiences Porting Scientific Applications to the Intel
+(KNL) Xeon Phi Platform has been accepted. Attached are the reviews of
+your paper that you should address before submitting your final paper
+for the proceedings.
+
+You will be notified soon about the schedule for your presentation at
+the conference. At least one author must register and attend the
+conference for the presentation. Please reserve your hotel room by May
+31st to guarantee the conference rate, prices will go up considerably
+after this date. The basic schedule is available here:
+https://www.pearc.org/schedule
+
+There are a few things that need to be followed up on:
+
+1.       As an accepted paper, you must prepare a final version of your
+paper using the latest version of the ACM SIG proceedings templates,
+available at
+http://www.acm.org/publications/proceedings-template. Please follow the
+template instructions precisely. Corresponding authors will also receive
+email from the ACM rights management system (rightsreview@acm.org) with
+copyright information and other instructions. Upon completion of the
+online form, the system will email you the appropriate text for the
+permissions block of your final paper.
+2.       Presenting Author Information – in order to make sure we are
+corresponding with the correct author please let us know which of the
+authors will be presenting the paper and their contact
+information. Future correspondences regarding the conference attendance
+and presentation expectations will be communicated via this author (or
+authors). We would like the name and a short bio of the author.
+3.       We will feature a fast-forward preview of the paper sessions
+after the Tuesday and Wednesday plenaries. This will give you an
+opportunity to preview your work to the entire conference. You will have
+30 seconds to present one slide summarizing the work, so focus on what
+will excite attendees about your paper. We will be sending out a
+template closer to the conference date to prepare and submit a single
+slide. Please keep this in mind as the conference nears.
+
+The deadline for providing a final paper, with permissions block is
+Friday June 9th. This deadline MUST be met in order to get your paper
+published.
+
+For additional questions or concerns please email me DIRECTLY at
+jwilgenb@umn.edu.
+
+I look forward to seeing you in New Orleans!
+
+Sincerely,
+James Wilgenbusch
+PEARC17 Accelerating Discovery in Scholarly Research track
+
+
+----------------------- REVIEW 1 ---------------------
+PAPER: 82
+TITLE: Experiences Porting Scientific Applications to the Intel (KNL)
+Xeon Phi Platform
+AUTHORS: Nicholas Malaya, Damon McDougall, Christopher S. Simmons, Craig
+Michoski and Myoungkyu Lee
+
+Overall evaluation: 2 (accept)
+
+----------- Overall evaluation -----------
+In this paper, the authors detail their efforts porting four scientific
+software applications to the Intel Knights Landing (KNL) architecture
+that will make up the forthcoming Stampede II supercomputer.  The
+applications ported include Poongback (DNS simulations), QUESO
+(uncertainty quantification), ArcSyn3sis (a finite element package) and
+CFOUR (coupled cluster methods for computational chemistry).  In
+general, for each of the packages, they describe the level of effort
+required to move from an x86 CPU-based architecture to the KNLs and the
+scalability achieved using a variety MPI to OpenMP ratios.
+
+Overall, the authors find that the level of effort required to “port”
+these applications was simply a recompile with some additional flags
+included to indicate to the compiler the use of a KNL architecture.  The
+optimal ratio between MPI ranks and OpenMP threads is generally based on
+the algorithmic characteristics of each application.  This is extremely
+useful information for other application scientists as it is anticipated
+that modern architectures such as the KNL will increasingly be used in
+future supercomputers.
+
+The authors could strengthen their paper by providing additional
+performance comparisons to existing (CPU) architectures (e.g. Intel
+Haswell or Broadwell chips).  While understanding the on-chip
+scalability is useful, many application scientists are more interested
+in the performance gains that can (or cannot) be achieved with the KNL
+chips compared to existing CPU chips.  The comparisons in the CFOUR
+application were useful and the authors should be encouraged to expand
+this analysis to the other applications.
+
+Minor question: In the CFOUR section, the reference CPU architecture was
+two Intel Xeon E5-2670 CPUs (each with 12 cores).  Yet later in the
+section, it is mentioned that the OMP_NUM_THREADS was set to 16 (or best
+performance was achieved with 16 threads).  Is this per chip or is it 8
+per chip?  If the former, this seems surprising if the chip was
+oversubscribed (and not in a uniform way).  If the latter, some
+explanation of the idle cores may be helpful (e.g. the application was
+memory bandwidth limited).  Or it may be that this was a typo because I
+would expect the best performance with 12 threads per chip.
+
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 82
+TITLE: Experiences Porting Scientific Applications to the Intel (KNL)
+Xeon Phi Platform
+AUTHORS: Nicholas Malaya, Damon McDougall, Christopher S. Simmons, Craig
+Michoski and Myoungkyu Lee
+
+Overall evaluation: 2 (accept)
+
+----------- Overall evaluation -----------
+Authors present their effort to port four scientific codes to the KNLs
+on the Stampede machine at TACC. The codes are for study of turbulence,
+analysis of uncertainty, implementation of FEM methods, and solving
+quantum chemistry problems. For all of the codes they thoroughly explain
+the optimization efforts and analyze the performance using various
+memory hierarchy (that KNL allows), and parallel options (MPI,
+OpenMP). As KNLs are new architecture, their analysis of results of
+different types of scientific codes would be interest to the community.
+
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 82
+TITLE: Experiences Porting Scientific Applications to the Intel (KNL)
+Xeon Phi Platform
+AUTHORS: Nicholas Malaya, Damon McDougall, Christopher S. Simmons, Craig
+Michoski and Myoungkyu Lee
+
+Overall evaluation: 2 (accept)
+
+----------- Overall evaluation -----------
+Good paper describing early experiences in porting codes to Intel’s Xeon
+Phi MIC platform, Knight's Landing (KNL). They examine a number of
+different and important scientific kernels and applications in a variety
+of languages and present strong scaling results for all of these and
+discuss the effort involved in porting them to KNL. I think there will
+be a lot of interest in this topic among attendees. As a personal
+quibble, I would like to have seen more results comparing the overall
+performance, time to solution, for the given amount of effort, with
+codes run on just Intel Xeon chips (i.e. without co-processors) or on
+other architectures. I suppose this is effort for future work. :)

@@ -1,6 +1,10 @@
 This package provides a class for typesetting publications of 
 Association for Computing Machinery.
 
+Your TeX distribution probably includes the latest released version of
+this package.  If you decide to install it yourself, please see
+Installation section of the User's Guide.
+
 Changes
 
 version 1.08    SIGPLAN reformatting (Matthew Fluet); bug fixes
@@ -73,3 +77,30 @@ version 1.31    Changed default year and month to the current ones
 		Marginalia now work in all formats
 		New command \additionalaffiliation
 		Documentation changes
+
+version 1.32    New DOI formatting.
+		Format siggraph is now obsolete, and sigconf
+		is used instead.
+		New proceedings title: POMACS.
+
+version 1.33    New option `timestamp' (Michael D. Adams)
+		New option `authordraft'
+                Documentation updates
+		Bug fixes
+		We now use Type 1 versions of Libertine fonts even with XeTeX.
+		New hook acmart-preload-hook.tex (wizards only!)
+		Added new options `obeypunctuation' for \affiliation command
+		Added SubmissionID
+		Added right line count ruler for two-column formats
+		Added workaround for Adobe Acrobat bugs in selection
+		Added eid field to the bibliography
+		
+version 1.34    Deleted DOI from doi numbers
+		Changed bibstrip formatting
+		The command \terms is now obsolete
+		The rulers in review mode now have continuous numbering
+
+version 1.35    Author-year bib style now uses square brackets.
+		Changed defaults for TOG sample
+		Price is suppressed for usgov and rightsretained modes.
+		Bugs fixed
