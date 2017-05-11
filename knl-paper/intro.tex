@@ -28,7 +28,7 @@ compared to both previous generation ``Knights Ferry'' and ``Knights Corner'' Xe
 Phi MICs~\cite{schulz2012early} as well as traditional Intel Haswell CPUs.
 
 The remainder of the paper is organized as follows: \S\ref{sec:hardware}
-describes the early-access Stampede 2 hardware used as testing infrastructure,
+describes the KNL hardware used as testing infrastructure,
 \S\ref{sec:cross_compile} describes cross compiling experiences,
 \S\ref{sec:apps} presents results of the porting efforts for each application
 considered, and \S\ref{sec:summary} summarizes the overall experiences.
@@ -36,19 +36,19 @@ considered, and \S\ref{sec:summary} summarizes the overall experiences.
 \section{Testing Infrastructure}
 \label{sec:hardware}
 
-The test hardware used for this exercise was early-access hardware for the
-upcoming Stampede 2 cluster at the Texas Advanced Computing Center.  This early
-access hardware leaves
-the original Stampede cluster hardware untouched and adds compute performance
-capabilities with the newest iteration of Intel's MIC architecture code-named
-``Knights Landing (KNL)''.
+The test hardware leveraged for this exercise were KNL nodes that form the
+Stampede Upgrade (Stampede-KNL) cluster.  These nodes are due to be used for
+the upcoming Stampede 2 cluster at the Texas Advanced Computing Center in the
+Summer of 2017.  This upgrade hardware leaves the original Stampede cluster
+hardware untouched and adds compute performance capabilities with the newest
+iteration of Intel's MIC architecture code-named ``Knights Landing (KNL)''.
 
-The ``Knights Landing'' Xeon Phi 7250 compute nodes in the Stampede 2
-cluster boast 68 cores, each with 4 hardware threads, are bootable and each run
-a lightweight CentOS 7 Linux kernel.  They also have 16GB of high-bandwidth
+The ``Knights Landing'' Xeon Phi 7250 compute nodes in the Stampede 2 cluster
+will boast 68 cores, each with 4 hardware threads, are bootable and each run a
+lightweight CentOS 7 Linux kernel.  They also have 16GB of high-bandwidth
 Multi-Channel Dynamic Random Access Memory (MCDRAM) and 96GB of DDR4-2400.
 
-The login node of the early-access Stampede 2 (KNL) cluster is a 14 core (28 thread)
+The login node of the Stampede-KNL cluster is a 14 core (28 thread)
 Haswell generation Intel Xeon E5-2695v3 processor with a clock speed of
 2.30GHz.  This was used to cross-compile scientific applications for the KNL
 compute nodes.  Applications were built with version 17.0.0 20160721 of Intel's
@@ -61,7 +61,7 @@ As with many scientific research groups, application development at the PECOS
 center employs many open-source libraries.  Fortunately, TACC's module system
 built on top of \texttt{lmod} provides many commonly used scientific packages
 already compiled with the necessary instructions supported by KNL.  Moreover,
-since the Stampede 2 cluster contains only bootable KNL nodes, the login
+since the Stampede 2 cluster will contain only bootable KNL nodes, the login
 Haswell node is not needed for offloading computation.  We use it only for
 compiling and building software.  Compilation is possible on KNL, but it is
 much slower.
@@ -86,6 +86,6 @@ As an example, the following configure options were used to build version
 }
 
 These strategies successfully built dynamic libraries and executables for KNL.
-Where appropriate, the kernels used for benchmarking in the subsequent sections have been 
-publicly provided on GitHub: \url{https://github.com/PECOS-KNL/kernels}. 
+Where appropriate, the kernels used for benchmarking in the subsequent sections have been
+publicly provided on GitHub: \url{https://github.com/PECOS-KNL/kernels}.
 %\todo{can we comment on if these are actually using avx512 for vectorization?}
