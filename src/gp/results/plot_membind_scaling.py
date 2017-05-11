@@ -13,6 +13,7 @@ from matplotlib.ticker import LogFormatter
 
 membind_0_data = np.loadtxt('out.membind.0.txt', skiprows=1)
 membind_1_data = np.loadtxt('out.membind.1.txt', skiprows=1)
+xeon_data = np.loadtxt('E5-2670v3_out.txt', skiprows=1)
 
 fig = plt.figure(figsize=(5.5,4))
 ax = fig.add_subplot(1, 1, 1)
@@ -21,6 +22,7 @@ locator = LogLocator(2)
 formatter = LogFormatter(2)
 
 threads = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+xeon_threads = xeon_data[:,0]
 
 ideal = np.zeros(membind_0_data.shape[0])
 ideal[0] = membind_0_data[0,0] + membind_0_data[0,1]
@@ -30,6 +32,7 @@ for i in range(1, ideal.shape[0]):
 
 ax.loglog(threads, membind_0_data[:,0] + membind_0_data[:,1], 'b-o', label='membind=0')
 ax.loglog(threads, membind_1_data[:,0] + membind_1_data[:,1], 'r-d', label='membind=1')
+ax.loglog(xeon_threads, xeon_data[:,3], 'g-s', label='Xeon E5-2670v3')
 ax.loglog(threads, ideal, 'k--', label='Linear Scalability')
 ax.set_xlim(0.51, 500)
 ax.set_xlabel('OpenMP threads')
