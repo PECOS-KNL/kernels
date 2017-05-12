@@ -73,10 +73,12 @@ as a function of number of OpenMP threads.  The timings only include the
 assembly and the factorization, since these two procedures are the most
 expensive at each iteration of a Markov chain Monte Carlo procedure.  The
 assembly was parallelized with the usual OpenMP preprocessor directives, and
-the factorization was executed by Intel's MKL.  Two cases were run, one
-entirely in MCDRAM and the other entirely in DDR4.  Timings for both of these
-show that for problems that are not memory-bandwidth limited, MCDRAM does not
-offer a significant payoff.
+the factorization was executed by Intel's MKL.  Two cases were run on the KNL
+node, one entirely in MCDRAM and the other entirely in DDR4.  Timings for both
+of these show that for problems that are not memory-bandwidth limited, MCDRAM
+does not offer a significant payoff.  A third case was run on a Xeon E52670v3
+for comparison.  We note that KNL and Xeon scalability are similar, but
+that the KNL time-to-solution is more favorable beyond 16 threads.
 
 %
 % Can you say something about strong-weak scaling?  this looks like a strong
