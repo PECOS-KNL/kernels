@@ -32,7 +32,7 @@ for i in range(1, ideal.shape[0]):
 
 ax.loglog(threads, membind_0_data[:,0] + membind_0_data[:,1], 'b-o', label='membind=0')
 ax.loglog(threads, membind_1_data[:,0] + membind_1_data[:,1], 'r-d', label='membind=1')
-ax.loglog(xeon_threads, xeon_data[:,3], 'g-s', label='Xeon E5-2670v3')
+ax.loglog(xeon_threads, xeon_data[:,2] + xeon_data[:,3], 'g-s', label='Xeon E5-2670v3')
 ax.loglog(threads, ideal, 'k--', label='Linear Scalability')
 ax.set_xlim(0.51, 500)
 ax.set_xlabel('OpenMP threads')
