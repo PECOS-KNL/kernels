@@ -193,7 +193,7 @@ Figure~\ref{fig:DNS_strong_scale_transpose}.
 \begin{figure}
  \begin{center}
    \includegraphics[width=0.45\textwidth]{DNS_full_timestep}
-   \caption{Strong scaling results for the total elapsed time for single timestep. The parentheses denote: (MPI tasks $\times$ OpenMP threads).}
+   \caption{Strong scaling results for the total elapsed time for single timestep. The parentheses denote: (MPI tasks $\times$ OpenMP threads).; (Small) $1024 \times 128 \time 512$; (Big) $1536 \times 192 \times 768$}
 %   \caption{Strong scaling results for the total elapsed time for single timestep. The parantheses denote: (MPI tasks $\times$ OpenMP threads). Hybrid parallelism was found to show the best performance, with nearly perfect scalability until approximately 128 concurrencies.}
    \label{fig:DNS_strong_scale_total_elapsed_time}
  \end{center}
@@ -202,19 +202,28 @@ Figure~\ref{fig:DNS_strong_scale_transpose}.
 The performance of one full timestep (without I/O) is shown in
 Figure~\ref{fig:DNS_strong_scale_total_elapsed_time}. The best
 performing set of MPI $\times$ OpenMP concurrency for each number of
-processors was chosen. It also shows almost perfect scalability up to 64
+processors was chosen. The benchmark with same grid size is performed
+on single node of Lonestar5 which has two sockets of Xeon E5-2690 v3
+(Haswell) processors at the Texas Advanced Computing
+Center. Additionally we performed another benchmark with slightly
+bigger grid size, $1536 \times 192 \times 768$. Both cases with
+different grid sizes shows good scalability on Lonestar 5. On
+Stampede2 KNL node, it also shows almost perfect scalability up to 64
 processors. The performance continues to increase after using hardware
-threads. In most cases, using only MPI tasks shows the best performance,
-excepts at 64 processors with 2 hardware threads. However, the
-difference between hybrid parallelism and only MPI tasks are minimal at
-128 processors. A conclusion from this study is that generally speaking,
+threads. In most cases, using only MPI tasks shows the best
+performance, excepts at 64 processors with 2 hardware threads in small
+grid size case. However, the difference between hybrid parallelism and
+only MPI tasks are minimal at 128 processors. Comparing the best
+performance on Lonestar 5 and Stampede2 KNL node with large grid size
+benchmark, Stampede2 KNL shows approximately 21\% better
+performance. A conclusion from this study is that generally speaking,
 using only MPI seems to be the best option for any problem size.
 Despite this, we also note that hybrid parallelism could be more
-important due to the off-node impact. When the problem size
-is bigger than the size of DRAM on a KNL node, one must use multiple KNL
-nodes. Using many MPI tasks can easily saturate the capability of
-the interconnect device. Under these conditions, reducing the number of MPI tasks
-by using OpenMP would likely improve performance.
+important due to the off-node impact. When the problem size is bigger
+than the size of DRAM on a KNL node, one must use multiple KNL
+nodes. Using many MPI tasks can easily saturate the capability of the
+interconnect device. Under these conditions, reducing the number of
+MPI tasks by using OpenMP would likely improve performance.
 
 %\todo{if we merge this with the previous section, we can have an intro
 %to dns and then talk about each in detail}
