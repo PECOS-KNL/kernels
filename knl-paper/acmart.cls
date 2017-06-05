@@ -1041,9 +1041,9 @@ Computing Machinery]
 \def\acmPrice#1{\def\@acmPrice{#1}}
 \acmPrice{15.00}
 \def\acmISBN#1{\def\@acmISBN{#1}}
-\acmISBN{978-x-xxxx-xxxx-x/YY/MM}
+\acmISBN{978-1-4503-5272-7/17/07}
 \def\acmDOI#1{\def\@acmDOI{#1}}
-\acmDOI{10.1145/nnnnnnn.nnnnnnn}
+\acmDOI{10.1145/3093338.3104172}
 \newif\if@ACM@badge
 \@ACM@badgefalse
 \newlength\@ACM@badge@width
